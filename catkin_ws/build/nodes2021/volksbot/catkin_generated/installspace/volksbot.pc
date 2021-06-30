@@ -1,8 +1,0 @@
-prefix=/home/crab/Documents/catkin_ws/install
-
-Name: volksbot
-Description: Description of volksbot
-Version: 0.0.1
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib 
-Requires: std_msgs message_runtime roscpp
