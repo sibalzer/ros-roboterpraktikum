@@ -1,0 +1,2 @@
+nodes2021/lms100:nodes2021/volksbot
+-DCATKIN_DEVEL_PREFIX=/home/crab/Documents/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/crab/Documents/catkin_ws/install -G Unix Makefiles
