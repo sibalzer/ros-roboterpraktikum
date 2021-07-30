@@ -39,38 +39,38 @@ double  CGioController::H_case_2(double y, double theta, double u, double alpha,
 double  CGioController::Compute_W(double y, double theta, double a, double u, int *err){
   double res, h, gamma;
 
-  if(fabs(y) < epsilon) {
+  if(fabs(y) < epsilon) { // e. g. y = 0
     if(fabs(theta) >= d_th) {
-     cerr << "H1_1\n";
-	 h = H_case_1(y, theta, u, a, &gamma);
-	 *err = 0;
-    } else {
-    cerr << "H1_2\n";
-	 h = H_case_1(y, d_th, u, a, &gamma);
-	 *err = 0;
+      cerr << "H1_1\n";
+	    h = H_case_1(y, theta, u, a, &gamma);
+	    *err = 0;
+    } else { // value for theta to small to evaluate correctly
+      cerr << "H1_2\n";
+	    h = H_case_1(y, d_th, u, a, &gamma);
+	    *err = 0;
     }
   } else {
-    if(fabs(y) >= d_y) {
-	 h = H_case_2(y, d_th, u, a, &gamma);
-	 *err = 0;
-    } else {
-	 if(fabs(theta) < d_th) {
-	   h = H_case_2(d_y, d_th, u, a, &gamma);
-	   *err = 0;
-	 } else {
-	   h = H_case_2(d_y, theta, u, a, &gamma);
-	   *err = 0;
-	 }
+    if(fabs(y) >= d_y) { // value of y is big enough
+	    h = H_case_2(y, d_th, u, a, &gamma); // why d_th?
+	    *err = 0;
+    } else { // value of y too small
+	    if(fabs(theta) < d_th) { // value of theta too small
+	      h = H_case_2(d_y, d_th, u, a, &gamma);
+	      *err = 0;
+	    } else { // value of theta ok
+	      h = H_case_2(d_y, theta, u, a, &gamma);
+	      *err = 0;
+	    }
     }
   }
-
+  // use the simplest equation possible to determine omega
   if(fabs(theta) >= d_th) {
     res = -h * u * y * sin(theta)/theta - gamma * theta;
   } else {
-    if(fabs(theta) <= d_th && fabs(theta) >= d_th_0){
-	 res = -h * u * y - gamma * theta;
+    if(fabs(theta) <= d_th && fabs(theta) >= d_th_0) {
+	    res = -h * u * y - gamma * theta;
     } else {
-	 res = -h * u * y;
+	    res = -h * u * y;
     }
   }
 
@@ -144,11 +144,11 @@ int CGioController::canDetermineRobotPosition(int looped){
 
   while(this->loop_exit != 0 && !exit) {
     if(path->pointInn(x0,y0)) {
-	 if(path->getDistanceToEnd(x0, y0) > 0.1) { 
-	   exit = 1;
-	   giofile << path->getDistanceToEnd(x0, y0) << " "; // u 1
-	   continue;
-	 }
+	    if(path->getDistanceToEnd(x0, y0) > 0.1) { 
+	      exit = 1;
+	      giofile << path->getDistanceToEnd(x0, y0) << " "; // u 1
+	      continue;
+	    }
     }
     this->loop_exit = path->getNext(looped);
   }
@@ -181,11 +181,16 @@ int CGioController::getNextState(double &u, double &w, double &vleft, double &vr
 
   u = this->u0;
 
+  // get a value for omega from the control laws
   w = Compute_W(l, phic, this->a, u, &err);
+  // limit the absolute angular velocity to avoid to big values for the motor
   double sign = w < 0 ? -1 : 1;
   w = (fabs(w) > this->Vm / this->AXIS_LENGTH) ? sign*(this->Vm / this->AXIS_LENGTH) : w;
+
   //w = (fabs(w) > this->Vm / this->AXIS_LENGTH) ? fabs(this->Vm / this->AXIS_LENGTH) : w;
 
+  // transform the output of the Giovanni controller into input 
+  // for differential drive
   giofile << w << " ";
   vright = u - AXIS_LENGTH * w * 0.5;
   vleft  = u + AXIS_LENGTH * w * 0.5;

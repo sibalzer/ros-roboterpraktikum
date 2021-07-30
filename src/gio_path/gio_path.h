@@ -1,3 +1,10 @@
+/**
+ *  Implementation of a Giovanni Controller for mobile robots.
+ *  As reference, the paper SWITCHING LINEAR PATH FOLLOWING FOR
+ *  BOUNDED CURVATURE CAR-LIKE VEHICLE by Giovanni Idiveri, 2004 
+ *  can be seen.
+ */
+
 #ifndef __GIO_PATH_H_
 #define __GIO_PATH_H_
 
@@ -39,24 +46,27 @@ protected:
    */
   CCurve *path;
   int loop_exit;
-  //Lokales Koordinatensystem des Roboters
+  // local coordinate system of the robot
   double ex[2]; 
   double ey[2];
 
-  double x0;
+  double x0; // initial pose?
   double y0;
   double phi0;
 
-  // festgestellte Konstanten vom Roboter
-  double AXIS_LENGTH;
-  double Vm;            
-  double d_y;          
-  double d_th;          
-  double kr_max;
-  double u0;
-  double a;
-  double epsilon;
-    
+  // found coordinates of the robot
+  double AXIS_LENGTH; // 2b
+  double Vm;   // limit for motor speed         
+  double d_y;  // delta y from the paper, minimal value to evaluate     
+  double d_th; // delta theta from the paper, minimal value to evaluate         
+  double kr_max; // maximal curvature
+  double u0;     // initial velocity
+  double a;        // steering angle
+  double epsilon; // to treat values near 0 as 0
+
+  /**
+   *  ...
+   */  
   void InitDefault();
   /**
    * Method to set local coordinate system
@@ -64,23 +74,80 @@ protected:
    */
   void setLocalSystem(double ang);
   
+  /**
+   *   Calculate h_j* according to eq 23 in the paper
+   *   Calculate gamma_j according to eq 26 in the paper
+   *
+   *   @param y coordinate of the robot w.r.t. goal
+   *   @param th angle of the pose (theta) w.r.t. goal
+   *   @param u forward speed
+   *   @param alpha steering angle
+   *   @param gama gamma, gain of the control law
+   *   @return h gain of the controller
+   */
   double H_case_1(double y, double th, double u, double alpha, double *gama);
+  /**
+   *   Calculate h_j* according to eq 24 in the paper
+   *   Calculate gamma_j according to eq 26 in the paper
+   *   @param y coordinate of the robot w.r.t goal
+   *   @param th angle of the pose (theta) w.r.t. goal
+   *   @param u forward speed
+   *   @param alpha steering angle
+   *   @param gama gamma, gain of the control law
+   *   @return h gain of the controller
+   */
   double H_case_2(double y, double th, double u, double alpha, double *gama);
+  /**
+   *  compute the rotation rate required
+   *  @param y coordinate of the robot w.r.t. goal
+   *  @param th angle of the pose (theta) w.r.t. goal
+   *  @param a alpha, steering angle
+   *  @param u forward speed
+   *  @param err error handling
+   *  @return omega (rotation rate)
+   */
   double Compute_W(double y, double th, double a, double u, int *err);
 
 public:
-  std::ofstream giofile;
+  std::ofstream giofile; // file to log to
   
+  /**
+   *  Construct a new instance of the Giovanni Controller
+   */
   CGioController();
 
+  /**
+   *  Destruct the instance
+   */
   ~CGioController();
     
+  /**
+   *  Configurate the axis length 
+   *  @param val new value in [m?]
+   */
   void setAxisLength(double val);
+  /**
+   *  Get the current value for the axis length
+   *  @return axis length in [m?]
+   */
   double getAxisLength();	
 
+  /**
+   *  Set the velocity to a specific value
+   *  @param val
+   *  @param abs
+   */
   void setCurrentVelocity(double val, int abs = ABS);
+
+  /**
+   *  Get the current velocity
+   *  @return velocity in [m/s?]
+   */
   double getCurrentVelocity();
   
+  /**
+   *  
+   */
   void setPose(double x, double y, double phi);
   void getPose(double &x, double &y, double &ph);
   int getPathFromFile(const char* fname);
