@@ -61,7 +61,7 @@ protected:
   double d_th; // delta theta from the paper, minimal value to evaluate         
   double kr_max; // maximal curvature
   double u0;     // initial velocity
-  double a;        // steering angle
+  double a;        // gain alpha
   double epsilon; // to treat values near 0 as 0
 
   /**
@@ -81,7 +81,7 @@ protected:
    *   @param y coordinate of the robot w.r.t. goal
    *   @param th angle of the pose (theta) w.r.t. goal
    *   @param u forward speed
-   *   @param alpha steering angle
+   *   @param alpha gain, >1
    *   @param gama gamma, gain of the control law
    *   @return h gain of the controller
    */
@@ -92,7 +92,7 @@ protected:
    *   @param y coordinate of the robot w.r.t goal
    *   @param th angle of the pose (theta) w.r.t. goal
    *   @param u forward speed
-   *   @param alpha steering angle
+   *   @param alpha gain, >1
    *   @param gama gamma, gain of the control law
    *   @return h gain of the controller
    */
@@ -101,7 +101,7 @@ protected:
    *  compute the rotation rate required
    *  @param y coordinate of the robot w.r.t. goal
    *  @param th angle of the pose (theta) w.r.t. goal
-   *  @param a alpha, steering angle
+   *  @param a alpha, gain >1
    *  @param u forward speed
    *  @param err error handling
    *  @return omega (rotation rate)
