@@ -22,24 +22,14 @@
 #include <fcntl.h>
 #include <stdexcept>
 
-
 #include <sys/mman.h>
-
-
-
 #include "epos2/epos2.h"
 
-
-//VMC::CVmc *vmc;
-
 void quit(int sig) {
-
 	exit(0);
-
 }
 
 int main(int argc, char* argv[]) {
-
 	mlockall(MCL_CURRENT | MCL_FUTURE);
 
 	printf("Ros init...\n");
@@ -55,50 +45,40 @@ int main(int argc, char* argv[]) {
 	VMC::CVmc *vmc;
 	EPOS2* epos;
 
-	if ( controller == "VMC" ) {
-
-		printf("Using VMC as Motor Controler\n");
+	// create a new controller based on configuration
+	if (controller == "VMC") {
+		printf("Using VMC as motor controller\n");
 
 		vmc = new VMC::CVmc(device.c_str());
 
 		if( !vmc->isConnected() ) {
-
 			printf("Could not connect\n");
 			delete vmc;
 			return 1;
-
 		}
-
-	} else if ( controller == "EPOS2" ) {
-
-		printf("Using EPOS2 as Motor Controller\n");
+	} else if (controller == "EPOS2") {
+		printf("Using EPOS2 as motor controller\n");
 
 		epos = new EPOS2(device.c_str());
 
 		if( !epos->isConnected() ) {
-
 			printf("Could not connect\n");
 			delete epos;
 			return 1;
-
 		}
-
 	}
 
-
-	signal(SIGINT,quit);
+	// trap interrupt signal and execute quit function
+	signal(SIGINT, quit);
+	// look for callbacks
 	ros::spin();
 
-	if ( controller == "VMC" ) {
-
+	// cleanup
+	if (controller == "VMC") {
 		delete vmc;
-
-	} else if ( controller == "EPOS2" ) {
-
+	} else if (controller == "EPOS2") {
 		delete epos;
-
 	}
 
 	return 0;
-
 }

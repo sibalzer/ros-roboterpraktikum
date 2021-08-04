@@ -3,6 +3,7 @@
 Joystick::Joystick(const char *filename) {
   init(filename);
 }
+
 Joystick::Joystick() {
   init("/dev/input/js0");
 }
@@ -11,34 +12,35 @@ void Joystick::init(const char *filename) {
   fd = open(filename, O_RDONLY| O_NONBLOCK);
   if(fd < 0) {
     printf("Joystick not found!\n");
-    exit(0);
+    exit(1);
   }
-
 }
+
 Joystick::~Joystick() {
   close(fd);
 }
-    
+
 void Joystick::waitforevents() {
-  
   while(true) {
     if (read(fd, &je, 8) == 8) {
       if (je.type == BUTTON_TYPE) {
-        handleButton(je.number, je.value==1, je.time);
+        handleButton(je.number, je.value == 1, je.time);
       } else if(je.type == AXIS_TYPE) {
         handleAxis(je.number, je.value, je.time);
       }
     }
   }
-
 }
-
 
 void Joystick::waitforevent() {
     if (read(fd, &je, 8) == 8) {
+      printf("Event number: %x", je.number);
+
       if (je.type == BUTTON_TYPE) {
-        handleButton(je.number, je.value==1, je.time);
+        printf("Pressed button");
+        handleButton(je.number, je.value == 1, je.time);
       } else if(je.type == AXIS_TYPE) {
+        printf("Pressed axis");
         handleAxis(je.number, je.value, je.time);
       }
     }

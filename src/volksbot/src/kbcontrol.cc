@@ -95,7 +95,7 @@ void kbcontrol::run() {
         break;
     }
     setVelocity(c);
-    printf("Call servic: %f %f\n", velocity.request.left, velocity.request.right);
+    printf("Call service: %f %f\n", velocity.request.left, velocity.request.right);
     ros::service::call("Controls", velocity);
     
     ros::spinOnce();

@@ -20,17 +20,16 @@ int main(int argc, char* argv[])
     js = new Firejet(device.c_str());
   } else {
     ROS_ERROR("No joystick type specified!!!\n Aborting joystick-control.\n");
-    js = new Predator(device.c_str());
-    //return 0;
+    return 1;
   }
 
-   // js->waitforevents();
-    
+  // js->waitforevents();
   while (ros::ok())
   {
     js->waitforevent();
   }
 
+  // cleanup
   delete js;
 	return 0;
 }
