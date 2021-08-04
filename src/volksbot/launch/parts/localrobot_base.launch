@@ -24,5 +24,4 @@
   <node pkg="riegl" name="receiver" type="receiver" />
   <node pkg="riegl" name="scanassembler" type="assembler"/>
   -->
-
 </launch>

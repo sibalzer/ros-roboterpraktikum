@@ -7,7 +7,7 @@
 
   <!-- Essential volksbot stuff -->
   <node pkg="volksbot" name="volksbot" type="volksbot" />
-  <node pkg="volksbot" name="odometry" type="odometry" args="1"/>
+  <node pkg="volksbot" name="odometry" type="odometry" args="1" />
 
   <!-- Sensors -->
   <node pkg="lms100" name="sick_front" type="sicksensor" />
@@ -20,5 +20,4 @@
     <rosparam file="$(find volksbotRT)/launch/config/ekf_params.yaml" command="load" />
   </node>
   -->
-
 </launch>

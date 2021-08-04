@@ -7,7 +7,6 @@
 
   -->
   <node name="gmapping" pkg="gmapping" type="slam_gmapping" args="scan:=LMS">
-    <rosparam file="$(find volksbot)/launch/config/gmapping_cfg.yaml" command="load"/>
+    <rosparam file="$(find volksbot)/launch/config/gmapping_cfg.yaml" command="load" />
   </node>
-   
 </launch>
