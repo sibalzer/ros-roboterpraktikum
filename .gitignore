@@ -1,2 +1,7 @@
+# generated output
 build
 devel
+
+# IDE configs
+.vscode
+.idea
