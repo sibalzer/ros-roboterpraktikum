@@ -37,17 +37,17 @@ void Odometry::convertTicks2Odom(const ticksConstPtr& cticks)
   if (firstticks) {
     oldlticks = cticks->left;
     oldrticks = cticks->right;
-//    oldticks = *cticks;
+    // oldticks = *cticks;
     firstticks = false;
     return;
   }
 
   ros::Time current = cticks->header.stamp; 
 
-//  int left = cticks->left - oldticks.left;
-//  int right = cticks->right - oldticks.right;
-//  long difftime = cticks->timestamp - oldticks.timestamp;
-//  oldticks = *cticks;
+  // int left = cticks->left - oldticks.left;
+  // int right = cticks->right - oldticks.right;
+  // long difftime = cticks->timestamp - oldticks.timestamp;
+  // oldticks = *cticks;
 
   int left = cticks->left - oldlticks;
   int right = cticks->right - oldrticks;
@@ -96,8 +96,8 @@ void Odometry::convertTicks2Odom(const ticksConstPtr& cticks)
   //set the velocity only if reasonably accurate
   
   if (ddt > 0 && fabs(ax) < 5.0) {
-//  fprintf(file, "%f %f %f   %f %d %d  %f %f\n", current.toSec(), vl*-0.01, vr*-0.01,  ddt, cticks->left, cticks->right, (lastvx-(vx/ddt))/ddt, (lastvth-(vth/ddt))/ddt );
-//    fprintf(file, "%f %f %f   %f %f\n", current.toSec(), cticks->vx, cticks->vth, vx/ddt, -vth/ddt );
+    //  fprintf(file, "%f %f %f   %f %d %d  %f %f\n", current.toSec(), vl*-0.01, vr*-0.01,  ddt, cticks->left, cticks->right, (lastvx-(vx/ddt))/ddt, (lastvth-(vth/ddt))/ddt );
+    //    fprintf(file, "%f %f %f   %f %f\n", current.toSec(), cticks->vx, cticks->vth, vx/ddt, -vth/ddt );
     lastvx = vx/ddt;
     lastvth = vth/ddt;
     odom.twist.twist.linear.x = vx/ddt;
@@ -132,11 +132,11 @@ void Odometry::convertTicks2Odom(const ticksConstPtr& cticks)
 
 
 Odometry::~Odometry() {
-//fclose(file);
+  //fclose(file);
 }
 
 Odometry::Odometry(bool _publish_tf) {
-//file = fopen("/tmp/ist.txt", "w");
+  //file = fopen("/tmp/ist.txt", "w");
   publish_tf = _publish_tf;
   if(publish_tf) {
     ROS_INFO("With odometry tf");
@@ -199,4 +199,4 @@ void Odometry::update(int rate) {
 
 }
 
-}
+}  // namespace 
