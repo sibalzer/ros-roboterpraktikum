@@ -17,8 +17,6 @@
 
 #include "volksbot/odometry.h"
 
-//FILE *file;
-
 namespace volksbot {
 // -461.817 ticks to cm
 //const double Odometry::M  = -1.0/461.817;
