@@ -1,6 +1,9 @@
 <launch>
+  <env name="ROSCONSOLE_CONFIG_FILE"
+       value="$(find volksbot)/launch/config/debug-output.conf" />
+
   <!-- Load the configuration file -->
   <rosparam command="load" file="$(find volksbot)/launch/config/parameters.yaml" />
 
-  <node pkg="volksbot" name="joystick_control" type="jscontrol" />
+  <node pkg="volksbot" name="joystick_control" type="jscontrol" output="screen" />
 </launch>
