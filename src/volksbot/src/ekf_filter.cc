@@ -58,8 +58,6 @@ void ekffilter::addImu(const sensor_msgs::Imu& imu) {
 
   updateHistory();
 }
-  
-
 
 
 void ekffilter::updateHistory() {
