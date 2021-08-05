@@ -4,18 +4,16 @@ devices/joystick:       "/dev/input/js0"
 #devices/mti:            "/dev/xsens" 
 
 ##### VMC Controller (Irma, Lars) !!Comment or Un-comment the following lines
-#devices/controller:     "VMC"
-#devices/volksbot:       "/dev/volksbot"
-#odometry/wheel_base:    44.4
-#odometry/ticks_per_cm:  -461.817
-
-## OR
+devices/controller:     "VMC"
+devices/volksbot:       "/dev/volksbot"
+odometry/wheel_base:    44.4
+odometry/ticks_per_cm:  -461.817
 
 ##### EPOS2 Controller (Ute) !!Comment or Un-comment the following lines
-devices/controller:     "EPOS2"
-devices/volksbot:       "USB0"
-odometry/wheel_base:    44.4
-odometry/ticks_per_cm:  -1811.9178
+#devices/controller:     "EPOS2"
+#devices/volksbot:       "USB0"
+#odometry/wheel_base:    44.4
+#odometry/ticks_per_cm:  -1811.9178
 
 ##### Joystick
 control/joystick/logitechf710: 1
@@ -47,8 +45,8 @@ riegl/mode:             1
 
 ##### Laser-Scanner (Sick)
 #sick/ip:                "192.168.0.9"  #Lars
-#sick/ip:                "192.168.0.51" #Irma
-sick/ip:                "192.168.0.14"  #Ute
+sick/ip:                "192.168.0.51" #Irma
+#sick/ip:                "192.168.0.14"  #Ute
 sick/port:              2111
 
 sick/fov/min:           -45
