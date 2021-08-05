@@ -12,16 +12,21 @@ namespace volksbot {
   class Odometry {
     private:
 
+      // temporary file for map position output
+      FILE* file;
+
       ros::NodeHandle n; 
       ros::Publisher publisher;
       tf::TransformBroadcaster odom_broadcaster;
       ros::Subscriber subscriber;
       bool firstticks;
       bool publish_tf = false;
+      // current pose
       double x,z,theta;
 
       double lastvx, lastvth;
 
+      ros::Time old;
       int oldlticks, oldrticks;
 
 
@@ -32,11 +37,9 @@ namespace volksbot {
 
       static const double covariance[36];
       
-
       nav_msgs::Odometry odom;
-      
-      geometry_msgs::Quaternion odom_quat; //quaternion rotation
-  
+      // quaternion rotation
+      geometry_msgs::Quaternion odom_quat;
       geometry_msgs::TransformStamped odom_trans;
 
     public:
@@ -45,12 +48,12 @@ namespace volksbot {
       Odometry(bool _publish_tf);
       ~Odometry();
 
-      void setTicks(double m) {
-        M = 1.0 / m;
+      void setTicks(double ticksPerCm) {
+        M = 1.0 / ticksPerCm;
       }
 
-      void setWheelBase(double b) {
-        B = b;
+      void setWheelBase(double wheelBase) {
+        B = wheelBase;
       }
 
       void convertTicks2Odom(const ticksConstPtr& cticks);
@@ -60,8 +63,6 @@ namespace volksbot {
       }
 
       void update(int ms);
-
-
   };
 }
 
