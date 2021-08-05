@@ -34,14 +34,16 @@ void Joystick::waitforevents() {
 
 void Joystick::waitforevent() {
     if (read(fd, &je, 8) == 8) {
-      printf("Event number: %x", je.number);
+      // printf("Event number: 0x%x\n", je.number);
 
       if (je.type == BUTTON_TYPE) {
-        printf("Pressed button");
+        // printf("Pressed: button\n");
         handleButton(je.number, je.value == 1, je.time);
       } else if(je.type == AXIS_TYPE) {
-        printf("Pressed axis");
+        // printf("Pressed: axis\n");
         handleAxis(je.number, je.value, je.time);
       }
+
+      // printf("\n");
     }
 }

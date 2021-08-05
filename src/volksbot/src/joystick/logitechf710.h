@@ -16,14 +16,14 @@
 #define LOGITECH        0x07
 #define BACK            0x0A
 
-#define LSTICK_LEFTRIGHT  0x00
-#define LSTICK_UPDOWN     0x01
-#define THROTTLE_LEFT     0x02
-#define RSTICK_LEFTRIGHT  0x03
-#define RSTICK_UPDOWN     0x04
-#define THROTTLE_RIGHT    0x05
-#define HUD_LEFTRIGHT     0x06
-#define HUD_UPDOWN        0x07
+#define LSTICK_LEFTRIGHT  0x20
+#define LSTICK_UPDOWN     0x05
+#define THROTTLE_LEFT     0x22
+#define RSTICK_LEFTRIGHT  0x23
+#define RSTICK_UPDOWN     0x03
+#define THROTTLE_RIGHT    0x25
+#define HUD_LEFTRIGHT     0x26
+#define HUD_UPDOWN        0x27
 
 #define STICK_MIN_ACTIVITY   1000
 
