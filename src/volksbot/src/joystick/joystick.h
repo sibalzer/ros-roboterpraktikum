@@ -6,6 +6,8 @@
 #include <fcntl.h>
 #include <stdint.h>
 
+#include <ros/ros.h>
+
 #define BUTTON_TYPE 1 
 #define AXIS_TYPE 2
 

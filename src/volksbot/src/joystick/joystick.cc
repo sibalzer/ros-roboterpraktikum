@@ -34,10 +34,10 @@ void Joystick::waitforevents() {
 
 void Joystick::waitforevent() {
     if (read(fd, &je, 8) == 8) {
-      // printf("Event number: 0x%x\n", je.number);
+      ROS_DEBUG("Time: %d ms; value: %i, type: 0x%x, number: %u", je.time, je.value, je.type, je.number);
 
       if (je.type == BUTTON_TYPE) {
-        // printf("Pressed: button\n");
+        printf("Pressed: button\n");
         handleButton(je.number, je.value == 1, je.time);
       } else if(je.type == AXIS_TYPE) {
         // printf("Pressed: axis\n");

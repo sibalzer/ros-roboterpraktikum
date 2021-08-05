@@ -2,9 +2,7 @@
   <!-- Load the configuration file -->
   <rosparam command="load" file="$(find volksbot)/launch/config/parameters.yaml" /> 
 
-  <!--- GMapping variant 
-  <rosparam param="use_sim_time">true</rosparam>  
-  -->
+  <rosparam param="use_sim_time">true</rosparam>
   
   <node pkg="gmapping" name="gmapping" type="slam_gmapping" args="scan:=LMS">
     <rosparam file="$(find volksbot)/launch/config/gmapping_cfg.yaml" command="load" />
