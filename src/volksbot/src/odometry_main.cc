@@ -1,8 +1,9 @@
 #include "volksbot/odometry.h"
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]) {
   ros::init(argc, argv, "Odometry");
+
+  printf("Launching odometry node...\n");
 
   bool publish_tf = true;
 
