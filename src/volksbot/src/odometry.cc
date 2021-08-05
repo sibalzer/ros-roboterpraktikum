@@ -61,9 +61,9 @@ void Odometry::convertTicks2Odom(const ticksConstPtr& cticks)
   double ddt = dt.toSec();
 
   /////////////////
-  //double vl = M*left / ddt;
-  //double vr = M*right / ddt;
-  //fprintf(file, "%f %f %f   %f %d %d \n", current.toSec(), vl*-0.01, vr*-0.01,  ddt, cticks->left, cticks->right );
+  double vl = M*left / ddt;
+  double vr = M*right / ddt;
+  fprintf(file, "%f %f %f   %f %d %d \n", current.toSec(), vl*-0.01, vr*-0.01,  ddt, cticks->left, cticks->right );
 
 
 
@@ -79,8 +79,8 @@ void Odometry::convertTicks2Odom(const ticksConstPtr& cticks)
   odom_quat = tf::createQuaternionMsgFromYaw(-theta);
   
   //next, we'll publish the odometry message over ROS
-  //odom.header.stamp = cticks->timestamp;
-  odom.header.stamp= current;// no timestamp data TODO
+  odom.header.stamp = cticks->timestamp;
+  //odom.header.stamp= current;// no timestamp data TODO
   //set the position
   odom.pose.pose.position.x = x/100.0;
   odom.pose.pose.position.y = z/100.0;
@@ -91,13 +91,13 @@ void Odometry::convertTicks2Odom(const ticksConstPtr& cticks)
     odom.pose.covariance[i] = covariance[i];
 
   double ax = (lastvx-(vx/ddt))/ddt;   // acceleration in cm/s^2
-  //double ath = (lastvth-(vth/ddt))/ddt;  // acceleration in rad/s^2
+  double ath = (lastvth-(vth/ddt))/ddt;  // acceleration in rad/s^2
   ax *= 0.01;   // m/s^2
   //set the velocity only if reasonably accurate
   
   if (ddt > 0 && fabs(ax) < 5.0) {
-    //  fprintf(file, "%f %f %f   %f %d %d  %f %f\n", current.toSec(), vl*-0.01, vr*-0.01,  ddt, cticks->left, cticks->right, (lastvx-(vx/ddt))/ddt, (lastvth-(vth/ddt))/ddt );
-    //    fprintf(file, "%f %f %f   %f %f\n", current.toSec(), cticks->vx, cticks->vth, vx/ddt, -vth/ddt );
+    fprintf(file, "%f %f %f   %f %d %d  %f %f\n", current.toSec(), vl*-0.01, vr*-0.01,  ddt, cticks->left, cticks->right, (lastvx-(vx/ddt))/ddt, (lastvth-(vth/ddt))/ddt );
+    fprintf(file, "%f %f %f   %f %f\n", current.toSec(), cticks->vx, cticks->vth, vx/ddt, -vth/ddt );
     lastvx = vx/ddt;
     lastvth = vth/ddt;
     odom.twist.twist.linear.x = vx/ddt;
@@ -115,7 +115,7 @@ void Odometry::convertTicks2Odom(const ticksConstPtr& cticks)
 
   if(publish_tf) {
     ros::Time current_time = ros::Time::now();
-    odom_trans.header.stamp = current_time;// no timestamp data TODO
+    odom_trans.header.stamp = cticks->timestamp; // current_time;// no timestamp data TODO
     odom_trans.header.frame_id = "odom_combined";
     odom_trans.child_frame_id = "base_link";
   
@@ -132,11 +132,11 @@ void Odometry::convertTicks2Odom(const ticksConstPtr& cticks)
 
 
 Odometry::~Odometry() {
-  //fclose(file);
+  fclose(file);
 }
 
 Odometry::Odometry(bool _publish_tf) {
-  //file = fopen("/tmp/ist.txt", "w");
+  file = fopen("/tmp/ist.txt", "w");
   publish_tf = _publish_tf;
   if(publish_tf) {
     ROS_INFO("With odometry tf");
@@ -185,7 +185,7 @@ void Odometry::update(int rate) {
 
   while (ros::ok()) {
     ros::Time current = ros::Time::now();
-    odom.header.stamp= current;// no timestamp data TODO
+    // odom.header.stamp= current;// no timestamp data TODO  does this happen above in the cticks stuff? 
 
     publisher.publish(odom);
   
