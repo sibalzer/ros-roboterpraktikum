@@ -6,12 +6,7 @@
   <rosparam param="use_sim_time">true</rosparam/>
   --> 
   
-  <!-- AMCL localization variant
-  -->
-  <node name="map_server" pkg="map_server" type="map_server" args="$(find volksbot)/launch/config/map_gmapping.yaml" />
-
-  <!-- Run AMCL 
- -->
+  <!-- Run AMCL -->
   <node pkg="amcl" type="amcl" name="amcl" args="scan:=/LMS">
     <rosparam file="$(find volksbot)/launch/config/amcl_diff_cfg.yaml" command="load" />
   </node>
