@@ -140,6 +140,14 @@ target_link_libraries(jscontrol
 )
 add_dependencies(jscontrol volksbot_generate_messages_cpp)
 
+add_executable(pose_logger 
+  src/pose_logger.cc
+)
+set_target_properties(pose_logger PROPERTIES LINK_FLAGS "-pthread")
+target_link_libraries(pose_logger
+  ${catkin_LIBRARIES}
+)
+add_dependencies(pose_logger volksbot_generate_messages_cpp)
 
 MESSAGE(STATUS "STATUS: ${CATKIN_PACKAGE_INCLUDE_DESTINATION}")
 MESSAGE(STATUS "STATUS: ${CATKIN_GLOBAL_INCLUDE_DESTINATION}")

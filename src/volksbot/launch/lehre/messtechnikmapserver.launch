@@ -2,12 +2,14 @@
     <!-- Load the configuration file -->
     <rosparam command="load" file="$(find volksbot)/launch/config/parameters.yaml" />
 
-    <!--
-    <rosparam param="use_sim_time">true</rosparam/>
-    --> 
+    <rosparam param="use_sim_time">true</rosparam>
   
     <!-- AMCL localization variant-->
-    <node name="map_server" pkg="map_server" type="map_server">
-        <rosparam file="$(find volksbot)/launch/config/map_gmapping.yaml" command="load" />
-    </node>
+    <node
+        name="map_server"
+        pkg="map_server"
+        type="map_server"
+        args="$(find volksbot)/launch/config/map_gmapping.yaml"
+        output="screen"
+    />
 </launch>

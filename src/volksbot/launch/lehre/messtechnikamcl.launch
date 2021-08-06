@@ -2,12 +2,10 @@
   <!-- Load the configuration file -->
   <rosparam command="load" file="$(find volksbot)/launch/config/parameters.yaml" /> 
 
-  <!--
-  <rosparam param="use_sim_time">true</rosparam/>
-  --> 
+  <rosparam param="use_sim_time">true</rosparam>
   
   <!-- Run AMCL -->
-  <node pkg="amcl" type="amcl" name="amcl" args="scan:=/LMS">
+  <node pkg="amcl" type="amcl" name="amcl" args="scan:=/LMS" output="screen">
     <rosparam file="$(find volksbot)/launch/config/amcl_diff_cfg.yaml" command="load" />
   </node>
 
