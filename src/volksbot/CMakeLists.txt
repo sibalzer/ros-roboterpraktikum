@@ -94,12 +94,18 @@ add_library(odo
 )
 add_dependencies(odo volksbot_generate_messages_cpp) 
 
+add_library(Simulator
+  src/Simulator/Simulator.cpp
+)
+add_dependencies(Simulator volksbot_generate_messages_cpp)
+
 add_executable(volksbot src/volksbot.cc)
 set_target_properties(volksbot PROPERTIES LINK_FLAGS "-pthread")
 target_link_libraries(volksbot
   ${catkin_LIBRARIES}
   VMCLIB
   EPOS2
+  Simulator
 )
 add_dependencies(volksbot volksbot_generate_messages_cpp) 
 

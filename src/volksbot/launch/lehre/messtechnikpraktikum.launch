@@ -1,4 +1,8 @@
 <launch>
+
+  <env name="ROSCONSOLE_CONFIG_FILE"
+       value="$(find volksbot)/launch/config/debug-output.conf" />
+
   <!-- Load the configuration file -->
   <rosparam command="load" file="$(find volksbot)/launch/config/parameters.yaml" /> 
 
@@ -6,7 +10,7 @@
   <include file="$(find volksbot)/launch/parts/localcalibration.launch" />
 
   <!-- Essential volksbot stuff -->
-  <node pkg="volksbot" name="volksbot" type="volksbot" />
+  <node pkg="volksbot" name="volksbot" type="volksbot" output="screen" />
   <node pkg="volksbot" name="odometry" type="odometry" args="1" />
 
   <!-- Sensors -->

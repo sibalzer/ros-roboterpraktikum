@@ -4,10 +4,13 @@ devices/joystick:       "/dev/input/js0"
 #devices/mti:            "/dev/xsens" 
 
 ##### VMC Controller (Irma, Lars) !!Comment or Un-comment the following lines
-devices/controller:     "VMC"
-devices/volksbot:       "/dev/volksbot"
-odometry/wheel_base:    44.4
-odometry/ticks_per_cm:  -461.817
+#devices/controller:     "VMC"
+#devices/volksbot:       "/dev/volksbot"
+#odometry/wheel_base:    44.4
+#odometry/ticks_per_cm:  -461.817
+
+##### Simulator Controller !!Comment or Un-comment the following lines
+devices/controller: "SIM"
 
 ##### EPOS2 Controller (Ute) !!Comment or Un-comment the following lines
 #devices/controller:     "EPOS2"

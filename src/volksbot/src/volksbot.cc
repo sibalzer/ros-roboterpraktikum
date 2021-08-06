@@ -24,6 +24,7 @@
 
 #include <sys/mman.h>
 #include "epos2/epos2.h"
+#include "Simulator/Simulator.h"
 
 void quit(int sig) {
 	exit(0);
@@ -44,6 +45,7 @@ int main(int argc, char* argv[]) {
 
 	VMC::CVmc *vmc;
 	EPOS2* epos;
+	Simulator *sim;
 
 	// create a new controller based on configuration
 	if (controller == "VMC") {
@@ -66,6 +68,11 @@ int main(int argc, char* argv[]) {
 			delete epos;
 			return 1;
 		}
+	} else if (controller == "SIM") {
+		ROS_INFO("Using SIM as motor controller\n");
+		printf("Using Sim as motor controller.\n");
+
+		sim = new Simulator();
 	}
 
 	// trap interrupt signal and execute quit function
@@ -78,6 +85,8 @@ int main(int argc, char* argv[]) {
 		delete vmc;
 	} else if (controller == "EPOS2") {
 		delete epos;
+	} else if (controller == "SIM") {
+		delete sim;
 	}
 
 	return 0;
