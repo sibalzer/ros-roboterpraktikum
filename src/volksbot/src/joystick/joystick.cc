@@ -11,7 +11,7 @@ Joystick::Joystick() {
 void Joystick::init(const char *filename) {
   fd = open(filename, O_RDONLY| O_NONBLOCK);
   if(fd < 0) {
-    printf("Joystick not found!\n");
+    ROS_ERROR("Joystick not found!");
     exit(1);
   }
 }

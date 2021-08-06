@@ -47,22 +47,22 @@ int main(int argc, char* argv[]) {
 
 	// create a new controller based on configuration
 	if (controller == "VMC") {
-		printf("Using VMC as motor controller\n");
+		ROS_INFO("Using VMC as motor controller\n");
 
 		vmc = new VMC::CVmc(device.c_str());
 
 		if( !vmc->isConnected() ) {
-			printf("Could not connect\n");
+			ROS_ERROR("Could not connect\n");
 			delete vmc;
 			return 1;
 		}
 	} else if (controller == "EPOS2") {
-		printf("Using EPOS2 as motor controller\n");
+		ROS_INFO("Using EPOS2 as motor controller\n");
 
 		epos = new EPOS2(device.c_str());
 
 		if( !epos->isConnected() ) {
-			printf("Could not connect\n");
+			ROS_ERROR("Could not connect\n");
 			delete epos;
 			return 1;
 		}
