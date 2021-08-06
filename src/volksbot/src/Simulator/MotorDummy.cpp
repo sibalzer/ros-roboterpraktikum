@@ -1,18 +1,18 @@
-#include "Simulator.h"
+#include "MotorDummy.h"
 
-Simulator::Simulator() {
+MotorDummy::MotorDummy() {
     absolute_rotations_left = 0;
     absolute_rotations_right = 0;
 
-    max_velocity = 100; // rotations per 0.01s
+    max_velocity = 1; // rotations per second
     frequency = 200;
     period_us = 1000000/200;
-    Simulator::init();
+    MotorDummy::init();
 }
 
-Simulator::~Simulator() {}
+MotorDummy::~MotorDummy() {}
 
-bool Simulator::callback(volksbot::velocities::Request& vel, volksbot::velocities::Response& response) {
+bool MotorDummy::callback(volksbot::velocities::Request& vel, volksbot::velocities::Response& response) {
 
 	lastcommand = ros::Time::now();
 	leftvel = vel.left;
@@ -21,7 +21,7 @@ bool Simulator::callback(volksbot::velocities::Request& vel, volksbot::velocitie
 	return true;
 }
 
-void Simulator::Vcallback(const volksbot::velsConstPtr& vel ) {
+void MotorDummy::Vcallback(const volksbot::velsConstPtr& vel ) {
 
 	//ROS_INFO("Velocity Callback");
 	lastcommand = ros::Time::now();
@@ -29,7 +29,7 @@ void Simulator::Vcallback(const volksbot::velsConstPtr& vel ) {
 	rightvel = vel->right;
 }
 
-void Simulator::CVcallback(const geometry_msgs::Twist::ConstPtr& cmd_vel) {
+void MotorDummy::CVcallback(const geometry_msgs::Twist::ConstPtr& cmd_vel) {
 
 	lastcommand = ros::Time::now();
 	vx = cmd_vel->linear.x;
@@ -71,15 +71,15 @@ void Simulator::CVcallback(const geometry_msgs::Twist::ConstPtr& cmd_vel) {
 
 }
 
-void* Simulator::threadFunction(void* param) {
+void* MotorDummy::threadFunction(void* param) {
     
-    Simulator* ref = (Simulator*) param;
+    MotorDummy* ref = (MotorDummy*) param;
 
 	volksbot::ticks t;
 
 	t.header.frame_id = "base_link";
 
-	while ( ref->isConnected() ) {
+	while ( ros::ok() ) {
 
 		ros::Time current = ros::Time::now();
 		t.header.stamp = current;
@@ -88,11 +88,10 @@ void* Simulator::threadFunction(void* param) {
 		int tics_right = 0;
 
         // use ref->rightvel*MAX_RPM/100 for right wheel
-
         // use ref->leftvel*MAX_RPM/100 for left wheel
 
-        ref->absolute_rotations_left  += ref->max_velocity * ref->leftvel/100;
-        ref->absolute_rotations_right += ref->max_velocity * ref->rightvel/100;
+        ref->absolute_rotations_left  += ref->max_velocity * ref->leftvel;
+        ref->absolute_rotations_right += ref->max_velocity * ref->rightvel;
 
 		if (current - ref->lastcommand < ros::Duration(50.5) ) {
 
@@ -102,6 +101,7 @@ void* Simulator::threadFunction(void* param) {
 
 		}
 
+		// that inversion also happened in EPOS controller
 		t.left = tics_left;
 		t.right = - tics_right;
 
@@ -116,22 +116,22 @@ void* Simulator::threadFunction(void* param) {
     return param;
 }
 
-void Simulator::init() {
+void MotorDummy::init() {
 
-    printf("Simulator initialized\n");
-    ROS_INFO("Simulator initialized");
+    printf("MotorDummy initialized\n");
+    ROS_INFO("MotorDummy initialized");
 	leftvel = 0.0;
 	rightvel = 0.0;
 	vx = 0;
 	vth = 0;
 
-	pub = n.advertise<volksbot::ticks>("SIM", 20);
+	pub = n.advertise<volksbot::ticks>("VMC", 20); // yeah, this is stupid...
 
-	sub = n.subscribe("Vel", 100, &Simulator::Vcallback, this, ros::TransportHints().reliable().udp().maxDatagramSize(100));
+	sub = n.subscribe("Vel", 100, &MotorDummy::Vcallback, this, ros::TransportHints().reliable().udp().maxDatagramSize(100));
 
-	cmd_vel_sub_ = n.subscribe<geometry_msgs::Twist>("cmd_vel", 10, &Simulator::CVcallback, this, ros::TransportHints().reliable().udp().maxDatagramSize(100));
+	cmd_vel_sub_ = n.subscribe<geometry_msgs::Twist>("cmd_vel", 10, &MotorDummy::CVcallback, this, ros::TransportHints().reliable().udp().maxDatagramSize(100));
 
-	service = n.advertiseService("Controls", &Simulator::callback, this);
-	pthread_create(&threadId, NULL, &Simulator::threadFunction, this);
+	service = n.advertiseService("Controls", &MotorDummy::callback, this);
+	pthread_create(&threadId, NULL, &MotorDummy::threadFunction, this);
 
 }

@@ -160,7 +160,6 @@ Odometry::Odometry(bool _publish_tf) {
   lastvth = 0;
 
   publisher = n.advertise<nav_msgs::Odometry>("odom", 100);
-  // better get this from parameters.yaml because there is also SIM
   subscriber = n.subscribe("VMC", 20, &Odometry::convertTicks2Odom, this);
   firstticks = true;
   

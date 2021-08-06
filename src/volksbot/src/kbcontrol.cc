@@ -13,13 +13,13 @@
 #include <fcntl.h>
 #include <stdexcept>
 
-#define KEYCODE_R 0x43 
-#define KEYCODE_L 0x44
-#define KEYCODE_U 0x41
-#define KEYCODE_D 0x42
-#define KEYCODE_Q 0x71
-#define KEYCODE_A 0x61
-#define KEYCODE_Y 0x79
+#define KEYCODE_R 'r' //0x43 
+#define KEYCODE_L 'l' //0x44
+#define KEYCODE_U 'u' //0x41
+#define KEYCODE_D 'd' //0x42
+#define KEYCODE_Q 'q' //0x71
+#define KEYCODE_A 'a' //0x61
+#define KEYCODE_Y 'y' //0x79
 
 // service
 #include "volksbot/velocities.h"
@@ -78,7 +78,7 @@ void kbcontrol::run() {
   while (ros::ok() ) {
     c = KEYCODE_Q;
     read(kfd, &c, 1);
-    
+        
     switch(c)
     {
       case KEYCODE_A:
@@ -92,9 +92,10 @@ void kbcontrol::run() {
         break;
       default:
         previous = c;
+        setVelocity(c);
         break;
     }
-    setVelocity(c);
+    
     printf("Call service: %f %f\n", velocity.request.left, velocity.request.right);
     ros::service::call("Controls", velocity);
     

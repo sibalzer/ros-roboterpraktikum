@@ -10,7 +10,7 @@ devices/joystick:       "/dev/input/js0"
 #odometry/ticks_per_cm:  -461.817
 
 ##### Simulator Controller !!Comment or Un-comment the following lines
-devices/controller: "SIM"
+devices/controller:      "SIM"
 
 ##### EPOS2 Controller (Ute) !!Comment or Un-comment the following lines
 #devices/controller:     "EPOS2"
