@@ -2,6 +2,8 @@
     <!-- Initialize -->
     <include file="$(find volksbot)/launch/parts/pre.xml" />
 
+    <rosparam param="use_sim_time">false</rosparam>
+
     <node
         pkg="map_server"
         type="map_server"

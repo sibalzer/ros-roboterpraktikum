@@ -6,16 +6,17 @@
     />
 
     <!-- Set current working robot (use one of: irma, lars, sim, ute) -->
-    <arg name="ROBOT" default="sim" />
+    <arg name="robot" default="sim" />
+    <arg name="use_sim" default="true" />
 
     <!-- Load the generic configuration file -->
     <rosparam command="load" file="$(find volksbot)/config/parameters.yaml" />
 
     <!-- Load robot specific configuration file -->
-    <rosparam command="load" file="$(find volksbot)/config/robot/$(arg ROBOT).yaml" />
+    <rosparam command="load" file="$(find volksbot)/config/robot/$(arg robot).yaml" />
 
     <!-- Set to true, if we are in a simulation -->
-    <rosparam param="use_sim_time" if="$(eval arg('ROBOT') == 'sim')">
+    <rosparam param="use_sim_time" if="$(eval arg('use_sim') == 'true')">
         true
     </rosparam>
 </launch>
