@@ -155,6 +155,16 @@ target_link_libraries(pose_logger
 )
 add_dependencies(pose_logger volksbot_generate_messages_cpp)
 
+add_executable(input_gio 
+  src/gio_path/gio_path.cpp
+  src/gio_path/input_gio.cc
+)
+set_target_properties(input_gio PROPERTIES LINK_FLAGS "-pthread")
+target_link_libraries(input_gio
+  ${catkin_LIBRARIES}
+)
+add_dependencies(input_gio volksbot_generate_messages_cpp)
+
 MESSAGE(STATUS "STATUS: ${CATKIN_PACKAGE_INCLUDE_DESTINATION}")
 MESSAGE(STATUS "STATUS: ${CATKIN_GLOBAL_INCLUDE_DESTINATION}")
 MESSAGE(STATUS "STATUS: include/${PROJECT_NAME}")

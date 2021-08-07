@@ -1,4 +1,4 @@
-#include <gio_path/gio_path.h>
+#include "gio_path.h"
 
 using namespace std;
 
@@ -49,13 +49,13 @@ double CGioController::Compute_W(double y, double theta, double a, double u, int
   {  // e. g. y = 0
     if (fabs(theta) >= d_th)
     {
-      cerr << "H1_1\n";
+      //cerr << "H1_1\n";
       h = H_case_1(y, theta, u, a, &gamma);
       *err = 0;
     }
     else
     {  // value for theta to small to evaluate correctly
-      cerr << "H1_2\n";
+      //cerr << "H1_2\n";
       h = H_case_1(y, d_th, u, a, &gamma);
       *err = 0;
     }
