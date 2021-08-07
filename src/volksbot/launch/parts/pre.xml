@@ -5,8 +5,8 @@
         value="$(find volksbot)/config/rosconsole.conf"
     />
 
-    <!-- Load the current robot selection -->
-    <include file="$(find volksbot)/launch/parts/robot-selector.xml" />
+    <!-- Set current working robot (use one of: irma, lars, sim, ute) -->
+    <arg name="ROBOT" default="sim" />
 
     <!-- Load the generic configuration file -->
     <rosparam command="load" file="$(find volksbot)/config/parameters.yaml" />

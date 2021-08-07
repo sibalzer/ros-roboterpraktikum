@@ -1,4 +1,0 @@
-<launch>
-    <!-- Set current working robot (use one of: irma, lars, sim, ute) -->
-    <arg name="ROBOT" value="irma" />
-</launch>
