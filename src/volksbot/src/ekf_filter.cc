@@ -7,11 +7,11 @@ using std::queue;
 #include <vector>
 using std::vector;
 #include <sstream>
-using std::stringstream;
-using std::string;
 using std::cout;
 using std::endl;
 using std::ifstream;
+using std::string;
+using std::stringstream;
 
 void ekffilter::addOdom(const nav_msgs::Odometry& odom)
 {

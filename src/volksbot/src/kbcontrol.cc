@@ -121,7 +121,7 @@ void kbcontrol::run()
     loop_rate.sleep();
   }
 }
-}
+}  // namespace volksbot
 
 int main(int argc, char* argv[])
 {

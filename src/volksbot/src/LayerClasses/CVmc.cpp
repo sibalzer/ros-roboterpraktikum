@@ -363,15 +363,15 @@ int CVmc::getMotorValue(int motor, int state)
       value = (int)_apiObject->useVMC().Motor[motor].EncoderTicksRelativ.getValue();
       break;
 
-    //		case MOTOR_POWER:
-    //
-    //			value= (int) _apiObject->useVMC().Motor[motor].ActualPowerOutput.getValue();
-    //			break;
+      //		case MOTOR_POWER:
+      //
+      //			value= (int) _apiObject->useVMC().Motor[motor].ActualPowerOutput.getValue();
+      //			break;
 
-    //		case MOTOR_TEMPERATURE:
-    //
-    //			value= (int) apiObject->useVMC().Motor[motor].ActualWindingTemperature.getValue();
-    //			break;
+      //		case MOTOR_TEMPERATURE:
+      //
+      //			value= (int) apiObject->useVMC().Motor[motor].ActualWindingTemperature.getValue();
+      //			break;
 
     default:
       value = VMC_ERROR;

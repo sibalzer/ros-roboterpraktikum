@@ -60,16 +60,14 @@ void Predator::handleAxis(uint8_t number, int16_t value, uint32_t time)
 {
   switch (number)
   {
-    case LEFTUPDOWN:
-    {
+    case LEFTUPDOWN: {
       rightvel = ((double)value) / (double)JS_MAX_VALUE;
       sendSpeed();
       break;
     }
     case LEFTLEFTRIGHT:
       break;
-    case RIGHTUPDOWN:
-    {
+    case RIGHTUPDOWN: {
       leftvel = ((double)value) / (double)JS_MAX_VALUE;
       sendSpeed();
       break;

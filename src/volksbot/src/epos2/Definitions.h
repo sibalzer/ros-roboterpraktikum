@@ -13,7 +13,8 @@
 ** Changes:        4.8.1.0    (15.12.10): initial version
 ** 			       4.8.2.0    (14.03.11): usb interface related bugfix's
 ** 			       4.9.1.0    (27.07.12): ipm mode bugfix, kernel 2.6 support, ftdi driver update
-** 			       4.9.2.0    (26.04.13): rs232 baudrate bugfix, new functions: VCS_GetHomingState, VCS_WaitForHomingAttained,
+** 			       4.9.2.0    (26.04.13): rs232 baudrate bugfix, new functions: VCS_GetHomingState,
+*VCS_WaitForHomingAttained,
 ***                                        VCS_GetVelocityIsAveraged, VCS_GetCurrentIsAveraged
 ** 			       5.0.1.0    (10.10.14): x86_64, arm sf/hf support, new functions: VCS_GetDriverInfo, bugfix:
 *VCS_GetErrorInfo
@@ -50,8 +51,8 @@ int DeleteCommunication();
 #define CanLayer_DllExport extern "C"
 
 /*************************************************************************************************************************************
-* INITIALISATION FUNCTIONS
-*************************************************************************************************************************************/
+ * INITIALISATION FUNCTIONS
+ *************************************************************************************************************************************/
 
 // Communication
 Initialisation_DllExport void* VCS_OpenDevice(char* DeviceName, char* ProtocolStackName, char* InterfaceName,
@@ -101,8 +102,8 @@ HelpFunctions_DllExport int VCS_GetPortName(void* KeyHandle, char* pPortName, un
                                             unsigned int* pErrorCode);
 
 /*************************************************************************************************************************************
-* CONFIGURATION FUNCTIONS
-*************************************************************************************************************************************/
+ * CONFIGURATION FUNCTIONS
+ *************************************************************************************************************************************/
 
 // General
 Configuration_DllExport int VCS_SetObject(void* KeyHandle, unsigned short NodeId, unsigned short ObjectIndex,
@@ -228,8 +229,8 @@ Configuration_DllExport int VCS_GetVelocityUnits(void* KeyHandle, unsigned short
                                                  char* pVelNotation, unsigned int* pErrorCode);
 
 /*************************************************************************************************************************************
-* OPERATION FUNCTIONS
-*************************************************************************************************************************************/
+ * OPERATION FUNCTIONS
+ *************************************************************************************************************************************/
 
 // OperationMode
 Status_DllExport int VCS_SetOperationMode(void* KeyHandle, unsigned short NodeId, char OperationMode,
@@ -519,8 +520,8 @@ InputsOutputs_DllExport int VCS_ResetPositionMarkerCounter(void* KeyHandle, unsi
                                                            unsigned int* pErrorCode);
 
 /*************************************************************************************************************************************
-* LOW LAYER FUNCTIONS
-*************************************************************************************************************************************/
+ * LOW LAYER FUNCTIONS
+ *************************************************************************************************************************************/
 
 // CanLayer Functions
 CanLayer_DllExport int VCS_SendCANFrame(void* KeyHandle, unsigned short CobID, unsigned short Length, void* pData,
@@ -533,8 +534,8 @@ CanLayer_DllExport int VCS_SendNMTService(void* KeyHandle, unsigned short NodeId
                                           unsigned int* pErrorCode);
 
 /*************************************************************************************************************************************
-* TYPE DEFINITIONS
-*************************************************************************************************************************************/
+ * TYPE DEFINITIONS
+ *************************************************************************************************************************************/
 // Communication
 // Dialog Mode
 const int DM_PROGRESS_DLG = 0;

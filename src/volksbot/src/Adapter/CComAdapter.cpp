@@ -398,4 +398,4 @@ int CComAdapter::clearTransmissionBuffer()
 #endif
   return 0;
 }
-}
+}  // namespace fair

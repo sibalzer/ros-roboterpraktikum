@@ -72,6 +72,6 @@ private:
 #endif
 };
 
-} /*namespace*/
+}  // namespace fair
 
 #endif /*CTIMER_H__*/

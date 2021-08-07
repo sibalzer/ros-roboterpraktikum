@@ -247,6 +247,6 @@ private:
    */
   char _szBuffer[1024];
 };
-}
+}  // namespace fair
 
 #endif  // #ifdef __COMADAPTER_H__

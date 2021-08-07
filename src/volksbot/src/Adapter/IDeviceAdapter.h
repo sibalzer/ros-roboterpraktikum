@@ -224,6 +224,6 @@ private:
 private:
 #endif
 };
-}
+}  // namespace fair
 
 #endif /*IDEVICEADAPTER_H_*/

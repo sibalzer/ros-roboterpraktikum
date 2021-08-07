@@ -66,6 +66,6 @@ public:
 
   void update(int ms);
 };
-}
+}  // namespace volksbot
 
 #endif

@@ -25,11 +25,11 @@ bool CMotor::Init(CTranslationLayer* Trans, BYTE* pNextRequestCommand, CChannel 
    * =================================================*/
 
   /*==================VelocityController=====================*/
-  VelocityControllerState.Init(
-      m_pTrans, pNextRequestCommand,             // Pointer to the Translation Layer / Pointer to next Request Command
-      _CMDGRP_MOTOR_CONFIN_, _MCMD_CONTROLLER_,  // Command Group / Command
-      SignedInteger, m_Channel, "VelocityControllerState",  // Data Type / Motor Channel / Name
-      0.0, 1.0, 0.0, one, none);                            // Value / Maximum Value / Minimum Value / Unit Prefix, Unit
+  VelocityControllerState.Init(m_pTrans, pNextRequestCommand,  // Pointer to the Translation Layer / Pointer to next
+                                                               // Request Command
+                               _CMDGRP_MOTOR_CONFIN_, _MCMD_CONTROLLER_,             // Command Group / Command
+                               SignedInteger, m_Channel, "VelocityControllerState",  // Data Type / Motor Channel / Name
+                               0.0, 1.0, 0.0, one, none);  // Value / Maximum Value / Minimum Value / Unit Prefix, Unit
 
   VelocityControllerLinearPart.Init(
       m_pTrans, pNextRequestCommand,             // Pointer to the Translation Layer / Pointer to next Request Command
@@ -67,11 +67,11 @@ bool CMotor::Init(CTranslationLayer* Trans, BYTE* pNextRequestCommand, CChannel 
   /*==============================================*/
 
   /*===================CurrentController=======================*/
-  CurrentControllerState.Init(
-      m_pTrans, pNextRequestCommand,  // Pointer to the Translation Layer / Pointer to next Request Command
-      0x0, 0x0,                       // Command Group / Command
-      SignedInteger, m_Channel, "CurrentControllerState",  // Data Type / Motor Channel / Name
-      0.0, 1.0, 0.0, one, none);                           // Value / Maximum Value / Minimum Value / Unit Prefix, Unit
+  CurrentControllerState.Init(m_pTrans, pNextRequestCommand,  // Pointer to the Translation Layer / Pointer to next
+                                                              // Request Command
+                              0x0, 0x0,                       // Command Group / Command
+                              SignedInteger, m_Channel, "CurrentControllerState",  // Data Type / Motor Channel / Name
+                              0.0, 1.0, 0.0, one, none);  // Value / Maximum Value / Minimum Value / Unit Prefix, Unit
 
   CurrentControllerLinearPart.Init(
       m_pTrans, pNextRequestCommand,   // Pointer to the Translation Layer / Pointer to next Request Command
@@ -241,11 +241,11 @@ bool CMotor::Init(CTranslationLayer* Trans, BYTE* pNextRequestCommand, CChannel 
       //		0.0, 2147483647.0, 0.0, one, none);			//Value / Maximum Value / Minimum Value / Unit Prefix, Unit
       0.0, 2147483647.0, 0.0, one, none);  // Value / Maximum Value / Minimum Value / Unit Prefix, Unit
 
-  ClearOneAbsolutRotations.Init(
-      m_pTrans, pNextRequestCommand,  // Pointer to the Translation Layer / Pointer to next Request Command
-      _CMDGRP_MOTOR_CONFIN_, _MCMD_CLEAR_ONE_TICKS_ABS_,  // Command Group / Command
-      UnsignedChar, m_Channel, "ClearAbsolutRotations",   // Data Type / Motor Channel / Name
-      0.0, 1.0, 0.0, one, none);                          // Value / Maximum Value / Minimum Value / Unit Prefix, Unit
+  ClearOneAbsolutRotations.Init(m_pTrans, pNextRequestCommand,  // Pointer to the Translation Layer / Pointer to next
+                                                                // Request Command
+                                _CMDGRP_MOTOR_CONFIN_, _MCMD_CLEAR_ONE_TICKS_ABS_,  // Command Group / Command
+                                UnsignedChar, m_Channel, "ClearAbsolutRotations",   // Data Type / Motor Channel / Name
+                                0.0, 1.0, 0.0, one, none);  // Value / Maximum Value / Minimum Value / Unit Prefix, Unit
 
   EncoderTicksRelativ.Init(m_pTrans,
                            pNextRequestCommand,  // Pointer to the Translation Layer / Pointer to next Request Command

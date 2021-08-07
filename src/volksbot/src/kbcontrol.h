@@ -22,4 +22,4 @@ public:
   kbcontrol();
   void run();
 };
-}
+}  // namespace volksbot

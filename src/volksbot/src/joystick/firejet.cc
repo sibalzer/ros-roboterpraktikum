@@ -87,20 +87,17 @@ void Firejet::handleAxis(uint8_t number, int16_t value, uint32_t time)
       }
       sendSpeed();
       break;
-    case SPEEDO:
-    {
+    case SPEEDO: {
       speed = 50.0 * ((double)value) / JS_MIN_VALUE + 50.0;
       setSpeed();
       break;
     }
-    case JSUPDOWN:
-    {
+    case JSUPDOWN: {
       sticky = ((double)value) / JS_MIN_VALUE;
       setSpeed();
       break;
     }
-    case JSLEFTRIGHT:
-    {
+    case JSLEFTRIGHT: {
       stickx = ((double)value) / JS_MAX_VALUE;
       setSpeed();
       break;

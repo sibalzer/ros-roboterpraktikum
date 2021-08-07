@@ -232,4 +232,4 @@ void Odometry::update(int rate)
   }
 }
 
-}  // namespace
+}  // namespace volksbot

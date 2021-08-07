@@ -91,8 +91,8 @@ public:
   CVmc(const char* comPort);
 
   /**
-     * The default destructor closes the connection to VMC
-     */
+   * The default destructor closes the connection to VMC
+   */
   ~CVmc();
 
   /**

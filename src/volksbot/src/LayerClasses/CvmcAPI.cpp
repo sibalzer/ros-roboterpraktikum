@@ -229,7 +229,7 @@ CStorage& CvmcAPI::useVMC()
   if (!m_ReceivedMessage.isValidMessage())
     VMC_Errors.push_back(CError("no message received", "CStorage CvmcAPI::useVMC()"));
 #endif
-///////////////////////////////////DEBUG///////////////////////////////////////////
+    ///////////////////////////////////DEBUG///////////////////////////////////////////
 
 #ifdef REAL_TIME
   m_VMC.setTimeStamp(ts);
@@ -400,8 +400,7 @@ bool CvmcAPI::interpreteConfigurationResponse(const CMessage& Message)
       return (m_VMC.Motor[Channel.get()].ThermalResistanceHousingNumerator.setValue(DataFrame));
       break;
 
-    case _MCMD_IO_PORT_CONFIG_:
-    {
+    case _MCMD_IO_PORT_CONFIG_: {
       //			const double Help = 0x1f;
 
       //			printf("at setValue Cvmc\n");
@@ -411,8 +410,8 @@ bool CvmcAPI::interpreteConfigurationResponse(const CMessage& Message)
 
     break;
 
-    //		case _MCMD_CLEAR_ALL_TICKS_ABS_: 	return(
-    //m_VMC.Motor[Channel.get()].ClearAbsolutRotations.setValue(DataFrame) ); break;
+      //		case _MCMD_CLEAR_ALL_TICKS_ABS_: 	return(
+      // m_VMC.Motor[Channel.get()].ClearAbsolutRotations.setValue(DataFrame) ); break;
 
     default:
       VMC_Errors.push_back(CError("unknown command", "VMC_API::InterpreteConfigurationResponse()", Message));
@@ -598,7 +597,7 @@ bool CvmcAPI::interpreteControllerConfigurationResponse(const CMessage& Message)
       return (m_VMC.Motor[Channel.get()].DeadBand.setValue(DataFrame));
       break;
 
-    //...				// still to do
+      //...				// still to do
 
     default:
       VMC_Errors.push_back(CError("unknown command", "VMC_API::InterpreteControllerConfigurationResponse()", Message));

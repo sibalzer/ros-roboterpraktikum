@@ -166,7 +166,7 @@ bool CData::setValue(const std::vector<BYTE>& DataFrame)
       }
       m_sName = ErrorString.str();
       //	VMC_Errors.push_back( CError("string not implemented yet", "CData::setValue(const std::vector<BYTE>&
-      //DataFrame)", _cName) );
+      // DataFrame)", _cName) );
       return false;
       break;
   }

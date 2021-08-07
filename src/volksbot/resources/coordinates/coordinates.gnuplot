@@ -1,7 +1,7 @@
 # IO
 set datafile separator ','
-#set terminal png size 900,500
-#set output 'coordinates.png'
+set terminal png size 1800,1000
+set output 'coordinates.png'
 
 # styling
 set title 'Robot path from odometry'
