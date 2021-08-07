@@ -1,0 +1,7 @@
+<launch>
+    <!-- Initialize -->
+    <include file="$(find volksbot)/launch/parts/pre.xml" />
+
+    <node pkg="rqt_graph" type="rqt_graph" name="rqt_graph" />
+    <node pkg="rqt_console" type="rqt_console" name="rqt_console" />
+</launch>
