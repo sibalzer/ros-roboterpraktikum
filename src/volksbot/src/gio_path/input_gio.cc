@@ -59,7 +59,7 @@ int main(int argc, char* argv[])
   double u, w;
 
   // setup the controller
-  if (!gio.getPathFromFile(datfile.c_str())) 
+  if (!gio.getPathFromFile(datfile.c_str()))
   {
     ROS_ERROR("Input Giovanni Controller cannot open datfile '%s'", datfile.c_str());
     ros::shutdown();
@@ -90,12 +90,14 @@ int main(int argc, char* argv[])
   ros::Rate loop_rate(rate);
   bool driving = true;
 
-  while (ros::ok && driving) {
+  while (ros::ok && driving)
+  {
     // get trajectory
-    if (gio.getNextState(u, w, leftvel, rightvel, 1)==0) {
-	     ROS_INFO("Input Giovanni Controller stopped.");
-       driving = false;
-       leftvel = rightvel = 0;
+    if (gio.getNextState(u, w, leftvel, rightvel, 1) == 0)
+    {
+      ROS_INFO("Input Giovanni Controller stopped.");
+      driving = false;
+      leftvel = rightvel = 0;
     }
     // send command
     sendSpeed(publisher, leftvel, rightvel);
