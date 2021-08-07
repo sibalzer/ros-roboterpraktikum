@@ -335,7 +335,7 @@ std::string CData::getUnitPrefix() const
       return "m";
       break;
     case micro:
-      return "µ";
+      return "Âµ";
       break;
     case nano:
       return "n";
@@ -396,7 +396,7 @@ std::string CData::getUnit() const
       return "Nm";
       break;
     case degreecelsius:
-      return "°C";
+      return "ï¿½C";
       break;
     case newtonmeter_ampere:
       return "N/A";
