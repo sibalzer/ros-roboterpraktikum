@@ -4,7 +4,7 @@ MotorDummy::MotorDummy() {
     absolute_rotations_left = 0;
     absolute_rotations_right = 0;
 
-    max_velocity = 30; // rotations per 100? second
+    ticks_per_cm = -1811.9178; // rotations per 100? second
     frequency = 20; // Hz
     MotorDummy::init();
 }
@@ -91,20 +91,20 @@ void* MotorDummy::threadFunction(void* param) {
         // use ref->rightvel*MAX_RPM/100 for right wheel
         // use ref->leftvel*MAX_RPM/100 for left wheel
 
-        ref->absolute_rotations_left  += ref->max_velocity * ref->leftvel;
-        ref->absolute_rotations_right += ref->max_velocity * ref->rightvel;
+		ref->absolute_rotations_left += ref->ticks_per_cm * ref->leftvel / ref->frequency;
+		ref->absolute_rotations_right += ref->ticks_per_cm * ref->rightvel / ref->frequency;
 
 		if (current - ref->lastcommand < ros::Duration(50.5) ) {
 
             // write position into tics_left, tics_right
-			tics_left = -1* (int) (ref->absolute_rotations_left);
+			tics_left = (int) (ref->absolute_rotations_left);
 			tics_right = (int) (ref->absolute_rotations_right);           
 
 		}
 
 		// that inversion also happened in EPOS controller
-		t.left = tics_left;
-		t.right = - tics_right;
+		t.left =  -tics_left;
+		t.right = -tics_right;
 
 		t.vx = ref->vx;
 		t.vth = ref->vth;

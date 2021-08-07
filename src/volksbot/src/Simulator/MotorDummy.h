@@ -64,7 +64,7 @@ private:
     double absolute_rotations_right;
 
 	// parameters to compute the wheel rotations
-    double max_velocity;
+    double ticks_per_cm;
     int frequency;
 
     // called by constructor

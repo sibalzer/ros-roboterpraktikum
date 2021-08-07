@@ -66,10 +66,12 @@ void quit(int signum) {
   // return to the normal input mode
   struct termios cooked;
   tcgetattr(kfd, &cooked);
-  cooked.c_lflag |= (ICANON | ECHO);  
+  cooked.c_lflag |= ( ICANON | ECHO);  
+  cooked.c_cc[VEOL] = 0;
+  cooked.c_cc[VEOF] = 4;
 
   tcsetattr(kfd, TCSANOW, &cooked);
-  exit(signum);
+  ros::shutdown();
 }
 
 void kbcontrol::run() {
@@ -78,7 +80,7 @@ void kbcontrol::run() {
   struct termios cooked;
   tcgetattr(kfd, &cooked);
   cooked.c_lflag &=~ (ICANON | ECHO);
-  // Setting a new line, then end of file                         
+  // Setting a new line, then end of file              
   cooked.c_cc[VEOL] = 1;
   cooked.c_cc[VEOF] = 2;
   tcsetattr(kfd, TCSANOW, &cooked);
