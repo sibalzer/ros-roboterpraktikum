@@ -1,13 +1,8 @@
 
-#include <pthread.h>
-#include <stdint.h>
-#include <cmath>
 #include "ros/ros.h"
 
 #include "volksbot/ticks.h"
 #include "volksbot/velocities.h"
-#include "std_srvs/Empty.h"
-#include "std_msgs/String.h"
 #include "geometry_msgs/Twist.h"
 #include "volksbot/vels.h"
 
@@ -71,7 +66,6 @@ private:
 	// parameters to compute the wheel rotations
     double max_velocity;
     int frequency;
-    int period_us;
 
     // called by constructor
     void init();

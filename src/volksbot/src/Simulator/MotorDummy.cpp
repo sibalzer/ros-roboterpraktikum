@@ -4,9 +4,8 @@ MotorDummy::MotorDummy() {
     absolute_rotations_left = 0;
     absolute_rotations_right = 0;
 
-    max_velocity = 1; // rotations per second
-    frequency = 200;
-    period_us = 1000000/200;
+    max_velocity = 30; // rotations per 100? second
+    frequency = 20; // Hz
     MotorDummy::init();
 }
 
@@ -79,6 +78,8 @@ void* MotorDummy::threadFunction(void* param) {
 
 	t.header.frame_id = "base_link";
 
+	ros::Rate r(ref->frequency);
+
 	while ( ros::ok() ) {
 
 		ros::Time current = ros::Time::now();
@@ -110,7 +111,7 @@ void* MotorDummy::threadFunction(void* param) {
 
 		ref->pub.publish(t);
 
-		usleep(ref->period_us);
+		r.sleep();
 
 	}
     return param;
