@@ -1,0 +1,14 @@
+<launch>
+    <!-- Initialize -->
+    <include file="$(find volksbot)/launch/parts/pre.xml" />
+
+    <node pkg="gmapping" type="slam_gmapping" name="gmapping" output="screen">
+        <!-- Remap scan topic because our laser scanner publishes on a different topic (why?) -->
+        <remap from="LMS" to="scan" />
+        <!-- Load gmapping specific configuration -->
+        <rosparam
+            file="$(find volksbot)/config/gmapping_cfg.yaml"
+            command="load"
+        />
+    </node>
+</launch>

@@ -1,0 +1,4 @@
+<launch>
+    <!-- Set current working robot (use one of: irma, lars, sim, ute) -->
+    <env name="ROBOT" value="irma" />
+</launch>

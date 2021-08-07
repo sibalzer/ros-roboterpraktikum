@@ -5,5 +5,5 @@
   <!-- Load the configuration file -->
   <rosparam command="load" file="$(find volksbot)/launch/config/parameters.yaml" />
 
-  <node pkg="volksbot" name="kbcontrol" type="kbcontrol" output="screen"/>
+  <node pkg="volksbot" name="kbcontrol" type="kbcontrol" output="screen" />
 </launch>

@@ -1,0 +1,32 @@
+##### Joystick
+devices/joystick:       "/dev/input/js0"
+#devices/mti:            "/dev/ttyS4"   # P1 on adapter
+#devices/mti:            "/dev/ttyUSB1" 
+#devices/mti:            "/dev/xsens" 
+
+control/joystick/logitechf710: 1
+control/joystick/ducttape: 0
+control/joystick/predator: 0
+control/joystick/firejet:  0
+
+xsense/rate:            25
+xsense/timeout:         0
+
+##### Laser-Scanner (Sick)
+sick/port:              2111
+
+sick/fov/min:           -45
+sick/fov/max:           225
+sick/resolution:        0.5
+sick/rate:              100
+
+##### Logging
+log/interval:           0.01
+log/timestamp:          "timestamps.txt"
+log/bagfile:            "log.bag"
+log/rxpfile:            "raw.rxp"
+log/basedir:            "/home/nod/dat/"
+log/scandir:            "scan3d/"
+log/lms100:             "lms100/"
+log/odomPoseFile:       "/tmp/odom-pose.csv"
+log/amclPoseFile:       "/tmp/amcl-pose.csv"

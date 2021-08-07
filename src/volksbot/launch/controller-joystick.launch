@@ -1,0 +1,6 @@
+<launch>
+    <!-- Initialize -->
+    <include file="$(find volksbot)/launch/parts/pre.xml" />
+
+    <node pkg="volksbot" type="jscontrol" name="joystick_control" output="screen" />
+</launch>

@@ -1,0 +1,21 @@
+<launch>
+    <!-- Configure the ros console -->
+    <env
+        name="ROSCONSOLE_CONFIG_FILE"
+        value="$(find volksbot)/config/rosconsole.conf"
+    />
+
+    <!-- Load the current robot selection -->
+    <include file="$(find volksbot)/launch/parts/robot-selector.xml" />
+
+    <!-- Load the generic configuration file -->
+    <rosparam command="load" file="$(find volksbot)/config/parameters.yaml" />
+
+    <!-- Load robot specific configuration file -->
+    <rosparam command="load" file="$(find volksbot)/config/robot/$(env ROBOT).yaml" />
+
+    <!-- Set to true, if we are in a simulation -->
+    <rosparam param="use_sim_time" if="$(eval env('ROBOT') == 'sim')">
+        true
+    </rosparam>
+</launch>

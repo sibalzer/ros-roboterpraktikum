@@ -1,0 +1,8 @@
+# EPOS2 Controller (Ute)
+devices/controller:     "EPOS2"
+devices/volksbot:       "USB0"
+odometry/wheel_base:    44.4
+odometry/ticks_per_cm:  -1811.9178
+
+# Laser-Scanner (Sick)
+sick/ip:                "192.168.0.14"

@@ -1,0 +1,23 @@
+<launch>
+    <!-- Initialize -->
+    <include file="$(find volksbot)/launch/parts/pre.xml" />
+
+    <!-- Run AMCL -->
+    <node pkg="amcl" type="amcl" name="amcl">
+        <!-- Remap scan topic because our laser scanner publishes on a different topic (why?) -->
+        <remap from="LMS" to="scan" />
+        <rosparam
+            file="$(find volksbot)/config/amcl_diff_cfg.yaml"
+            command="load"
+        />
+    </node>
+
+    <!-- Some coordinate transformations -->
+    <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+        <rosparam file="$(find volksbot)/launch/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find volksbot)/launch/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="$(find volksbot)/launch/config/local_costmap_params.yaml" command="load" />
+        <rosparam file="$(find volksbot)/launch/config/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find volksbot)/launch/config/base_local_planner_params.yaml" command="load" />
+    </node>
+</launch>

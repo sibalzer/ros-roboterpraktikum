@@ -1,0 +1,5 @@
+# Simulator Controller
+devices/controller:      "SIM"
+
+# Laser-Scanner (Sick)
+sick/ip:                 "0.0.0.0" # like "do not use"
