@@ -62,6 +62,16 @@ void kbcontrol::setVelocity(char c) {
     }
 }
 
+void quit(int signum) {
+  // return to the normal input mode
+  struct termios cooked;
+  tcgetattr(kfd, &cooked);
+  cooked.c_lflag |= (ICANON | ECHO);  
+
+  tcsetattr(kfd, TCSANOW, &cooked);
+  exit(signum);
+}
+
 void kbcontrol::run() {
   char c,previous;
   previous = KEYCODE_Q;
@@ -72,9 +82,9 @@ void kbcontrol::run() {
   cooked.c_cc[VEOL] = 1;
   cooked.c_cc[VEOF] = 2;
   tcsetattr(kfd, TCSANOW, &cooked);
+  signal(SIGINT, quit);
   
   ros::Rate loop_rate(5);
-
   while (ros::ok() ) {
     c = KEYCODE_Q;
     read(kfd, &c, 1);
@@ -102,13 +112,6 @@ void kbcontrol::run() {
     ros::spinOnce();
     loop_rate.sleep();
   }
-
-  // return to the normal input mode
-  tcgetattr(kfd, &cooked);
-  cooked.c_lflag |= (ICANON | ECHO);    
-
-  tcsetattr(kfd, TCSANOW, &cooked);
-
 }
 
 }

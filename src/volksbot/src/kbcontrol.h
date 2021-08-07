@@ -4,7 +4,9 @@
 #include "volksbot/velocities.h"
 
 namespace volksbot {
-
+  int kfd;
+  void quit(int signum);
+  
   class kbcontrol {
     private:
 
@@ -12,7 +14,6 @@ namespace volksbot {
       ros::ServiceClient client;
       volksbot::velocities velocity;
       double speed;
-      int kfd;
 
       void setVelocity(char c);
 
