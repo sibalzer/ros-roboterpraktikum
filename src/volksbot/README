@@ -18,16 +18,16 @@ You may have to alter these commands accordingly!
 
 4. Copy the udev rules for the USB devices
 
-	sudo cp 42-usb-serial-volksbot.rules /etc/udev/rules.d/
+	sudo cp resources/42-usb-serial-volksbot.rules /etc/udev/rules.d/
 	sudo service udev restart
 
 5. Copy the libEposCmd Library. Use the version (armv7hf for Raspberry Pi, x86 or x86_64) that matches your CPU Architecture.
 
-	sudo cp libEposCmd/armv7hf/libEposCmd.so.6.1.1.0 /usr/local/lib/
+	sudo cp resources/libEposCmd/armv7hf/libEposCmd.so.6.1.1.0 /usr/local/lib/
 		- or -
-	sudo cp libEposCmd/x86/libEposCmd.so.6.1.1.0 /usr/local/lib/
+	sudo cp resources/libEposCmd/x86/libEposCmd.so.6.1.1.0 /usr/local/lib/
 		- or -
-	sudo cp libEposCmd/x86_64/libEposCmd.so.6.1.1.0 /usr/local/lib/
+	sudo cp resources/libEposCmd/x86_64/libEposCmd.so.6.1.1.0 /usr/local/lib/
 
 		- after any of the commands above, execute both these commands -
 	sudo ln -s /usr/local/lib/libEposCmd.so.6.1.1.0 /usr/local/lib/libEposCmd.so
