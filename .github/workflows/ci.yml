@@ -1,0 +1,31 @@
+name: CI
+
+# Events that trigger this workflow
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: ROS CI
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v2
+      - name: Setup ROS
+        uses: ros-tooling/setup-ros@v0.2
+        with:
+          required-ros-distributions: melodic
+
+      - name: Run ROS CI
+        uses: ros-tooling/action-ros-ci@v0.2
+        with:
+          package-name: ros-roboterpraktikum
+          target-ros1-distro: melodic
+
+  style:
+    name: Check style
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v2
+      - name: Install and check code style
+        uses: DoozyX/clang-format-lint-action@v0.12
