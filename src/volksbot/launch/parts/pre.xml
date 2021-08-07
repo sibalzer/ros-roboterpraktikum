@@ -12,10 +12,10 @@
     <rosparam command="load" file="$(find volksbot)/config/parameters.yaml" />
 
     <!-- Load robot specific configuration file -->
-    <rosparam command="load" file="$(find volksbot)/config/robot/$(env ROBOT).yaml" />
+    <rosparam command="load" file="$(find volksbot)/config/robot/$(arg ROBOT).yaml" />
 
     <!-- Set to true, if we are in a simulation -->
-    <rosparam param="use_sim_time" if="$(eval env('ROBOT') == 'sim')">
+    <rosparam param="use_sim_time" if="$(eval arg('ROBOT') == 'sim')">
         true
     </rosparam>
 </launch>
