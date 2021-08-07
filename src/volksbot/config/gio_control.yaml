@@ -1,6 +1,5 @@
 source:             "odom"
-# source: "amcl_pose"
+# source:             "amcl_pose"
 looprate:           100
 u_max:              30.0
 axis_length:        200.0
-datfile:            "/home/ansgar/Documents/Study/Mess-_und_Regelungstechnik/ros-roboterpraktikum/quadrat.dat"

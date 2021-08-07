@@ -1,0 +1,19 @@
+<launch>
+    <!-- Initialize -->
+    <include file="$(find volksbot)/launch/parts/pre.xml" />
+
+    <!-- Load gio input configuration -->
+    <rosparam
+        file="$(find volksbot)/config/gio_control.yaml"
+        command="load"
+    />
+
+    <arg name="file" />
+    <param
+        name="datfile"
+        type="str"
+        value="$(eval find('volksbot') + '/resources/paths/' + arg('file'))"
+    />
+
+    <node pkg="volksbot" type="input_gio" name="input_gio" output="screen" />
+</launch>
