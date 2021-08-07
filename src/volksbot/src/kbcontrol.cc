@@ -102,6 +102,13 @@ void kbcontrol::run() {
     ros::spinOnce();
     loop_rate.sleep();
   }
+
+  // return to the normal input mode
+  tcgetattr(kfd, &cooked);
+  cooked.c_lflag |= (ICANON | ECHO);    
+
+  tcsetattr(kfd, TCSANOW, &cooked);
+
 }
 
 }
