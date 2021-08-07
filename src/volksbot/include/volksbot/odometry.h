@@ -7,63 +7,65 @@
 #include <nav_msgs/Odometry.h>
 #include <tf/transform_broadcaster.h>
 
-namespace volksbot {
+namespace volksbot
+{
+class Odometry
+{
+private:
+  // temporary file for map position output
+  FILE* file;
 
-  class Odometry {
-    private:
+  ros::NodeHandle n;
+  ros::Publisher publisher;
+  tf::TransformBroadcaster odom_broadcaster;
+  ros::Subscriber subscriber;
+  bool firstticks;
+  bool publish_tf = false;
+  // current pose
+  double x, z, theta;
 
-      // temporary file for map position output
-      FILE* file;
+  double lastvx, lastvth;
 
-      ros::NodeHandle n; 
-      ros::Publisher publisher;
-      tf::TransformBroadcaster odom_broadcaster;
-      ros::Subscriber subscriber;
-      bool firstticks;
-      bool publish_tf = false;
-      // current pose
-      double x,z,theta;
+  ros::Time old;
+  int oldlticks, oldrticks;
 
-      double lastvx, lastvth;
+  // -461.817 ticks to cm
+  double M;
+  // 44.4 cm is the wheel base
+  double B;
 
-      ros::Time old;
-      int oldlticks, oldrticks;
+  static const double covariance[36];
 
+  nav_msgs::Odometry odom;
+  // quaternion rotation
+  geometry_msgs::Quaternion odom_quat;
+  geometry_msgs::TransformStamped odom_trans;
 
-      // -461.817 ticks to cm
-      double M;
-      // 44.4 cm is the wheel base
-      double B;
+public:
+  Odometry() : Odometry(false){};
 
-      static const double covariance[36];
-      
-      nav_msgs::Odometry odom;
-      // quaternion rotation
-      geometry_msgs::Quaternion odom_quat;
-      geometry_msgs::TransformStamped odom_trans;
+  Odometry(bool _publish_tf);
+  ~Odometry();
 
-    public:
-      Odometry() : Odometry(false) { };
+  void setTicks(double ticksPerCm)
+  {
+    M = 1.0 / ticksPerCm;
+  }
 
-      Odometry(bool _publish_tf);
-      ~Odometry();
+  void setWheelBase(double wheelBase)
+  {
+    B = wheelBase;
+  }
 
-      void setTicks(double ticksPerCm) {
-        M = 1.0 / ticksPerCm;
-      }
+  void convertTicks2Odom(const ticksConstPtr& cticks);
 
-      void setWheelBase(double wheelBase) {
-        B = wheelBase;
-      }
+  const nav_msgs::Odometry& getCurrentOdom()
+  {
+    return odom;
+  }
 
-      void convertTicks2Odom(const ticksConstPtr& cticks);
-
-      const nav_msgs::Odometry& getCurrentOdom() {
-        return odom;
-      }
-
-      void update(int ms);
-  };
+  void update(int ms);
+};
 }
 
 #endif

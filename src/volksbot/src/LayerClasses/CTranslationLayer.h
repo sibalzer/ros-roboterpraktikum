@@ -17,40 +17,41 @@
 #include <list>
 #include <iostream>
 
-namespace VMC {
+namespace VMC
+{
 class CTranslationLayer
 {
 public:
-	CTranslationLayer();
-	~CTranslationLayer(){};
+  CTranslationLayer();
+  ~CTranslationLayer(){};
 
-	bool sendMessage(const CMessage& Message);		
+  bool sendMessage(const CMessage& Message);
 #ifdef REAL_TIME
-  bool receiveMessage(uint64_t &timestamp);
-#else 
-	bool receiveMessage();		
+  bool receiveMessage(uint64_t& timestamp);
+#else
+  bool receiveMessage();
 #endif
-	bool findMessage(CMessage& NewMessage);
+  bool findMessage(CMessage& NewMessage);
 
-	bool openDevice();
-	bool closeDevice();
-private:		
+  bool openDevice();
+  bool closeDevice();
 
-	static const BYTE sm_PStart;
-	static const BYTE sm_PEnd;
-	static const BYTE sm_Quote;
-	
-	void appendByte(std::string& MessageString, BYTE byte);
-	std::string m_sReceiveBuffer;		
-	CCommunicationLayer m_Com;
-	
-	BYTE m_SendPacketCounter;
-	BYTE m_ReceivePacketCounter;
-	
-	bool m_bReceivedMessage;
-	
-	friend class CvmcAPI;
+private:
+  static const BYTE sm_PStart;
+  static const BYTE sm_PEnd;
+  static const BYTE sm_Quote;
+
+  void appendByte(std::string& MessageString, BYTE byte);
+  std::string m_sReceiveBuffer;
+  CCommunicationLayer m_Com;
+
+  BYTE m_SendPacketCounter;
+  BYTE m_ReceivePacketCounter;
+
+  bool m_bReceivedMessage;
+
+  friend class CvmcAPI;
 };
 
 }  // namespace VMC
-#endif //_CTranslationLayer_H_
+#endif  //_CTranslationLayer_H_

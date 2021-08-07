@@ -1,19 +1,21 @@
 #include "volksbot/odometry.h"
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[])
+{
   ros::init(argc, argv, "Odometry");
 
   printf("Launching odometry node...\n");
 
   bool publish_tf = true;
 
-  if(argc > 1) {
+  if (argc > 1)
+  {
     publish_tf = atoi(argv[1]);
   }
 
   volksbot::Odometry odo(publish_tf);
   ros::spin();
-  //odo.update(70);
+  // odo.update(70);
 
-	return 0;
+  return 0;
 }

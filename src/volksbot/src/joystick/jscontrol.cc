@@ -9,16 +9,23 @@ int main(int argc, char* argv[])
   ros::NodeHandle n;
   std::string device;
   n.param<std::string>("/devices/joystick", device, "/dev/input/js0");
-  
-  Joystick *js;
+
+  Joystick* js;
   int type;
-  if ( n.getParam("/control/joystick/logitechf710", type) && type) {
+  if (n.getParam("/control/joystick/logitechf710", type) && type)
+  {
     js = new LogitechF(device.c_str());
-  } else if ( n.getParam("/control/joystick/predator", type) && type) {
+  }
+  else if (n.getParam("/control/joystick/predator", type) && type)
+  {
     js = new Predator(device.c_str());
-  } else if ( n.getParam("/control/joystick/firejet", type) && type) {
+  }
+  else if (n.getParam("/control/joystick/firejet", type) && type)
+  {
     js = new Firejet(device.c_str());
-  } else {
+  }
+  else
+  {
     ROS_ERROR("No joystick type specified!!!\n Aborting joystick-control.\n");
     return 1;
   }
@@ -31,5 +38,5 @@ int main(int argc, char* argv[])
 
   // cleanup
   delete js;
-	return 0;
+  return 0;
 }

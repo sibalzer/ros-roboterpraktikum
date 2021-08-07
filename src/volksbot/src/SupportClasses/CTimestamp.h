@@ -14,32 +14,37 @@
 #include <iostream>
 #include "CTimer.h"
 
-namespace VMC {
-
+namespace VMC
+{
 class CTimestamp
 {
-public:		
+public:
+  CTimestamp()
+  {
+    m_dMilliTime = sm_globalMilliTime.getTime();
+  }
 
-	CTimestamp() { m_dMilliTime = sm_globalMilliTime.getTime();}
-	
-    ~CTimestamp(){};
-	
-	long double   getTime() const {return m_dMilliTime;}
+  ~CTimestamp(){};
 
-	void printTime() const;
-	
-	void update() {	m_dMilliTime = sm_globalMilliTime.getTime();}
+  long double getTime() const
+  {
+    return m_dMilliTime;
+  }
 
-	friend std::ostream& operator<<(std::ostream& out,const CTimestamp& t);
-	
-private:		
+  void printTime() const;
 
-	static fair::CTimer sm_globalMilliTime;
+  void update()
+  {
+    m_dMilliTime = sm_globalMilliTime.getTime();
+  }
 
-	long double m_dMilliTime;
+  friend std::ostream& operator<<(std::ostream& out, const CTimestamp& t);
+
+private:
+  static fair::CTimer sm_globalMilliTime;
+
+  long double m_dMilliTime;
 };
 
-
-
 }  // namespace VMC
-#endif //_CTimestamp_H_
+#endif  //_CTimestamp_H_

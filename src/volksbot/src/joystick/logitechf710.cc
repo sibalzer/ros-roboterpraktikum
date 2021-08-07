@@ -7,9 +7,11 @@
 #include "std_srvs/Empty.h"
 #include <math.h>
 
-void LogitechF::handleButton(uint8_t number, bool pressed, uint32_t time) {
+void LogitechF::handleButton(uint8_t number, bool pressed, uint32_t time)
+{
   std_srvs::Empty e;
-  switch(number) {
+  switch (number)
+  {
     case BUTTON_A:
       ROS_DEBUG("Button A");
       ros::service::call("startMeasuring", e);
@@ -21,7 +23,7 @@ void LogitechF::handleButton(uint8_t number, bool pressed, uint32_t time) {
     case BUTTON_X:
       ROS_DEBUG("Button X");
       ros::service::call("setSingle", e);
-      //ros::service::call("Shutdown", e);
+      // ros::service::call("Shutdown", e);
       break;
     case BUTTON_Y:
       ROS_DEBUG("Button Y");
@@ -29,7 +31,8 @@ void LogitechF::handleButton(uint8_t number, bool pressed, uint32_t time) {
       break;
     case BUTTON_LEFT:
       ROS_DEBUG("Button Left");
-      if (pressed) {
+      if (pressed)
+      {
         ROS_INFO("SLOWER");
         speed = fmax(0.0, speed - 10.0);
         sendSpeed();
@@ -37,7 +40,8 @@ void LogitechF::handleButton(uint8_t number, bool pressed, uint32_t time) {
       break;
     case BUTTON_RIGHT:
       ROS_DEBUG("Button Right");
-      if (pressed) {
+      if (pressed)
+      {
         ROS_INFO("FASTER");
         speed = fmin(100.0, speed + 10.0);
         sendSpeed();
@@ -45,9 +49,10 @@ void LogitechF::handleButton(uint8_t number, bool pressed, uint32_t time) {
       break;
     case START:
       ROS_DEBUG("Button Start");
-      if (pressed) {
+      if (pressed)
+      {
         ROS_INFO("START THERMO SCAN");
-        ros::service::call("startImageScan",e);
+        ros::service::call("startImageScan", e);
       }
       break;
     case LOGITECH:
@@ -62,16 +67,21 @@ void LogitechF::handleButton(uint8_t number, bool pressed, uint32_t time) {
   }
 }
 
-void LogitechF::handleAxis(uint8_t number, int16_t value, uint32_t time) {
-  switch (number) {
+void LogitechF::handleAxis(uint8_t number, int16_t value, uint32_t time)
+{
+  switch (number)
+  {
     case LSTICK_LEFTRIGHT:
       ROS_DEBUG("L-Stick Left-Right");
       break;
     case LSTICK_UPDOWN:
       ROS_DEBUG("L-Stick Up-Down");
-      if (fabs(value) > STICK_MIN_ACTIVITY) {
-        rightvel = ((double) value) / (double) JS_MAX_VALUE;
-      } else {
+      if (fabs(value) > STICK_MIN_ACTIVITY)
+      {
+        rightvel = ((double)value) / (double)JS_MAX_VALUE;
+      }
+      else
+      {
         rightvel = 0;
       }
       sendSpeed();
@@ -81,9 +91,12 @@ void LogitechF::handleAxis(uint8_t number, int16_t value, uint32_t time) {
       break;
     case RSTICK_UPDOWN:
       ROS_DEBUG("R-Stick Up-Down");
-      if (fabs(value) > STICK_MIN_ACTIVITY) {
-        leftvel = ((double) value) / (double) JS_MAX_VALUE;
-      } else {
+      if (fabs(value) > STICK_MIN_ACTIVITY)
+      {
+        leftvel = ((double)value) / (double)JS_MAX_VALUE;
+      }
+      else
+      {
         leftvel = 0;
       }
       sendSpeed();
@@ -96,29 +109,39 @@ void LogitechF::handleAxis(uint8_t number, int16_t value, uint32_t time) {
       break;
     case HUD_UPDOWN:
       ROS_DEBUG("HUD up-down");
-      if (value > 0) { // down
-        leftvel = speed; 
-        rightvel = speed; 
-      } else if (value < 0) {  //up
-        leftvel = -speed; 
-        rightvel = -speed; 
-      } else {
-        leftvel = 0; 
-        rightvel = 0; 
+      if (value > 0)
+      {  // down
+        leftvel = speed;
+        rightvel = speed;
+      }
+      else if (value < 0)
+      {  // up
+        leftvel = -speed;
+        rightvel = -speed;
+      }
+      else
+      {
+        leftvel = 0;
+        rightvel = 0;
       }
       sendSpeed();
       break;
     case HUD_LEFTRIGHT:
       ROS_DEBUG("HUD left-right");
-      if (value > 0) { // right
-        leftvel = speed; 
-        rightvel = -speed; 
-      } else if (value < 0) {  //left
-        leftvel = -speed; 
-        rightvel = speed; 
-      } else {
-        leftvel = 0; 
-        rightvel = 0; 
+      if (value > 0)
+      {  // right
+        leftvel = speed;
+        rightvel = -speed;
+      }
+      else if (value < 0)
+      {  // left
+        leftvel = -speed;
+        rightvel = speed;
+      }
+      else
+      {
+        leftvel = 0;
+        rightvel = 0;
       }
       sendSpeed();
       break;
@@ -128,8 +151,8 @@ void LogitechF::handleAxis(uint8_t number, int16_t value, uint32_t time) {
   }
 }
 
-
-void LogitechF::sendSpeed() {
+void LogitechF::sendSpeed()
+{
   volksbot::vels velocity;
   velocity.left = leftvel * speed;
   velocity.right = rightvel * speed;

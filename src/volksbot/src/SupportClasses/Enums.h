@@ -3,92 +3,91 @@
 
 #include "Config.h"
 
-namespace VMC {
-
+namespace VMC
+{
 //////////////////////////////////////////////////////////////////////////////
 ///  @brief adapter types
 //////////////////////////////////////////////////////////////////////////////
-enum EnumAdapter 
+enum EnumAdapter
 {
-	RS232,
-	FILE,
-	CAN,
-	USB,
-	NONE
+  RS232,
+  FILE,
+  CAN,
+  USB,
+  NONE
 };
 
 //////////////////////////////////////////////////////////////////////////////
 ///  @brief motor states
 //////////////////////////////////////////////////////////////////////////////
-enum EnumMotorState 
+enum EnumMotorState
 {
-	forward,
-	backwards,
-	brake,
-	stop
+  forward,
+  backwards,
+  brake,
+  stop
 };
 
 //////////////////////////////////////////////////////////////////////////////
 ///  @brief velocity input types
 //////////////////////////////////////////////////////////////////////////////
-enum EnumVelocityInputType 
+enum EnumVelocityInputType
 {
-	PWM,
-	RPM
+  PWM,
+  RPM
 };
 
 //////////////////////////////////////////////////////////////////////////////
 ///  @brief data types in the messages
 //////////////////////////////////////////////////////////////////////////////
-enum EnumDataType 
+enum EnumDataType
 {
-	UnsignedChar,
-	SignedChar,
-	UnsignedInteger,
-	SignedInteger,
-	SignedLong,
-	String
+  UnsignedChar,
+  SignedChar,
+  UnsignedInteger,
+  SignedInteger,
+  SignedLong,
+  String
 };
 
 //////////////////////////////////////////////////////////////////////////////
 ///  @brief unit prefixes
 //////////////////////////////////////////////////////////////////////////////
-enum EnumUnitPrefix 
+enum EnumUnitPrefix
 {
-	giga,
-	mega,
-	kilo,
-	hecto,
-	deca,
-	one,
-	deci,
-	centi,
-	milli,
-	micro,
-	nano
+  giga,
+  mega,
+  kilo,
+  hecto,
+  deca,
+  one,
+  deci,
+  centi,
+  milli,
+  micro,
+  nano
 };
 
 //////////////////////////////////////////////////////////////////////////////
 ///  @brief units
 //////////////////////////////////////////////////////////////////////////////
-enum EnumUnit 
+enum EnumUnit
 {
-	none,
-	volt,
-	ampere,
-	watt,
-	ohm,
-	rpm,
-	second,
-	meter,
-	newtonmeter,
-	degreecelsius,
-	newtonmeter_ampere,
-	rpm_volt,
-	rpm_newtonmeter,
-	kelvin_watt
+  none,
+  volt,
+  ampere,
+  watt,
+  ohm,
+  rpm,
+  second,
+  meter,
+  newtonmeter,
+  degreecelsius,
+  newtonmeter_ampere,
+  rpm_volt,
+  rpm_newtonmeter,
+  kelvin_watt
 };
 
 }  // namespace VMC
-#endif //_Enums_H_
-
+#endif  //_Enums_H_

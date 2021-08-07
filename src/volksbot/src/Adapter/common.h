@@ -14,55 +14,55 @@
 #include <assert.h>
 
 #ifdef WIN32
-#	include <windows.h>
-#	define SLEEP(x) Sleep(x);
-#	define snprintf _snprintf
-#	ifndef M_PI
-#		define M_PI        3.14159265358979323846
-#	endif
+#include <windows.h>
+#define SLEEP(x) Sleep(x);
+#define snprintf _snprintf
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 #else
-#	include <unistd.h>
-#	define SLEEP(x) usleep(x*1000);
+#include <unistd.h>
+#define SLEEP(x) usleep(x * 1000);
 #endif
 
 /**
  * @brief helper macro to support extern c declaration for c++ usage
  */
 #ifdef __cplusplus
-#	define BEGIN_C_DECLS	extern "C" {
-#	define END_C_DECLS		}
+#define BEGIN_C_DECLS extern "C" {
+#define END_C_DECLS }
 #else
-#	define BEGIN_C_DECLS
-#	define END_C_DECLS
+#define BEGIN_C_DECLS
+#define END_C_DECLS
 #endif
 
 #ifndef EXIT_SUCCESS
 /**
- * @brief common success return flag 
+ * @brief common success return flag
  */
-#	define EXIT_SUCCESS 0
+#define EXIT_SUCCESS 0
 /**
  * @brief common failure return flag
  */
-#	define EXIT_FAILURE 1
+#define EXIT_FAILURE 1
 #endif
 
 /**
  * @brief assertion macro for debugging purposes. Only active with DEBUG preprocessor flag.
  */
-#if defined( DEBUG )
-#	define Assert(a,b) assert( a && b && __LINE__ && __FILE__)
+#if defined(DEBUG)
+#define Assert(a, b) assert(a&& b&& __LINE__&& __FILE__)
 #else
-#	define Assert(a,b)
+#define Assert(a, b)
 #endif /*_DEBUG*/
 
 /**
  * @brief system independend (windows/linux) sleep macro with ms granularity
  */
 #ifdef WIN32
-#	define SLEEP(x) Sleep(x);
+#define SLEEP(x) Sleep(x);
 #else
-#	define SLEEP(x) usleep(x*1000);
+#define SLEEP(x) usleep(x * 1000);
 #endif
 
 #endif /* !COMMON_H */

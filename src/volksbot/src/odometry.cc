@@ -17,21 +17,21 @@
 
 #include "volksbot/odometry.h"
 
-namespace volksbot {
+namespace volksbot
+{
 // -461.817 ticks to cm
-//const double Odometry::M  = -1.0/461.817;
+// const double Odometry::M  = -1.0/461.817;
 // 44.4 cm is the wheel base
-//const double Odometry::B = 44.4;
+// const double Odometry::B = 44.4;
 
-const double Odometry::covariance[36] = { 0.01, 0, 0, 0, 0, 0,
-                                          0, 0.01, 0, 0, 0, 0,
-                                          0, 0, 99999, 0, 0, 0,
-                                          0, 0, 0, 0.174532925, 0, 0,
-                                          0, 0, 0, 0, 9999, 0,
-                                          0, 0, 0, 0, 0, 99999 };
+const double Odometry::covariance[36] = { 0.01, 0, 0,     0, 0,    0, 0, 0.01, 0, 0,           0, 0,
+                                          0,    0, 99999, 0, 0,    0, 0, 0,    0, 0.174532925, 0, 0,
+                                          0,    0, 0,     0, 9999, 0, 0, 0,    0, 0,           0, 99999 };
 
-void Odometry::convertTicks2Odom(const ticksConstPtr& cticks) {
-  if (firstticks) {
+void Odometry::convertTicks2Odom(const ticksConstPtr& cticks)
+{
+  if (firstticks)
+  {
     oldlticks = cticks->left;
     oldrticks = cticks->right;
     // oldticks = *cticks;
@@ -39,7 +39,7 @@ void Odometry::convertTicks2Odom(const ticksConstPtr& cticks) {
     return;
   }
 
-  ros::Time current = cticks->header.stamp; 
+  ros::Time current = cticks->header.stamp;
 
   // int left = cticks->left - oldticks.left;
   // int right = cticks->right - oldticks.right;
@@ -50,53 +50,56 @@ void Odometry::convertTicks2Odom(const ticksConstPtr& cticks) {
   int right = cticks->right - oldrticks;
   oldlticks = cticks->left;
   oldrticks = cticks->right;
-  
+
   ros::Duration dt = current - old;
-  old  = current;
+  old = current;
 
   double ddt = dt.toSec();
 
   /////////////////
-  //double vl = M*left / ddt;
-  //double vr = M*right / ddt;
-  //fprintf(file, "%f %f %f   %f %d %d \n", current.toSec(), vl*-0.01, vr*-0.01,  ddt, cticks->left, cticks->right );
+  // double vl = M*left / ddt;
+  // double vr = M*right / ddt;
+  // fprintf(file, "%f %f %f   %f %d %d \n", current.toSec(), vl*-0.01, vr*-0.01,  ddt, cticks->left, cticks->right );
 
-  double vth = (M*right - M*left) / B;               // delta theta in radian
-  double vx  = ((M*right + M*left) / 2.0) / 100.0;   // delta x in m
-  
+  double vth = (M * right - M * left) / B;             // delta theta in radian
+  double vx = ((M * right + M * left) / 2.0) / 100.0;  // delta x in m
+
   theta += vth;
 
-  x += ((M*right + M*left) / 2.0) * cos(theta);
-  z -= ((M*right + M*left) / 2.0) * sin(theta);
+  x += ((M * right + M * left) / 2.0) * cos(theta);
+  z -= ((M * right + M * left) / 2.0) * sin(theta);
 
-  //since all odometry is 6DOF we'll need a quaternion created from yaw
+  // since all odometry is 6DOF we'll need a quaternion created from yaw
   odom_quat = tf::createQuaternionMsgFromYaw(-theta);
-  
+
   ///
   /// next, we'll publish the odometry message over ROS
   ///
 
   // odom.header.stamp = cticks->timestamp;
-  odom.header.stamp = current; // no timestamp data TODO
+  odom.header.stamp = current;  // no timestamp data TODO
   // set the position
   odom.pose.pose.position.x = x / 100.0;
   odom.pose.pose.position.y = z / 100.0;
   odom.pose.pose.position.z = 0.0;
   odom.pose.pose.orientation = odom_quat;
 
-  for (int i = 0; i < 36; i++) {
+  for (int i = 0; i < 36; i++)
+  {
     odom.pose.covariance[i] = covariance[i];
   }
 
   // calculate new accelerations
-  double ax = (lastvx - (vx / ddt)) / ddt;     // acceleration in cm/s^2
-  //double ath = (lastvth - (vth  /ddt)) / ddt;  // acceleration in rad/s^2
-  ax *= 0.01; // cm/s^2 -> m/s^2
+  double ax = (lastvx - (vx / ddt)) / ddt;  // acceleration in cm/s^2
+  // double ath = (lastvth - (vth  /ddt)) / ddt;  // acceleration in rad/s^2
+  ax *= 0.01;  // cm/s^2 -> m/s^2
 
-  if (ddt > 0 && fabs(ax) < 5.0) {
+  if (ddt > 0 && fabs(ax) < 5.0)
+  {
     // set the velocity only if reasonably accurate
 
-    //  fprintf(file, "%f %f %f   %f %d %d  %f %f\n", current.toSec(), vl*-0.01, vr*-0.01,  ddt, cticks->left, cticks->right, (lastvx-(vx/ddt))/ddt, (lastvth-(vth/ddt))/ddt );
+    //  fprintf(file, "%f %f %f   %f %d %d  %f %f\n", current.toSec(), vl*-0.01, vr*-0.01,  ddt, cticks->left,
+    //  cticks->right, (lastvx-(vx/ddt))/ddt, (lastvth-(vth/ddt))/ddt );
     //  fprintf(file, "%f %f %f   %f %f\n", current.toSec(), cticks->vx, cticks->vth, vx/ddt, -vth/ddt );
 
     // store information for next round
@@ -106,14 +109,18 @@ void Odometry::convertTicks2Odom(const ticksConstPtr& cticks) {
     odom.twist.twist.linear.x = vx / ddt;
     odom.twist.twist.linear.y = 0;
     odom.twist.twist.angular.z = -vth / ddt;
-    for (int i = 0; i < 36; i++) {
+    for (int i = 0; i < 36; i++)
+    {
       odom.twist.covariance[i] = covariance[i];
     }
-  } else {
-    // velocities can't be computed, use old values    
-    for (int i = 0; i < 36; i++) {
+  }
+  else
+  {
+    // velocities can't be computed, use old values
+    for (int i = 0; i < 36; i++)
+    {
       odom.twist.covariance[i] = 99999.9;
-    } 
+    }
   }
 
   // send odometry message
@@ -122,17 +129,18 @@ void Odometry::convertTicks2Odom(const ticksConstPtr& cticks) {
   // store current position in temporary file
   fprintf(file, "%f,%f\n", odom.pose.pose.position.x, odom.pose.pose.position.y);
 
-  if(publish_tf) {
+  if (publish_tf)
+  {
     ros::Time current_time = ros::Time::now();
-    odom_trans.header.stamp = current_time;// no timestamp data TODO
+    odom_trans.header.stamp = current_time;  // no timestamp data TODO
     odom_trans.header.frame_id = "odom_combined";
     odom_trans.child_frame_id = "base_link";
-  
+
     odom_trans.transform.translation.x = odom.pose.pose.position.x;
     odom_trans.transform.translation.y = odom.pose.pose.position.y;
     odom_trans.transform.translation.z = odom.pose.pose.position.z;
     odom_trans.transform.rotation = odom_quat;
-   
+
     // send the transform
     odom_broadcaster.sendTransform(odom_trans);
   }
@@ -140,16 +148,21 @@ void Odometry::convertTicks2Odom(const ticksConstPtr& cticks) {
   ros::spinOnce();
 }
 
-Odometry::~Odometry() {
+Odometry::~Odometry()
+{
   fclose(file);
 }
 
-Odometry::Odometry(bool _publish_tf) {
+Odometry::Odometry(bool _publish_tf)
+{
   file = fopen("/tmp/ist.txt", "w");
   publish_tf = _publish_tf;
-  if(publish_tf) {
+  if (publish_tf)
+  {
     ROS_INFO("With odometry tf");
-  } else {
+  }
+  else
+  {
     ROS_INFO("Without odometry tf");
   }
 
@@ -162,11 +175,11 @@ Odometry::Odometry(bool _publish_tf) {
   publisher = n.advertise<nav_msgs::Odometry>("odom", 100);
   subscriber = n.subscribe("VMC", 20, &Odometry::convertTicks2Odom, this);
   firstticks = true;
-  
+
   // message frames
   odom.header.frame_id = "odom_combined";
   odom.child_frame_id = "base_link";
-  
+
   odom_quat = tf::createQuaternionMsgFromYaw(0.0);
 
   odom.pose.pose.position.x = 0.0;
@@ -174,11 +187,12 @@ Odometry::Odometry(bool _publish_tf) {
   odom.pose.pose.position.z = 0.0;
   odom.pose.pose.orientation = odom_quat;
 
-  for (int i = 0; i < 36; i++) {
+  for (int i = 0; i < 36; i++)
+  {
     odom.pose.covariance[i] = covariance[i];
   }
-    
-  //set the velocity
+
+  // set the velocity
   odom.twist.twist.linear.x = 0;
   odom.twist.twist.linear.y = 0;
   odom.twist.twist.linear.z = 0;
@@ -186,7 +200,8 @@ Odometry::Odometry(bool _publish_tf) {
   odom.twist.twist.angular.y = 0;
   odom.twist.twist.angular.z = 0;
 
-  for (int i = 0; i < 36; i++) {
+  for (int i = 0; i < 36; i++)
+  {
     odom.twist.covariance[i] = covariance[i];
   }
 
@@ -195,16 +210,19 @@ Odometry::Odometry(bool _publish_tf) {
   M = 1.0 / M;
 }
 
-void Odometry::update(int rate) {
+void Odometry::update(int rate)
+{
   ros::Rate loop_rate(rate);
 
-  while (ros::ok()) {
+  while (ros::ok())
+  {
     ros::Time current = ros::Time::now();
-    odom.header.stamp = current; // no timestamp data TODO
+    odom.header.stamp = current;  // no timestamp data TODO
 
     publisher.publish(odom);
-  
-    if(publish_tf) {
+
+    if (publish_tf)
+    {
       odom_trans.header.stamp = current;
       odom_broadcaster.sendTransform(odom_trans);
     }
@@ -214,4 +232,4 @@ void Odometry::update(int rate) {
   }
 }
 
-}  // namespace 
+}  // namespace

@@ -20,50 +20,60 @@
 #include <vector>
 #include "../SupportClasses/commands.h"
 
-namespace VMC {
-
+namespace VMC
+{
 class CStorage
 {
-public:		
-	CStorage() {m_bInitialized = false;}
-	
-	~CStorage(){};
-	
-	bool Init(CTranslationLayer* Trans, BYTE* pNextRequestCommand);
+public:
+  CStorage()
+  {
+    m_bInitialized = false;
+  }
 
-	std::vector<VMC::CMotor> Motor;		
+  ~CStorage(){};
 
-	CData BatteryVoltage;
-	CData VelocityInputType;	
-	CData VMCTimeout;
-	CData VMCVersion;
-	CData LoadParameters;
-	CData SaveParameters;
+  bool Init(CTranslationLayer* Trans, BYTE* pNextRequestCommand);
 
-	CMultisend MotorRPMs;
-	CMultisend MotorPWMs;
-	CSendTwo RobotVelocity;
+  std::vector<VMC::CMotor> Motor;
 
-	CData IOPortConfiguration;
-//	CData ClearAllAbsolutRotations;  gone to multisend
-	CMultisend ClearAllAbsolutRotations;
-	CData DigitalIN;
-//	CData DigitalOUT;  gone to multisend
-	CMultisend DigitalOUT;
-	CData AnalogInput1;
-	CData AnalogInput2;
-	
+  CData BatteryVoltage;
+  CData VelocityInputType;
+  CData VMCTimeout;
+  CData VMCVersion;
+  CData LoadParameters;
+  CData SaveParameters;
+
+  CMultisend MotorRPMs;
+  CMultisend MotorPWMs;
+  CSendTwo RobotVelocity;
+
+  CData IOPortConfiguration;
+  //	CData ClearAllAbsolutRotations;  gone to multisend
+  CMultisend ClearAllAbsolutRotations;
+  CData DigitalIN;
+  //	CData DigitalOUT;  gone to multisend
+  CMultisend DigitalOUT;
+  CData AnalogInput1;
+  CData AnalogInput2;
+
 #ifdef REAL_TIME
-  uint64_t getTimeStamp() { return timestamp;};
-  void setTimeStamp(uint64_t ts) { timestamp = ts;};
+  uint64_t getTimeStamp()
+  {
+    return timestamp;
+  };
+  void setTimeStamp(uint64_t ts)
+  {
+    timestamp = ts;
+  };
+
 private:
   uint64_t timestamp;
-#else 
+#else
 private:
 #endif
-	bool m_bInitialized;
-	CTranslationLayer* m_pTrans;
+  bool m_bInitialized;
+  CTranslationLayer* m_pTrans;
 };
 
 }  // namespace VMC
-#endif //_CStorage_H_
+#endif  //_CStorage_H_

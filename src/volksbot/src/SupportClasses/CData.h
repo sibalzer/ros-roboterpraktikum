@@ -8,7 +8,6 @@
 ///  @date 16.10.2006
 //////////////////////////////////////////////////////////////////////////////
 
-
 #ifndef _CData_H_
 #define _CData_H_
 
@@ -22,83 +21,76 @@
 #include <list>
 #include <sstream>
 
-namespace VMC {
-
+namespace VMC
+{
 extern std::list<CError> VMC_Errors;
 
 class CData
 {
-public:		
+public:
+  CData()
+  {
+    m_bInitialized = false;
+  }
 
-	CData() {m_bInitialized = false;}
-					
-	~CData(){};
-	
-	bool Init(	CTranslationLayer* Trans,
-				BYTE* pNextRequestCommand,
-				const BYTE nCommandGroup, 
-				const BYTE nCommand,
-				const EnumDataType DataType,
-				const CChannel& MotorChannel,			
-				const std::string& cName,
-				const double dValue, 
-				const double dMaximum,
-				const double dMinimum,
-				const EnumUnitPrefix UnitPrefix = one,
-				const EnumUnit Unit = none);
+  ~CData(){};
 
-	double getValue() const;
-	bool Update() const;		
-	bool Set(const double Value) const;
-	
-	EnumDataType getDataType() const;	
-		
-	void updateTimestamp();		
-	long double getTimestamp() const;		
-	
-	bool setRange(const double Maximum,const double Minimum);		
-	double getMaximum() const;		
-	double getMinimum() const;		
-	
-	std::string getName() const;	
-	
-	unsigned int getMotorChannel() const;
-	
-	void setUnitPrefix(const EnumUnitPrefix& UnitPrefix);		
-	std::string getUnitPrefix() const;
-	
-	void setUnit(const EnumUnit& _Unit);		
-	std::string getUnit() const;		
-	
-	friend std::ostream& operator<<(std::ostream& out,const CData& d);
+  bool Init(CTranslationLayer* Trans, BYTE* pNextRequestCommand, const BYTE nCommandGroup, const BYTE nCommand,
+            const EnumDataType DataType, const CChannel& MotorChannel, const std::string& cName, const double dValue,
+            const double dMaximum, const double dMinimum, const EnumUnitPrefix UnitPrefix = one,
+            const EnumUnit Unit = none);
 
-	bool giveInitState();	
+  double getValue() const;
+  bool Update() const;
+  bool Set(const double Value) const;
+
+  EnumDataType getDataType() const;
+
+  void updateTimestamp();
+  long double getTimestamp() const;
+
+  bool setRange(const double Maximum, const double Minimum);
+  double getMaximum() const;
+  double getMinimum() const;
+
+  std::string getName() const;
+
+  unsigned int getMotorChannel() const;
+
+  void setUnitPrefix(const EnumUnitPrefix& UnitPrefix);
+  std::string getUnitPrefix() const;
+
+  void setUnit(const EnumUnit& _Unit);
+  std::string getUnit() const;
+
+  friend std::ostream& operator<<(std::ostream& out, const CData& d);
+
+  bool giveInitState();
 
 private:
-	bool setValue(const double Value);
-	bool setValue(const std::vector<BYTE>& DataFrame);	
-	
-	friend class CvmcAPI;
+  bool setValue(const double Value);
+  bool setValue(const std::vector<BYTE>& DataFrame);
 
-	bool m_bInitialized;
-	CTranslationLayer* m_pTrans;
-	BYTE* m_pNextRequestCommand;
-	BYTE m_CommandGroup;		
-	BYTE m_Command;
-	EnumDataType m_DataType;
-	CChannel m_MotorChannel;		
-	std::string m_sName;	
-	double m_dValue;
-	double m_dMaximum;		
-	double m_dMinimum;
-	EnumUnitPrefix m_UnitPrefix;
-	EnumUnit m_Unit;	
-	CTimestamp m_Timestamp;
+  friend class CvmcAPI;
+
+  bool m_bInitialized;
+  CTranslationLayer* m_pTrans;
+  BYTE* m_pNextRequestCommand;
+  BYTE m_CommandGroup;
+  BYTE m_Command;
+  EnumDataType m_DataType;
+  CChannel m_MotorChannel;
+  std::string m_sName;
+  double m_dValue;
+  double m_dMaximum;
+  double m_dMinimum;
+  EnumUnitPrefix m_UnitPrefix;
+  EnumUnit m_Unit;
+  CTimestamp m_Timestamp;
 };
 
 }  // namespace VMC
 
-#endif //_CData_H_
+#endif  //_CData_H_
 
 //@}
-
