@@ -15,6 +15,7 @@ double initialYaw = 0;
 
 void handleOdomPose(const nav_msgs::Odometry::ConstPtr& odom)
 {
+  ROS_DEBUG("Receive odom pose");
   // do something with the odometry pose
   tf::Pose pose;
   tf::poseMsgToTF(odom->pose.pose, pose);
@@ -27,6 +28,7 @@ void handleOdomPose(const nav_msgs::Odometry::ConstPtr& odom)
 
 void handleAmclPose(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& amcl)
 {
+  ROS_DEBUG("Receive amcl pose");
   // do something with the AMCL pose
   tf::Pose pose;
   tf::poseMsgToTF(amcl->pose.pose, pose);
@@ -82,10 +84,12 @@ int main(int argc, char* argv[])
   ros::Subscriber subscriber;
   if (source == "odom")
   {
+    ROS_DEBUG("Subscribe to odom pose");
     subscriber = n.subscribe(source, 20, handleOdomPose);
   }
   else if (source == "amcl_pose")
   {
+    ROS_DEBUG("Subscribe to amcl pose");
     subscriber = n.subscribe(source, 20, handleAmclPose);
   }
   else
@@ -96,16 +100,21 @@ int main(int argc, char* argv[])
   }
   ros::Publisher publisher = n.advertise<volksbot::vels>("Vel", 100);
 
+  ROS_INFO("Wait for initialization");
+
   // setup loop
   ros::Rate loop_rate(rate);
   while (ros::ok && initializingPose) 
   {
+    ROS_DEBUG("Waiting for first pose");
     ros::spinOnce();
     loop_rate.sleep();
   }
   gio.getPose(initialX, initialY, initialYaw);
 
   bool driving = true;
+
+  ROS_INFO("Initialized. Driving");
 
   while (ros::ok && driving)
   {
@@ -116,6 +125,7 @@ int main(int argc, char* argv[])
       driving = false;
       leftvel = rightvel = 0;
     }
+
     // send command
     sendSpeed(publisher, -leftvel, -rightvel);
 
