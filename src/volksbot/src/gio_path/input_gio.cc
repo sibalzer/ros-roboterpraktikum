@@ -93,8 +93,12 @@ int main(int argc, char* argv[])
   ros::Publisher publisher = n.advertise<volksbot::vels>("Vel", 100);
   ros::Rate loop_rate(rate);
   
+  
   // init pose
+  std::string input;
   ROS_INFO("Wait for initialization");
+  std::cout << "Press enter to continue..." << std::endl;
+  std::cin >> input;
   while (!ros::isShuttingDown() && isInit) 
   {
     ROS_DEBUG("Waiting for first pose");
@@ -102,12 +106,15 @@ int main(int argc, char* argv[])
     loop_rate.sleep();
   }
   gio.getPose(initialX, initialY, initialYaw);
+  ROS_INFO("Initalized.");
 
   double leftvel, rightvel;
   double u, w;
 
   // update velocities
-  ROS_INFO("Initialized. Driving...");
+  std::cout << "Press enter to continue..." << std::endl;
+  std::cin >> input;
+  ROS_INFO("Driving...");
   while (!ros::isShuttingDown())
   {
     // get trajectory
