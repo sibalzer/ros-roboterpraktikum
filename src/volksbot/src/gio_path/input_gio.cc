@@ -14,10 +14,16 @@ double initialY = 0;
 double initialYaw = 0;
 
 void handlePose(const geometry_msgs::PoseWithCovariance& pose) {
-  double yaw = tf::getYaw(pose.pose.orientation);
-  gio.setPose(pose.pose.position.x - initialX, 
-              pose.pose.position.y - initialY, 
-              yaw - initialYaw);
+  const double yaw = tf::getYaw(pose.pose.orientation);
+  const auto diffX = pose.pose.position.x - initialX;
+  const auto diffY = pose.pose.position.y - initialY;
+  const auto diffYaw = yaw - initialYaw;
+
+  ROS_DEBUG("Abs: %f [m], %f [m], %f [rad]; Rel: %f [m], %f [m], %f [rad]",
+    pose.pose.position.x, pose.pose.position.y, yaw,
+    diffX, diffY, diffYaw);
+
+  gio.setPose(diffX, diffY, diffYaw);
   isInit = false;
 }
 
@@ -93,7 +99,6 @@ int main(int argc, char* argv[])
   ros::Publisher publisher = n.advertise<volksbot::vels>("Vel", 100);
   ros::Rate loop_rate(rate);
   
-  
   // init pose
   std::string input;
   ROS_INFO("Wait for initialization");
@@ -106,7 +111,7 @@ int main(int argc, char* argv[])
     loop_rate.sleep();
   }
   gio.getPose(initialX, initialY, initialYaw);
-  ROS_INFO("Initalized.");
+  ROS_INFO("Initalized. Pos: %f (m), %f (m), %f (rad)", initialX, initialY, initialYaw);
 
   double leftvel, rightvel;
   double u, w;
