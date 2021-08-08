@@ -49,12 +49,12 @@ void kbcontrol::setVelocity(char c)
       velocity.request.right = -speed;
       break;
     case KEYCODE_U:
-      velocity.request.left = -speed;
-      velocity.request.right = -speed;
-      break;
-    case KEYCODE_D:
       velocity.request.left = speed;
       velocity.request.right = speed;
+      break;
+    case KEYCODE_D:
+      velocity.request.left = -speed;
+      velocity.request.right = -speed;
       break;
     case KEYCODE_Q:
       speed = 0;
