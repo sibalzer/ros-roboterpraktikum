@@ -8,38 +8,32 @@
 #include "volksbot/vels.h"
 
 CGioController gio;
-bool initializingPose = true;
+bool isInit = true;
 double initialX = 0;
 double initialY = 0;
 double initialYaw = 0;
 
+void handlePose(const geometry_msgs::PoseWithCovariance& pose) {
+  double yaw = tf::getYaw(pose.pose.orientation);
+  gio.setPose(pose.pose.position.x - initialX, 
+              pose.pose.position.y - initialY, 
+              yaw - initialYaw);
+  isInit = false;
+}
+
 void handleOdomPose(const nav_msgs::Odometry::ConstPtr& odom)
 {
   ROS_DEBUG("Receive odom pose");
-  // do something with the odometry pose
-  tf::Pose pose;
-  tf::poseMsgToTF(odom->pose.pose, pose);
-  double yaw = tf::getYaw(pose.getRotation());
-  gio.setPose(odom->pose.pose.position.x - initialX, 
-              odom->pose.pose.position.y - initialY, 
-              yaw - initialYaw);
-  initializingPose = false;
+  handlePose(odom->pose);
 }
 
 void handleAmclPose(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& amcl)
 {
   ROS_DEBUG("Receive amcl pose");
-  // do something with the AMCL pose
-  tf::Pose pose;
-  tf::poseMsgToTF(amcl->pose.pose, pose);
-  double yaw = tf::getYaw(pose.getRotation());
-  gio.setPose(amcl->pose.pose.position.x - initialX, 
-              amcl->pose.pose.position.y - initialY, 
-              yaw - initialYaw);
-  initializingPose = false;
+  handlePose(amcl->pose);
 }
 
-void sendSpeed(ros::Publisher& publisher, const double leftvel, const double rightvel)
+void sendSpeed(const ros::Publisher& publisher, const double leftvel, const double rightvel)
 {
   volksbot::vels velocity;
   velocity.left = leftvel;
@@ -66,9 +60,6 @@ int main(int argc, char* argv[])
   n.param<std::string>("datfile", datfile, "quadrat.dat");
   double axis_length;
   n.param<double>("axis_length", axis_length, 200.0);
-
-  double leftvel, rightvel;
-  double u, w;
 
   // setup the controller
   if (!gio.getPathFromFile(datfile.c_str()))
@@ -98,13 +89,13 @@ int main(int argc, char* argv[])
     ros::shutdown();
     return 1;
   }
+
   ros::Publisher publisher = n.advertise<volksbot::vels>("Vel", 100);
-
-  ROS_INFO("Wait for initialization");
-
-  // setup loop
   ros::Rate loop_rate(rate);
-  while (ros::ok && initializingPose) 
+  
+  // init pose
+  ROS_INFO("Wait for initialization");
+  while (!ros::isShuttingDown() && isInit) 
   {
     ROS_DEBUG("Waiting for first pose");
     ros::spinOnce();
@@ -112,29 +103,28 @@ int main(int argc, char* argv[])
   }
   gio.getPose(initialX, initialY, initialYaw);
 
-  bool driving = true;
+  double leftvel, rightvel;
+  double u, w;
 
-  ROS_INFO("Initialized. Driving");
-
-  while (ros::ok && driving)
+  // update velocities
+  ROS_INFO("Initialized. Driving...");
+  while (!ros::isShuttingDown())
   {
     // get trajectory
-    if (gio.getNextState(u, w, leftvel, rightvel, 1) == 0)
-    {
+    if (gio.getNextState(u, w, leftvel, rightvel, 1)) {
+      sendSpeed(publisher, -leftvel, -rightvel);
+    } else {
       ROS_INFO("Input Giovanni Controller stopped.");
-      driving = false;
-      leftvel = rightvel = 0;
+      ros::shutdown();
     }
-
-    // send command
-    sendSpeed(publisher, -leftvel, -rightvel);
 
     // ROS housekeeping
     ros::spinOnce();
     loop_rate.sleep();
   }
 
-  // cleanup
-  subscriber.shutdown();
+  // stop robot
+  sendSpeed(publisher, 0, 0);
+
   return 0;
 }
