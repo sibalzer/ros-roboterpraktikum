@@ -10,7 +10,7 @@ void CGioController::InitDefault()
   this->d_y = 0.001;
   this->d_th = 0.34;
   this->kr_max = 2 / AXIS_LENGTH;
-  this->u0 = Vm / 2.0;
+  this->u0 = Vm / 4.0;
   this->a = 1.2;
   this->epsilon = 1e-4;
   this->path = new CCurve();

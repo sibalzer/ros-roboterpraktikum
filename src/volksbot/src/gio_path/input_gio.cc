@@ -8,6 +8,10 @@
 #include "volksbot/vels.h"
 
 CGioController gio;
+bool initializingPose = true;
+double initialX = 0;
+double initialY = 0;
+double initialYaw = 0;
 
 void handleOdomPose(const nav_msgs::Odometry::ConstPtr& odom)
 {
@@ -15,7 +19,10 @@ void handleOdomPose(const nav_msgs::Odometry::ConstPtr& odom)
   tf::Pose pose;
   tf::poseMsgToTF(odom->pose.pose, pose);
   double yaw = tf::getYaw(pose.getRotation());
-  gio.setPose(odom->pose.pose.position.x, odom->pose.pose.position.y, yaw);
+  gio.setPose(odom->pose.pose.position.x - initialX, 
+              odom->pose.pose.position.y - initialY, 
+              yaw - initialYaw);
+  initializingPose = false;
 }
 
 void handleAmclPose(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& amcl)
@@ -24,7 +31,10 @@ void handleAmclPose(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& am
   tf::Pose pose;
   tf::poseMsgToTF(amcl->pose.pose, pose);
   double yaw = tf::getYaw(pose.getRotation());
-  gio.setPose(amcl->pose.pose.position.x, amcl->pose.pose.position.y, yaw);
+  gio.setPose(amcl->pose.pose.position.x - initialX, 
+              amcl->pose.pose.position.y - initialY, 
+              yaw - initialYaw);
+  initializingPose = false;
 }
 
 void sendSpeed(ros::Publisher& publisher, const double leftvel, const double rightvel)
@@ -88,6 +98,13 @@ int main(int argc, char* argv[])
 
   // setup loop
   ros::Rate loop_rate(rate);
+  while (ros::ok && initializingPose) 
+  {
+    ros::spinOnce();
+    loop_rate.sleep();
+  }
+  gio.getPose(initialX, initialY, initialYaw);
+
   bool driving = true;
 
   while (ros::ok && driving)
@@ -100,7 +117,7 @@ int main(int argc, char* argv[])
       leftvel = rightvel = 0;
     }
     // send command
-    sendSpeed(publisher, leftvel, rightvel);
+    sendSpeed(publisher, -leftvel, -rightvel);
 
     // ROS housekeeping
     ros::spinOnce();

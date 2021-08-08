@@ -1,5 +1,5 @@
-source:             "odom"
-# source:             "amcl_pose"
+#source:             "odom"
+source:             "amcl_pose"
 looprate:           100
 u_max:              30.0
-axis_length:        200.0
+axis_length:        444.0
