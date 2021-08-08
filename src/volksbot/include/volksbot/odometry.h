@@ -12,9 +12,6 @@ namespace volksbot
 class Odometry
 {
 private:
-  // temporary file for map position output
-  FILE* file;
-
   ros::NodeHandle n;
   ros::Publisher publisher;
   tf::TransformBroadcaster odom_broadcaster;
@@ -45,7 +42,6 @@ public:
   Odometry() : Odometry(false){};
 
   Odometry(bool _publish_tf);
-  ~Odometry();
 
   void setTicks(double ticksPerCm)
   {
