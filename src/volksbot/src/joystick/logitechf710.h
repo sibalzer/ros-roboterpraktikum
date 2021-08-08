@@ -51,6 +51,10 @@ public:
     init();
   };
 
+  ~LogitechF() {
+    publisher.shutdown();
+  }
+
   virtual void handleButton(uint8_t number, bool pressed, uint32_t time);
   virtual void handleAxis(uint8_t number, int16_t value, uint32_t time);
 

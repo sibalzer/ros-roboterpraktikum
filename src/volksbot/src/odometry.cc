@@ -94,14 +94,9 @@ void Odometry::convertTicks2Odom(const ticksConstPtr& cticks)
   // double ath = (lastvth - (vth  /ddt)) / ddt;  // acceleration in rad/s^2
   ax *= 0.01;  // cm/s^2 -> m/s^2
 
+  // set the velocity only if reasonably accurate
   if (ddt > 0 && fabs(ax) < 5.0)
   {
-    // set the velocity only if reasonably accurate
-
-    //  fprintf(file, "%f %f %f   %f %d %d  %f %f\n", current.toSec(), vl*-0.01, vr*-0.01,  ddt, cticks->left,
-    //  cticks->right, (lastvx-(vx/ddt))/ddt, (lastvth-(vth/ddt))/ddt );
-    //  fprintf(file, "%f %f %f   %f %f\n", current.toSec(), cticks->vx, cticks->vth, vx/ddt, -vth/ddt );
-
     // store information for next round
     lastvx = vx / ddt;
     lastvth = vth / ddt;
@@ -126,9 +121,6 @@ void Odometry::convertTicks2Odom(const ticksConstPtr& cticks)
   // send odometry message
   publisher.publish(odom);
 
-  // store current position in temporary file
-  fprintf(file, "%f,%f\n", odom.pose.pose.position.x, odom.pose.pose.position.y);
-
   if (publish_tf)
   {
     ros::Time current_time = ros::Time::now();
@@ -148,14 +140,8 @@ void Odometry::convertTicks2Odom(const ticksConstPtr& cticks)
   ros::spinOnce();
 }
 
-Odometry::~Odometry()
-{
-  fclose(file);
-}
-
 Odometry::Odometry(bool _publish_tf)
 {
-  file = fopen("/tmp/ist.txt", "w");
   publish_tf = _publish_tf;
   if (publish_tf)
   {
