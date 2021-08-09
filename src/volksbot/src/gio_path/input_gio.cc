@@ -123,9 +123,10 @@ int main(int argc, char* argv[])
   while (!ros::isShuttingDown())
   {
     // get trajectory
-    if (gio.getNextState(u, w, leftvel, rightvel, 1)) {
-      sendSpeed(publisher, -leftvel, -rightvel);
+    if (gio.getNextState(u, w, leftvel, rightvel, 0)) {
+      sendSpeed(publisher, leftvel, rightvel);
     } else {
+      sendSpeed(publisher, 0, 0);
       ROS_INFO("Input Giovanni Controller stopped.");
       ros::shutdown();
     }
@@ -134,9 +135,6 @@ int main(int argc, char* argv[])
     ros::spinOnce();
     loop_rate.sleep();
   }
-
-  // stop robot
-  sendSpeed(publisher, 0, 0);
 
   return 0;
 }

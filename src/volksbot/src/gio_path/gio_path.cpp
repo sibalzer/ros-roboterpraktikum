@@ -4,7 +4,7 @@ using namespace std;
 
 void CGioController::InitDefault()
 {
-  this->loop_exit = 0;
+  this->isRunning = 0;
   this->AXIS_LENGTH = 0.485;
   this->Vm = 1;
   this->d_y = 0.001;
@@ -13,6 +13,7 @@ void CGioController::InitDefault()
   this->u0 = Vm / 4.0;
   this->a = 1.2;
   this->epsilon = 1e-4;
+  this->endDistanceMax = 0.1;
   this->path = new CCurve();
   this->setPose(0.0, 0.0, 0);
   this->setLocalSystem(0.0);
@@ -152,7 +153,7 @@ void CGioController::setPose(double x, double y, double phi)
   this->x0 = x;
   this->y0 = y;
   this->phi0 = phi;
-  NormalizeAngle(this->phi0);
+  NORMALIZE_ANGLE(this->phi0);
 }
 
 void CGioController::getPose(double& x, double& y, double& ph)
@@ -168,39 +169,33 @@ int CGioController::getPathFromFile(const char* fname)
   if (res)
   {
     path->initTraversal();
-    this->loop_exit = path->getNext();
+    this->isRunning = path->getNext();
   }
   return res;
 }
 
-int CGioController::canDetermineRobotPosition(int looped)
+bool CGioController::canDetermineRobotPosition(int looped)
 {
-  int exit;
-  int check_prev;
-
-  exit = 0;
-  check_prev = 0;
-
-  while (this->loop_exit != 0 && !exit)
+  while (isRunning)
   {
-    if (path->pointInn(x0, y0))
-    {
-      if (path->getDistanceToEnd(x0, y0) > 0.1)
-      {
-        exit = 1;
-        giofile << path->getDistanceToEnd(x0, y0) << " ";  // u 1
-        continue;
-      }
+    const bool isInBoundary = path->pointIn(x0, y0);
+    const bool isNotOnDestination = path->getDistanceToEnd(x0, y0) > endDistanceMax;
+    if (isInBoundary && isNotOnDestination) {
+      ROS_DEBUG("In boundary and not on destination. Continue...");
+      giofile << path->getDistanceToEnd(x0, y0) << " ";  // u 1
+      return true;
     }
-    this->loop_exit = path->getNext(looped);
+    
+    ROS_DEBUG("Get next point");
+    isRunning = path->getNext(looped);
   }
 
-  return exit;
+  return false;
 }
 
-int CGioController::getNextState(double& u, double& w, double& vleft, double& vright, int looped)
+bool CGioController::getNextState(double& u, double& w, double& vleft, double& vright, const int looped)
 {
-  double l, phic = 0, pathAng = 0, tmpw;
+  double l, phic, pathAng, tmpw;
   int err;
 
   if (!canDetermineRobotPosition(looped))
@@ -209,20 +204,21 @@ int CGioController::getNextState(double& u, double& w, double& vleft, double& vr
     w = 0;
     vleft = 0;
     vright = 0;
-    return 0;
+    return false;
   }
 
   l = path->getDistance(x0, y0);
-  if (path->Evaluate(x0, y0) > 5e-7)
-  {
-    l = -l;
-  }
+  /// WHY?????
+  // if (path->evaluate(x0, y0) > 5e-7)
+  // {
+  //   l = -l;
+  // }
 
-  giofile << l << " " << path->Evaluate(x0, y0) << " ";  // u 2 3
+  giofile << l << " " << path->evaluate(x0, y0) << " ";  // u 2 3
 
   phic = phi0 - path->getAng();
   giofile << phi0 << " " << pathAng << " " << phic << " ";  // using 4 5 6
-  NormalizeAngle(phic);
+  NORMALIZE_ANGLE(phic);
 
   u = this->u0;
 
@@ -239,5 +235,5 @@ int CGioController::getNextState(double& u, double& w, double& vleft, double& vr
   giofile << w << " ";
   vright = u - AXIS_LENGTH * w * 0.5;
   vleft = u + AXIS_LENGTH * w * 0.5;
-  return 1;
+  return true;
 }

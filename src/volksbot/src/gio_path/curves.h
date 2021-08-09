@@ -2,10 +2,10 @@
 #define __MY_CURVES_H__
 
 #include <math.h>
-#include <iostream>
-#include <fstream>
-
 #include <ros/ros.h>
+
+#include <fstream>
+#include <iostream>
 
 #define CN_NOT_ACT -2
 
@@ -22,9 +22,7 @@ protected:
    * An array that holds the y coordinate of all drive points.
    */
   double* ty;
-  /**
-   * Matrix coefficients.
-   */
+
   double A, B, C;
 
   /**
@@ -41,11 +39,11 @@ protected:
    */
   int c_err;
 
-  inline void recompute_coeffs(int i)
+  inline void updateCoefficients()
   {
-    A = ty[i + 1] - ty[i];
-    B = tx[i] - tx[i + 1];
-    C = -A * tx[i] - B * ty[i];
+    A = ty[cur + 1] - ty[cur];
+    B = tx[cur] - tx[cur + 1];
+    C = -A * tx[cur] - B * ty[cur];
   }
 
 public:
@@ -62,7 +60,7 @@ public:
    * First, it puts the number of points in the first line.
    * Then, for every point, it writes the x and y coordinate
    * separated by a whitespace on a line for each point.
-   * 
+   *
    * @param fname the path to the file to write to
    * @returns {@code true} when the file was successfully written
    */
@@ -72,13 +70,13 @@ public:
    * Reads the contents from the given file.
    * It parses the number of points
    * and the x and y coordinates from every point in the list.
-   * 
+   *
    * @param fname the path to the file to read from
    * @returns {@code true} when the file was successfully read
    */
   bool LoadFromFile(const char* fname);
 
-  double Evaluate(double x, double y);
+  double evaluate(const double x, const double y) const;
 
   double getAng();
 
@@ -86,32 +84,61 @@ public:
 
   /**
    * Resets the current driving point to the initial point.
-   * 
+   *
    * @returns {@code true} when the driving point was successfully reset
    */
   bool initTraversal();
 
-  /**
-   * Determines the next index 
-   */
   bool getNext(int looped = 0);
 
-  int getPrev(int looped = 0);
+  bool addNextPoint(double x, double y);
 
-  int addNextPoint(double x, double y);
+  inline int getSegmentNumber() const
+  {
+    if (c_err)
+    {
+      return -1;
+    }
 
-  int getSegmentNumber();
+    return cur;
+  }
 
-  int pointInn(double x, double y);
+  /**
+   * Checks, if the given coordinates
+   * are orthogonal to the current path segment.
+   * 
+   * @param x the current x coordinate of the robot
+   * @param y the current y coordinate of the robot
+   */
+  bool pointIn(double x, double y) const;
 
-  double getDistance(double x, double y);
+  /**
+   * Returns the distance between the nearest point on the linear path
+   * between the current and next point in the point list.
+   *
+   * @param x the current x coordinate of the robot
+   * @param y the current y coordinate of the robot
+   * @returns the distance from the linear path
+   */
+  double getDistance(double x, double y) const;
 
-  inline int getCount()
+  /**
+   * Returns the number of points in the point list
+   * @returns the number of points
+   */
+  inline int getCount() const
   {
     return this->count;
   }
 
-  double getDistanceToEnd(double x, double y);
+  /**
+   * Returns the distance to the destination point on the curve.
+   *
+   * @param x the current x coordinate of the robot
+   * @param y the current y coordinate of the robot
+   * @returns the distance to the destination point
+   */
+  double getDistanceToEnd(double x, double y) const;
 };
 
 #endif

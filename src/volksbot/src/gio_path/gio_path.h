@@ -11,6 +11,8 @@
 #include <math.h>
 #include "curves.h"
 
+#include <ros/ros.h>
+
 #include <cmath>
 #include <csignal>
 #include <cstdio>
@@ -31,7 +33,7 @@ using namespace std;
 #define GradToRadian 0.01745328
 #define RadianToGrad 57.295827909
 
-#define NormalizeAngle(ang)                                                                                            \
+#define NORMALIZE_ANGLE(ang)                                                                                            \
   while (fabs(ang) > M_PI)                                                                                             \
   ang += (ang > 0) ? -2 * M_PI : 2 * M_PI
 #define SQR(c) ((c) * (c))
@@ -48,7 +50,7 @@ protected:
    * ...
    */
   CCurve* path;
-  int loop_exit;
+  int isRunning;
   // local coordinate system of the robot
   double ex[2];
   double ey[2];
@@ -66,6 +68,8 @@ protected:
   double u0;           // initial velocity
   double a;            // gain alpha
   double epsilon;      // to treat values near 0 as 0
+
+  double endDistanceMax;
 
   /**
    *  ...
@@ -155,8 +159,8 @@ public:
   void getPose(double& x, double& y, double& ph);
   int getPathFromFile(const char* fname);
   int writePathToFile(const char* fname);
-  int canDetermineRobotPosition(int looped = 0);
-  int getNextState(double& u, double& w, double& vleft, double& vright, int looped = 0);
+  bool canDetermineRobotPosition(int looped = 0);
+  bool getNextState(double& u, double& w, double& vleft, double& vright, int looped = 0);
 };
 
 #endif

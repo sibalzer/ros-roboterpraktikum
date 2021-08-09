@@ -117,7 +117,7 @@ bool CCurve::LoadFromFile(const char* fname)
   return (count != 0);
 };
 
-double CCurve::Evaluate(double x, double y)
+double CCurve::evaluate(const double x, const double y) const
 {
   if (c_err)
     return nan("NAN");
@@ -157,19 +157,20 @@ bool CCurve::initTraversal()
   return true;
 }
 
-bool CCurve::getNext(int looped)
+bool CCurve::getNext(const int looped)
 {
   // is true, when it's the first call of the function, otherwise false
   static bool firstCall = true;
   // the loop count (how many times the curve looped already?)
   static int loopCount = 0;
   // the return value
-  bool returnValue = true;
+  bool hasCurUpdated = true;
 
   if (c_err || (cur == -1))
+  {
     return false;
+  }
 
-  
   if (!firstCall && cur < count - 2)
   {
     // it's not the first call and cur is not the second last
@@ -180,25 +181,25 @@ bool CCurve::getNext(int looped)
     // it's the first call -> do nothing
     firstCall = false;
   }
-  else if (looped)
+  else if (looped != 0)
   {
-    // cur is second last and looped is activated
-    cur = 0;
-    loopCount++;
-    if (loopCount == looped)
+    if (loopCount >= looped)
     {
-      returnValue = false;
-    };
+      hasCurUpdated = false;
+    } else {
+      cur = 0;
+      loopCount++;
+    }
   }
   else
   {
     // it's the second last point -> do nothing
-    returnValue = false;
+    hasCurUpdated = false;
   }
 
-  if (returnValue)
+  if (hasCurUpdated)
   {
-    recompute_coeffs(cur);
+    updateCoefficients();
   }
   else
   {
@@ -208,136 +209,66 @@ bool CCurve::getNext(int looped)
     loopCount = 0;
   }
 
-  ROS_INFO("Next point: %d [%f, %f]", cur, tx[cur], ty[cur]);
+  ROS_INFO("Path: %d -> %d [%f, %f] -> [%f, %f]",
+    cur, cur+1, tx[cur], ty[cur], tx[cur+1], ty[cur+1]);
 
-  return returnValue;
+  return hasCurUpdated;
 }
 
-int CCurve::getPrev(int looped)
+bool CCurve::addNextPoint(const double x, const double y)
 {
-  static int ft = 1;
-  int ret_val = 1;
-
-  if (c_err || (cur == -1))
-    return 0;
-
-  switch (cur)
+  if (c_err || add_c >= count)
   {
-    case 0:
-      (ft == 1) ? (ft = 0) : (cur++);
-      break;
-    default:
-      if (cur > 0)
-      {
-        cur--;
-      }
-      else
-      {
-        (looped) ? (cur = count - 2) : (ret_val = 0);
-      }
-  };
-
-  if (ret_val)
-  {
-    recompute_coeffs(cur);
-  }
-  else
-  {
-    ft = 1;
-    cur = -1;
+    return false;
   }
 
-  ROS_INFO("Prev Point: %d [%f, %f]", cur, tx[cur], ty[cur]);
-
-  return ret_val;
+  tx[add_c] = x;
+  ty[add_c] = y;
+  add_c++;
+  return true;
 }
 
-int CCurve::addNextPoint(double x, double y)
-{
-  if (!c_err)
-  {
-    if (add_c < count)
-    {
-      tx[add_c] = x;
-      ty[add_c] = y;
-      add_c++;
-      return 1;
-    }
-    else
-      return 0;
-  }
-  else
-    return 0;
-}
-
-int CCurve::getSegmentNumber()
+bool CCurve::pointIn(const double x, const double y) const
 {
   if (c_err)
   {
-    return -1;
-  }
-
-  return cur;
-}
-
-int CCurve::pointInn(double x, double y)
-{
-  double a1, b1, c1, c2, c3;
-  if (c_err)
-  {
     return 0;
   }
 
-  a1 = tx[cur + 1] - tx[cur];
-  b1 = ty[cur + 1] - ty[cur];
-  c1 = -a1 * tx[cur] - b1 * ty[cur];
-  c2 = -a1 * tx[cur + 1] - b1 * ty[cur + 1];
-  c3 = -a1 * x - b1 * y;
+  const double diffX = tx[cur + 1] - tx[cur];
+  const double diffY = ty[cur + 1] - ty[cur];
 
-  if (c2 >= c1)
-  {
-    if (c3 >= c1)
-      return 1;
-    else
-      return 0;
-  }
-  else
-  {
-    if (c2 <= c1)
-    {
-      if (c3 >= c2)
-        return 1;
-      else
-        return 0;
-    }
-    else
-      return 0;
-  }
+  // boundary of starting point
+  const double c1 = -diffX * tx[cur    ] - diffY * ty[cur    ];
+  // boundary of destination point
+  const double c2 = -diffX * tx[cur + 1] - diffY * ty[cur + 1];
+  // level of current point
+  const double c3 = -diffX * x           - diffY * y;
+
+  return c3 >= min(c1, c2);
 }
 
-double CCurve::getDistance(double x, double y)
+double CCurve::getDistance(double x, double y) const
 {
-  double res;
   if (c_err)
   {
     return nan("NAN");
   }
 
-  res = fabs(A * x + B * y + C) / sqrt(A * A + B * B);
-  return res;
+  return fabs(evaluate(x, y)) / sqrt(A * A + B * B);
 }
 
-double CCurve::getDistanceToEnd(double x, double y)
+double CCurve::getDistanceToEnd(const double x, const double y) const
 {
-  double t1, t2, res;
-
   if (c_err)
   {
     return nan("NAN");
   }
 
-  t1 = this->getDistance(x, y);
-  t2 = (tx[cur + 1] - x) * (tx[cur + 1] - x) + (ty[cur + 1] - y) * (ty[cur + 1] - y);
-  res = sqrt(t2 - t1 * t1);
-  return res;
+  const double diffX = tx[cur + 1] - x;
+  const double diffY = ty[cur + 1] - y;
+  const double t1 = getDistance(x, y);
+  const double t2 = diffX * diffX + diffY * diffY;
+
+  return sqrt(t2 - t1 * t1);
 }
