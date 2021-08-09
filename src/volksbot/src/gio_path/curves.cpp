@@ -28,27 +28,31 @@ CCurve::~CCurve()
   }
 }
 
-int CCurve::WriteToFile(const char* fname)
+bool CCurve::WriteToFile(const char* fname)
 {
   ofstream pth;
   int i;
   if (c_err)
   {
-    return 0;
+    return false;
   }
 
   pth.open(fname);
   if (!pth)
-    return 0;
+    return false;
 
+  // print out number of points
+  pth << count << endl;
+
+  // print out coordinates of points
   for (i = 0; i < count; i++)
     pth << tx[i] << " " << ty[i] << endl;
 
   pth.close();
-  return 1;
+  return true;
 }
 
-int CCurve::LoadFromFile(const char* fname)
+bool CCurve::LoadFromFile(const char* fname)
 {
   ifstream file1;
   char buff[255];
@@ -58,15 +62,16 @@ int CCurve::LoadFromFile(const char* fname)
   if (!file1)
   {
     file1.close();
-    return 0;
+    return false;
   }
 
+  // load count from file (number of points)
   file1 >> count;
   file1.getline(buff, 255);
   if (file1.eof())
   {
     file1.close();
-    return 0;
+    return false;
   }
 
   if (!c_err)
@@ -81,6 +86,7 @@ int CCurve::LoadFromFile(const char* fname)
   tx = new double[count];
   ty = new double[count];
 
+  // read all points from file
   do
   {
     tx[i] = ty[i] = nan("NAN");
@@ -90,8 +96,9 @@ int CCurve::LoadFromFile(const char* fname)
 
     if (!isnan(tx[i]) && !isnan(ty[i]))
     {
-      //	        tx[i] *= 0.01;
-      // yx	        ty[i] *= 0.01;
+      // optionally scale points
+      // tx[i] *= 0.01;
+      // ty[i] *= 0.01;
       i++;
     }
     else
@@ -102,9 +109,10 @@ int CCurve::LoadFromFile(const char* fname)
 
   if (i != count)
   {
-    return 0;
+    return false;
   }
 
+  // everything has successfully finished
   c_err = 0;
   return (count != 0);
 };
@@ -136,73 +144,73 @@ double CCurve::getTan()
   return atan2(ty[cur + 1] - ty[cur], tx[cur + 1] - tx[cur]);
 }
 
-int CCurve::initTraversal()
+bool CCurve::initTraversal()
 {
   if (c_err)
   {
-    return 0;
+    return false;
   }
 
   cur = 0;
-  return 1;
+
+  ROS_INFO("Traversal initialized");
+  return true;
 }
 
-int CCurve::getNext(int looped)
+bool CCurve::getNext(int looped)
 {
-  static int ft = 1;
-  static int cnt = 0;
-  int ret_val = 1;
+  // is true, when it's the first call of the function, otherwise false
+  static bool firstCall = true;
+  // the loop count (how many times the curve looped already?)
+  static int loopCount = 0;
+  // the return value
+  bool returnValue = true;
 
   if (c_err || (cur == -1))
-    return 0;
+    return false;
 
-  switch (cur)
+  
+  if (!firstCall && cur < count - 2)
   {
-    case 0:
-      if (ft == 1)
-      {
-        ft = 0;
-      }
-      else
-      {
-        cur++;
-      }
-      break;
-    default:
-      if (cur < count - 2)
-      {
-        cur++;
-      }
-      else
-      {
-        if (looped)
-        {
-          cur = 0;
-          cnt++;
-          if (cnt == looped)
-          {
-            ret_val = 0;
-          };
-        }
-        else
-        {
-          ret_val = 0;
-        }
-      }
-  };
+    // it's not the first call and cur is not the second last
+    cur++;
+  }
+  else if (firstCall)
+  {
+    // it's the first call -> do nothing
+    firstCall = false;
+  }
+  else if (looped)
+  {
+    // cur is second last and looped is activated
+    cur = 0;
+    loopCount++;
+    if (loopCount == looped)
+    {
+      returnValue = false;
+    };
+  }
+  else
+  {
+    // it's the second last point -> do nothing
+    returnValue = false;
+  }
 
-  if (ret_val)
+  if (returnValue)
   {
     recompute_coeffs(cur);
   }
   else
   {
-    ft = 1;
+    // reset everything
+    firstCall = true;
     cur = -1;
-    cnt = 0;
+    loopCount = 0;
   }
 
-  return ret_val;
+  ROS_INFO("Next point: %d [%f, %f]", cur, tx[cur], ty[cur]);
+
+  return returnValue;
 }
 
 int CCurve::getPrev(int looped)
@@ -238,6 +246,8 @@ int CCurve::getPrev(int looped)
     ft = 1;
     cur = -1;
   }
+
+  ROS_INFO("Prev Point: %d [%f, %f]", cur, tx[cur], ty[cur]);
 
   return ret_val;
 }
