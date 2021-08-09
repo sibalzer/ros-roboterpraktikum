@@ -166,6 +166,15 @@ target_link_libraries(input_gio
 )
 add_dependencies(input_gio volksbot_generate_messages_cpp)
 
+add_executable(nocollide 
+  src/nocollide.cc
+)
+set_target_properties(nocollide PROPERTIES LINK_FLAGS "-pthread")
+target_link_libraries(nocollide
+  ${catkin_LIBRARIES}
+)
+add_dependencies(nocollide volksbot_generate_messages_cpp)
+
 MESSAGE(STATUS "STATUS: ${CATKIN_PACKAGE_INCLUDE_DESTINATION}")
 MESSAGE(STATUS "STATUS: ${CATKIN_GLOBAL_INCLUDE_DESTINATION}")
 MESSAGE(STATUS "STATUS: include/${PROJECT_NAME}")
