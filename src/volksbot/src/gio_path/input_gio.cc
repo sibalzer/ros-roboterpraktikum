@@ -17,13 +17,12 @@ void handlePose(const geometry_msgs::PoseWithCovariance& pose) {
   const double yaw = tf::getYaw(pose.pose.orientation);
   const auto diffX = pose.pose.position.x - initialX;
   const auto diffY = pose.pose.position.y - initialY;
-  const auto diffYaw = yaw - initialYaw;
 
   ROS_DEBUG("Abs: %f [m], %f [m], %f [rad]; Rel: %f [m], %f [m], %f [rad]",
     pose.pose.position.x, pose.pose.position.y, yaw,
-    diffX, diffY, diffYaw);
+    diffX, diffY, yaw);
 
-  gio.setPose(diffX, diffY, diffYaw);
+  gio.setPose(diffX, diffY, yaw);
   isInit = false;
 }
 
@@ -124,7 +123,7 @@ int main(int argc, char* argv[])
   {
     // get trajectory
     if (gio.getNextState(u, w, leftvel, rightvel, 0)) {
-      sendSpeed(publisher, leftvel, rightvel);
+      sendSpeed(publisher, -leftvel, -rightvel);
     } else {
       sendSpeed(publisher, 0, 0);
       ROS_INFO("Input Giovanni Controller stopped.");
