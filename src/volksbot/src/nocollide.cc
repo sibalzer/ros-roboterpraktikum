@@ -4,19 +4,19 @@
 #include "sensor_msgs/LaserScan.h"
 #include "volksbot/vels.h"
 
-#define EPSILON_LINEAR_SPEED 0.05
-#define EPSIOLON_ANGULAR_SPEED 0.05
+#define EPSILON_LINEAR_SPEED 0.1
+#define EPSIOLON_ANGULAR_SPEED 0.2
 #define EPSILON_LINEAR_DISTANCE 0.2
 #define EPSILON_ANGULAR_DISTANCE 0.2
-#define MIN_SAMPLES 3
 
 bool driving_linear = false;
 bool driving_right = false;
 bool driving_left = false;
-int left, middle, right, samples;
+int start, stop, left, middle, right, samples;
 bool obstacle_linear = false;
 bool obstacle_right = false;
 bool obstacle_left = false;
+int min_samples;
 
 
 void handleOdomPose(const nav_msgs::Odometry::ConstPtr& odom)
@@ -37,11 +37,11 @@ void handleLMS(const sensor_msgs::LaserScan::ConstPtr& laser)
   int samples_middle = 0;
   for (int i = 0; i < samples; i++)
   {
-    if (i < middle && laser->ranges[i] < EPSILON_ANGULAR_DISTANCE)
+    if (i > start && i < middle && laser->ranges[i] < EPSILON_ANGULAR_DISTANCE)
     {
       samples_left++;
     }
-    if (i > middle && laser->ranges[i] < EPSILON_ANGULAR_DISTANCE)
+    if (i > middle && i < stop && laser->ranges[i] < EPSILON_ANGULAR_DISTANCE)
     {
       samples_right++;
     }
@@ -50,9 +50,9 @@ void handleLMS(const sensor_msgs::LaserScan::ConstPtr& laser)
       samples_middle++;
     }
   }
-  obstacle_left = samples_left >= MIN_SAMPLES;
-  obstacle_right = samples_right >= MIN_SAMPLES;
-  obstacle_linear = samples_middle >= MIN_SAMPLES;
+  obstacle_left = samples_left >= min_samples;
+  obstacle_right = samples_right >= min_samples;
+  obstacle_linear = samples_middle >= min_samples;
 }
 
 int main(int argc, char* argv[])
@@ -70,28 +70,31 @@ int main(int argc, char* argv[])
   double resolution;
   n.param<double>("/sick/resolution", resolution, 0.5);
   samples = int((max_angle - min_angle)/resolution) + 1;
-  left = samples/3;
-  right = 2*samples/3;
+  start = int(0.35 * samples);
+  left = int(0.43 * samples);
+  right = int(0.57 * samples);
+  stop = int(0.65 * samples);
   middle = samples/2;
+  min_samples = int(0.05 * samples);
 
   ros::Subscriber odomSubscriber = n.subscribe("odom", 1, handleOdomPose);
-  ros::Subscriber lmsSubscriber = n.subscribe("LMS100", 1, handleLMS);
+  ros::Subscriber lmsSubscriber = n.subscribe("LMS", 1, handleLMS);
   ros::Publisher publisher = n.advertise<volksbot::vels>("Vel", 100);
   ros::Rate loop_rate(100);
 
   while (!ros::isShuttingDown()) 
   {
     if ((obstacle_linear && driving_linear) 
-        || (obstacle_right && driving_right)
-        || (obstacle_left && driving_left))
+       || (obstacle_left && driving_left)
+       || (obstacle_right && driving_right))
     {
+      ROS_WARN("EMERGENCY BREAK");
       volksbot::vels velocity;
       velocity.left = 0;
       velocity.right = 0;
-      ROS_WARN("Emergency Break");
       publisher.publish(velocity);
     }
-    
+
     ros::spinOnce();
     loop_rate.sleep();
   }

@@ -12,6 +12,8 @@
     <!-- Laser Scanner Node -->
     <node pkg="lms100" type="sicksensor" name="sick_front" />
 
+    <node pkg="volksbot" type="nocollide" name="nocollide" output="screen"/>
+
     <!-- As the ekf filter requires the robots coordinate frame to be called base_footprint instead of base_link -->
 
     <!--
