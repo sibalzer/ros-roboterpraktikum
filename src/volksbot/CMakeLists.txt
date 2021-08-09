@@ -156,6 +156,7 @@ target_link_libraries(pose_logger
 add_dependencies(pose_logger volksbot_generate_messages_cpp)
 
 add_executable(input_gio 
+  src/gio_path/curves.cpp
   src/gio_path/gio_path.cpp
   src/gio_path/input_gio.cc
 )
