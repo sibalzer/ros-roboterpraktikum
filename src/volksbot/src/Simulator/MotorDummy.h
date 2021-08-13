@@ -5,6 +5,7 @@
 #include "volksbot/velocities.h"
 #include "geometry_msgs/Twist.h"
 #include "volksbot/vels.h"
+#include "volksbot/vel_limit.h"
 
 #ifndef MOTORDUMMY_H
 #define MOTORDUMMY_H
@@ -39,6 +40,8 @@ private:
   bool callback(volksbot::velocities::Request& vel, volksbot::velocities::Response& response);
   void Vcallback(const volksbot::velsConstPtr& vel);
   void CVcallback(const geometry_msgs::Twist::ConstPtr& cmd_vel);
+  void limitCallback(const volksbot::vel_limitConstPtr& limit_vel);
+  void limitVelocities(double& leftvel, double& rightvel);
 
   // Thread Loop Function, simulate a connection to the motor
   static void* threadFunction(void* param);
@@ -47,6 +50,7 @@ private:
   ros::NodeHandle n;
   ros::Publisher pub;
   ros::Subscriber sub;
+  ros::Subscriber limit_sub;
   ros::Subscriber cmd_vel_sub_;
   ros::ServiceServer service;
 
@@ -58,6 +62,10 @@ private:
   double rightvel;
   double vx;
   double vth;
+
+  // limits
+  double left_neg, right_neg;
+  double left_pos, right_pos;
 
   // MotorDummy variables
   // counters for the wheel rotations

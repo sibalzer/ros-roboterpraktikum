@@ -1,4 +1,5 @@
 #include "InputGio.h"
+#include "volksbot/vel_limit.h"
 
 int InputGio::setup()
 {
@@ -41,8 +42,6 @@ int InputGio::setup()
         ros::shutdown();
         return 1;
     }
-
-    ros::Publisher publisher = n.advertise<volksbot::vels>("Vel", 100);
     return 0;
 }
 

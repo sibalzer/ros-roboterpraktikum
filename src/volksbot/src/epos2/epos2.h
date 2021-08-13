@@ -12,6 +12,7 @@
 #include "std_msgs/String.h"
 #include "geometry_msgs/Twist.h"
 #include "volksbot/vels.h"
+#include "volksbot/vel_limit.h"
 
 #define MAX_RPM 4000  // MOTOR MAX IS REALLY 12000 BUT IS TOO FAST!!!
 
@@ -31,6 +32,7 @@ private:
   bool callback(volksbot::velocities::Request& vel, volksbot::velocities::Response& response);
   void Vcallback(const volksbot::velsConstPtr& vel);
   void CVcallback(const geometry_msgs::Twist::ConstPtr& cmd_vel);
+  void limitCallback(const volksbot::vel_limitConstPtr& limit_vel);
 
   // Thread Loop Function
   static void* threadFunction(void* param);
@@ -40,6 +42,7 @@ private:
   ros::Publisher pub;
   ros::Subscriber sub;
   ros::Subscriber cmd_vel_sub_;
+  ros::Subscriber limit_sub;
   ros::ServiceServer service;
 
   ros::Time lastcommand;
@@ -50,6 +53,10 @@ private:
   double rightvel;
   double vx;
   double vth;
+  // limits
+  double left_neg, right_neg;
+  double left_pos, right_pos;
+  void limitVelocities(double& leftvel, double& rightvel);
 
   // EPOS2 Functions
   void init(const char* port);

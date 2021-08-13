@@ -2,7 +2,7 @@
 #include "nav_msgs/Odometry.h"
 #include <tf/transform_datatypes.h>
 #include "sensor_msgs/LaserScan.h"
-#include "volksbot/vels.h"
+#include "volksbot/vel_limit.h"
 
 #define EPSILON_LINEAR_SPEED 0.1
 #define EPSIOLON_ANGULAR_SPEED 0.2
@@ -79,20 +79,36 @@ int main(int argc, char* argv[])
 
   ros::Subscriber odomSubscriber = n.subscribe("odom", 1, handleOdomPose);
   ros::Subscriber lmsSubscriber = n.subscribe("LMS", 1, handleLMS);
-  ros::Publisher publisher = n.advertise<volksbot::vels>("Vel", 100);
+  ros::Publisher publisher = n.advertise<volksbot::vel_limit>("vel_limit", 1);
   ros::Rate loop_rate(100);
+
+  bool near_obstacle = false;
 
   while (!ros::isShuttingDown()) 
   {
-    if ((obstacle_linear && driving_linear) 
+    if (((obstacle_linear && driving_linear) 
        || (obstacle_left && driving_left)
        || (obstacle_right && driving_right))
+       && !near_obstacle)
     {
       ROS_WARN("EMERGENCY BREAK");
-      volksbot::vels velocity;
-      velocity.left = 0;
-      velocity.right = 0;
-      publisher.publish(velocity);
+      volksbot::vel_limit limit;
+      limit.left_pos = 0;
+      limit.right_pos = 0;
+      limit.right_neg = -100;
+      limit.left_neg = -100;
+      publisher.publish(limit);
+      near_obstacle = true;
+    }
+    else if (near_obstacle)
+    {
+      volksbot::vel_limit limit;
+      limit.left_pos = 100;
+      limit.right_pos = 100;
+      limit.right_neg = -100;
+      limit.left_neg = -100;
+      publisher.publish(limit);
+      near_obstacle = false;
     }
 
     ros::spinOnce();

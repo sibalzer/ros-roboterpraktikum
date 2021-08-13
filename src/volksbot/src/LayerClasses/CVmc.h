@@ -8,6 +8,7 @@
 #endif
 
 #include "CvmcAPI.h"
+#include "volksbot/vel_limit.h"
 
 namespace VMC
 {
@@ -332,6 +333,8 @@ private:
   void leaveCriticalSection();
   void init(const char* comPort);
   VMC::CvmcAPI* _apiObject;
+
+
 };
 
 const int CVmc::MOTOR_RPM = 0;
@@ -343,5 +346,11 @@ const int CVmc::MOTOR_TICKS_RELATIVE = 4;
 // const int CVmc::MOTOR_TEMPERATURE= 6;
 const int CVmc::BATTERY_VOLTAGE = 7;
 const int CVmc::VMC_ERROR = 0x80000000;
+
+// limits
+double left_neg, right_neg;
+double left_pos, right_pos;
+void limitCallback(const volksbot::vel_limitConstPtr& limit_vel);
+void limitVelocities(double& leftvel, double& rightvel);
 
 }  // namespace VMC

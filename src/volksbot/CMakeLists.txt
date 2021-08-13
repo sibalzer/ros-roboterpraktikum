@@ -16,6 +16,7 @@ add_message_files(
   pose2d.msg
   ticks.msg
   vels.msg
+  vel_limit.msg
 )
 
 add_service_files(

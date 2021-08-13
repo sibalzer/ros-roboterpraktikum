@@ -35,6 +35,7 @@ bool callback(volksbot::velocities::Request& vel, volksbot::velocities::Response
   lastcommand = ros::Time::now();
   leftvel = vel.left;
   rightvel = vel.right;
+  limitVelocities(leftvel, rightvel);
   return true;
 }
 
@@ -43,6 +44,7 @@ void Vcallback(const volksbot::velsConstPtr& vel)
   lastcommand = ros::Time::now();
   leftvel = vel->left;
   rightvel = vel->right;
+  limitVelocities(leftvel, rightvel);
   // ROS_INFO("Received [%f %f @ %ld]", vel->left, vel->right, vel->id);
 }
 
@@ -72,19 +74,46 @@ void CVcallback(const geometry_msgs::Twist::ConstPtr& cmd_vel)
     rightvel = (double)(linear + v_diff);
   }
 
-  if (fabs(leftvel) > 100.0)
+  limitVelocities(leftvel, rightvel);
+}
+
+void limitCallback(const volksbot::vel_limitConstPtr& limit_vel) {
+  if (fabs(limit_vel->left_neg) <= 100)
   {
-    if (leftvel > 0)
-      leftvel = 100.0;
-    else
-      leftvel = -100.0;
+    left_neg = limit_vel->left_neg;
   }
-  if (fabs(rightvel) > 100.0)
+  if (fabs(limit_vel->right_neg) <= 100)
   {
-    if (rightvel > 0)
-      rightvel = 100.0;
-    else
-      rightvel = -100.0;
+    right_neg = limit_vel->right_neg;
+  }
+  if (fabs(limit_vel->left_pos) <= 100)
+  {
+    left_pos = limit_vel->left_pos;
+  }
+  if (fabs(limit_vel->right_pos) <= 100)
+  {
+    right_pos = limit_vel->right_pos;
+  }
+  ROS_INFO("Updated velocity limits");
+}
+
+void limitVelocities(double& leftvel, double& rightvel)
+{
+  if (leftvel > left_pos)
+  {
+    leftvel = left_pos;
+  }
+  else if (leftvel < left_neg)
+  {
+    leftvel = left_neg;
+  }
+  if (rightvel > right_pos)
+  {
+    rightvel = right_pos;
+  }
+  else if (rightvel < right_neg)
+  {
+    rightvel = right_neg;
   }
 }
 
@@ -112,6 +141,7 @@ void* vmcThreadFunction(void* param)
   ros::Subscriber cmd_vel_sub_ = n.subscribe<geometry_msgs::Twist>(
       "cmd_vel", 10, CVcallback, ros::TransportHints().reliable().udp().maxDatagramSize(100));
   //      ros::TransportHints().reliable().tcp().tcpNoDelay(true));
+  ros::Subscriber sub_limits = n.subscribe<volksbot::vel_limit>("vel_limit", 1, limitCallback);
 
   ros::ServiceServer service = n.advertiseService("Controls", callback);
 
