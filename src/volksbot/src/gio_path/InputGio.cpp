@@ -50,9 +50,8 @@ void InputGio::initPose()
   broadcaster_.sendTransform(tf::StampedTransform(transform_, ros::Time::now(), "odom_combined", "gio-start"));
   isInit = false;
   // debug output
-  double initialX, initialY, initialYaw;
-  gio.getPose(initialX, initialY, initialYaw);
-  ROS_INFO("Initalized. Pos: %f (m), %f (m), %f (rad)", initialX, initialY, initialYaw);
+  double yaw = tf::getYaw(from.pose.orientation);
+  ROS_INFO("Initalized. Pos: %f (m), %f (m), %f (rad)", from.pose.position.x, from.pose.position.y, yaw);
 }
 
 void InputGio::run()
@@ -84,31 +83,29 @@ void InputGio::handlePose(const geometry_msgs::PoseWithCovariance& pose, std_msg
 {
   if (isInit)
   {
-    tf::Vector3 vect_tf;
     transform_.setOrigin(tf::Vector3(pose.pose.position.x, pose.pose.position.y, pose.pose.position.z));
     tf::Quaternion quat_tf;
-    tf::quaternionMsgToTF(pose.pose.orientation, quat_tf.normalize());
+    tf::quaternionMsgToTF(pose.pose.orientation, quat_tf);
+    quat_tf.normalize();
     transform_.setRotation(quat_tf);
   }
-  else
+
+  from.pose = pose.pose;
+  from.header = header;
+  from.header.stamp = ros::Time(0);
+  try
   {
-    from.pose = pose.pose;
-    from.header = header;
-    from.header.stamp = ros::Time(0);
-    try
-    {
-      listener_.transformPose("gio-start", from, to);
-      const double yaw = tf::getYaw(to.pose.orientation);
+    listener_.transformPose("gio-start", from, to);
+    const double yaw = tf::getYaw(to.pose.orientation);
 
-      ROS_DEBUG("Abs: %f [m], %f [m], %f [rad]; Rel: %f [m], %f [m], %f [rad]", from.pose.position.x,
-                from.pose.position.y, yaw, to.pose.position.x, to.pose.position.y, yaw);
+    ROS_DEBUG("Abs: %f [m], %f [m], %f [rad]; Rel: %f [m], %f [m], %f [rad]", from.pose.position.x,
+              from.pose.position.y, yaw, to.pose.position.x, to.pose.position.y, yaw);
 
-      gio.setPose(to.pose.position.x, to.pose.position.y, yaw);
-    }
-    catch (tf::TransformException& ex)
-    {
-      ROS_ERROR("%s", ex.what());
-    }
+    gio.setPose(to.pose.position.x, to.pose.position.y, yaw);
+  }
+  catch (tf::TransformException& ex)
+  {
+    ROS_ERROR("%s", ex.what());
   }
 }
 
