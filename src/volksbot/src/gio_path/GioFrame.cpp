@@ -34,31 +34,3 @@ bool GioFrame::apply(std_srvs::Empty::Request& req, std_srvs::Empty::Response& r
 
   return true;
 }
-
-void GioFrame::init(ros::NodeHandle& nh)
-{
-  ROS_DEBUG("Initalize");
-  nh.param<std::string>("source", source, "odom");
-  nh.param<std::string>("world", world, "odom_combined");
-  nh.param<std::string>("dest", dest, "gio_start");
-  nh.param<std::string>("reset", reset, "reset_gio_start");
-
-  ROS_INFO("Service name: %s", reset.c_str());
-
-  ROS_DEBUG("Subscribe to topics");
-  if (source == "odom")
-  {
-    nh.subscribe(source, 1, &GioFrame::handleOdomPose, this);
-  }
-  else if (source == "amcl_pose")
-  {
-    nh.subscribe(source, 1, &GioFrame::handleAmclPose, this);
-  }
-  else
-  {
-    ROS_WARN("No subscriber function for %s source found", source.c_str());
-  }
-
-  ROS_DEBUG("Advertise services");
-  nh.advertiseService(reset, &GioFrame::apply, this);
-}

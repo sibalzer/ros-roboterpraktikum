@@ -192,6 +192,8 @@ void* vmcThreadFunction(void* param)
 #endif
 }
 
+////////////////////////////////////////////////////
+
 CVmc::CVmc()
 {
   char port[20];

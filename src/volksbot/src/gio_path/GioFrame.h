@@ -12,6 +12,10 @@
 class GioFrame
 {
 private:
+  geometry_msgs::PoseWithCovariance lastPose;
+  tf::Transform transform;
+  tf::TransformBroadcaster broadcaster;
+public:
   // the current position source system
   std::string source;
   // the world coordinate system
@@ -22,17 +26,10 @@ private:
   // name of the reset service
   std::string reset;
 
-  geometry_msgs::PoseWithCovariance lastPose;
-  tf::Transform transform;
-  tf::TransformBroadcaster broadcaster;
-
   void handlePose(const geometry_msgs::PoseWithCovariance& pose, std_msgs::Header header);
   void handleOdomPose(const nav_msgs::Odometry::ConstPtr& odom);
   void handleAmclPose(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& amcl);
   bool apply(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res);
-
-public:
-  void init(ros::NodeHandle& nh);
 };
 
 #endif
