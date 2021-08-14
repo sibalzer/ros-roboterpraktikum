@@ -177,6 +177,15 @@ target_link_libraries(nocollide
 )
 add_dependencies(nocollide volksbot_generate_messages_cpp)
 
+add_executable(gio_start_tf
+  src/gio_path/gio_start_tf.cc
+)
+set_target_properties(gio_start_tf PROPERTIES LINK_FLAGS "-pthread")
+target_link_libraries(gio_start_tf
+  ${catkin_LIBRARIES}
+)
+add_dependencies(gio_start_tf volksbot_generate_messages_cpp)
+
 MESSAGE(STATUS "STATUS: ${CATKIN_PACKAGE_INCLUDE_DESTINATION}")
 MESSAGE(STATUS "STATUS: ${CATKIN_GLOBAL_INCLUDE_DESTINATION}")
 MESSAGE(STATUS "STATUS: include/${PROJECT_NAME}")

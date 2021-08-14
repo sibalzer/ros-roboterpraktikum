@@ -14,20 +14,21 @@ void LogitechF::handleButton(uint8_t number, bool pressed, uint32_t time)
   {
     case BUTTON_A:
       ROS_DEBUG("Button A");
-      ros::service::call("startMeasuring", e);
+      ros::service::call("reset_gio_start", e);
+      // ros::service::call("startMeasuring", e);
       break;
     case BUTTON_B:
       ROS_DEBUG("Button B");
-      ros::service::call("stopMeasuring", e);
+      // ros::service::call("stopMeasuring", e);
       break;
     case BUTTON_X:
       ROS_DEBUG("Button X");
-      ros::service::call("setSingle", e);
+      // ros::service::call("setSingle", e);
       // ros::service::call("Shutdown", e);
       break;
     case BUTTON_Y:
       ROS_DEBUG("Button Y");
-      ros::service::call("setContinuous", e);
+      // ros::service::call("setContinuous", e);
       break;
     case BUTTON_LEFT:
       ROS_DEBUG("Button Left");
