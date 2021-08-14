@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
   }
 
   ROS_DEBUG("Advertise services");
-  nh.advertiseService(frame.reset, &GioFrame::apply, &frame);
+  ros::ServiceServer service = nh.advertiseService(frame.reset, &GioFrame::apply, &frame);
 
   ROS_INFO("Running...");
   ros::spin();
