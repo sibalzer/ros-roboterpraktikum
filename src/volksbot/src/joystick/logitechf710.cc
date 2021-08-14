@@ -153,9 +153,9 @@ void LogitechF::handleAxis(uint8_t number, int16_t value, uint32_t time)
 
 void LogitechF::sendSpeed()
 {
-  volksbot::vels velocity;
-  velocity.left = leftvel * speed;
-  velocity.right = rightvel * speed;
+  volksbot::velocities velocity;
+  velocity.request.left = leftvel * speed;
+  velocity.request.right = rightvel * speed;
   ROS_INFO("%f %f SPEED %f \n", leftvel, rightvel, speed);
-  publisher.publish(velocity);
+  ros::service::call("Controls", velocity);
 }
