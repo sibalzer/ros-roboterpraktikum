@@ -91,7 +91,7 @@ void limitVelocities(double& leftvel, double& rightvel)
   leftvel = std::min(std::max(leftvel, left_neg), left_pos);
   rightvel = std::min(std::max(rightvel, right_neg), right_pos);
 
-  ROS_INFO("New velocities: %f l, %f r", leftvel, rightvel);
+  // ROS_INFO("New velocities: %f l, %f r", leftvel, rightvel);
 }
 
 #ifdef WIN32
