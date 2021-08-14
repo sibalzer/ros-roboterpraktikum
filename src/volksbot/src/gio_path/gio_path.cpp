@@ -209,10 +209,10 @@ bool CGioController::getNextState(double& u, double& w, double& vleft, double& v
 
   l = path->getDistance(x0, y0);
   /// WHY?????
-  // if (path->evaluate(x0, y0) > 5e-7)
-  // {
-  //   l = -l;
-  // }
+  if (path->evaluate(x0, y0) > 5e-7)
+  {
+    l = -l;
+  }
 
   giofile << l << " " << path->evaluate(x0, y0) << " ";  // u 2 3
 
