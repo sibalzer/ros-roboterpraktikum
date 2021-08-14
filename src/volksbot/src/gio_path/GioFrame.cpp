@@ -35,24 +35,24 @@ bool GioFrame::apply(std_srvs::Empty::Request& req, std_srvs::Empty::Response& r
   return true;
 }
 
-void GioFrame::init()
+void GioFrame::init(ros::NodeHandle& nh)
 {
   ROS_DEBUG("Initalize");
-  n.param<std::string>("source", source, "odom");
-  n.param<std::string>("world", world, "odom_combined");
-  n.param<std::string>("dest", dest, "gio_start");
-  n.param<std::string>("reset", reset, "reset_gio_start");
+  nh.param<std::string>("source", source, "odom");
+  nh.param<std::string>("world", world, "odom_combined");
+  nh.param<std::string>("dest", dest, "gio_start");
+  nh.param<std::string>("reset", reset, "reset_gio_start");
 
   ROS_INFO("Service name: %s", reset.c_str());
 
   ROS_DEBUG("Subscribe to topics");
   if (source == "odom")
   {
-    n.subscribe(source, 1, &GioFrame::handleOdomPose, this);
+    nh.subscribe(source, 1, &GioFrame::handleOdomPose, this);
   }
   else if (source == "amcl_pose")
   {
-    n.subscribe(source, 1, &GioFrame::handleAmclPose, this);
+    nh.subscribe(source, 1, &GioFrame::handleAmclPose, this);
   }
   else
   {
@@ -60,5 +60,5 @@ void GioFrame::init()
   }
 
   ROS_DEBUG("Advertise services");
-  n.advertiseService(reset, &GioFrame::apply, this);
+  nh.advertiseService(reset, &GioFrame::apply, this);
 }

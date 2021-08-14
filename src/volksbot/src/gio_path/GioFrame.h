@@ -22,7 +22,6 @@ private:
   // name of the reset service
   std::string reset;
 
-  ros::NodeHandle n;
   geometry_msgs::PoseWithCovariance lastPose;
   tf::Transform transform;
   tf::TransformBroadcaster broadcaster;
@@ -33,7 +32,7 @@ private:
   bool apply(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res);
 
 public:
-  void init();
+  void init(ros::NodeHandle& nh);
 };
 
 #endif
