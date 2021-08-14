@@ -179,6 +179,7 @@ add_dependencies(nocollide volksbot_generate_messages_cpp)
 
 add_executable(gio_start_tf
   src/gio_path/gio_start_tf.cc
+  src/gio_path/GioFrame.cpp
 )
 set_target_properties(gio_start_tf PROPERTIES LINK_FLAGS "-pthread")
 target_link_libraries(gio_start_tf
