@@ -11,25 +11,92 @@
 
 class GioFrame
 {
-private:
-  geometry_msgs::PoseWithCovariance lastPose;
-  tf::Transform transform;
-  tf::TransformBroadcaster broadcaster;
 public:
-  // the current position source system
+  /**
+   * Constructs a new gio frame transformer
+   * and registers subscribers and services.
+   */
+  GioFrame();
+
+  ~GioFrame();
+private:
+  /**
+   * The name of the topic which publishes the current robot position
+   * in the world coordinate frame.
+   */
   std::string source;
-  // the world coordinate system
+
+  /**
+   * Transform frame name which relates to the world coordinate system.
+   */
   std::string world;
-  // the output system relative to the world coordinate system
-  // based on the saved current position
+
+  /**
+   * Transform frame name which relates to the output system
+   * relative to the world coordinate system based on the saved current position.
+   */
   std::string dest;
-  // name of the reset service
+
+  /**
+   * The name of the reset service.
+   */
   std::string reset;
 
+  /**
+   * The default node handle for this object.
+   */
+  ros::NodeHandle nh;
+
+  /**
+   * The current pose subscriber.
+   */
+  ros::Subscriber poseSubscriber;
+
+  /**
+   * The reset service server.
+   */
+  ros::ServiceServer resetService;
+
+  /**
+   * The last pose received from the given robot position source.
+   */
+  geometry_msgs::PoseWithCovariance lastPose;
+
+  /**
+   * The current transformation frame which transformes the world frame
+   * to the last reset position.
+   */
+  tf::Transform transform;
+
+  /**
+   * The transformation frame broadcaster
+   * which broadcasts the current transformation on every received robot position.
+   */
+  tf::TransformBroadcaster broadcaster;
+
+  /**
+   * Handles a generic pose update from the robot
+   * and broadcasts the current transformation frame.
+   */
   void handlePose(const geometry_msgs::PoseWithCovariance& pose, std_msgs::Header header);
+
+  /**
+   * Handles a odometry pose update and passes it to the {@link handlePose} method.
+   */
   void handleOdomPose(const nav_msgs::Odometry::ConstPtr& odom);
+
+  /**
+   * Handles a pose with covariance pose update and passes it to the {@link handlePose} method.
+   */
   void handleAmclPose(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& amcl);
-  bool apply(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res);
+
+  /**
+   * Resets the stored transformation frame to the current pose.
+   * This is a service handler for an empty service request.
+   */
+  bool resetToCurrentPose(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res);
+
+  static const std::string loggingName;
 };
 
 #endif
