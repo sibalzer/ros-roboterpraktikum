@@ -3,6 +3,7 @@ project(volksbot)
 
 find_package(catkin REQUIRED COMPONENTS
   std_msgs
+  std_srvs
   message_generation
   roscpp
   tf

@@ -43,6 +43,8 @@ void GioFrame::init()
   n.param<std::string>("dest", dest, "gio_start");
   n.param<std::string>("reset", reset, "reset_gio_start");
 
+  ROS_INFO("Service name: %s", reset.c_str());
+
   ROS_DEBUG("Subscribe to topics");
   if (source == "odom")
   {
