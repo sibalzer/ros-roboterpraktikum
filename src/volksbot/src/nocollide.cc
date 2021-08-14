@@ -86,19 +86,21 @@ int main(int argc, char* argv[])
 
   while (!ros::isShuttingDown()) 
   {
-    if (((obstacle_linear && driving_linear) 
+    if ((obstacle_linear && driving_linear) 
        || (obstacle_left && driving_left)
        || (obstacle_right && driving_right))
-       && !near_obstacle)
     {
-      ROS_WARN("EMERGENCY BREAK");
-      volksbot::vel_limit limit;
-      limit.left_pos = 0;
-      limit.right_pos = 0;
-      limit.right_neg = -100;
-      limit.left_neg = -100;
-      publisher.publish(limit);
-      near_obstacle = true;
+      if (!near_obstacle)
+      {
+        ROS_WARN("EMERGENCY BREAK");
+        volksbot::vel_limit limit;
+        limit.left_pos = 0;
+        limit.right_pos = 0;
+        limit.right_neg = -100;
+        limit.left_neg = -100;
+        publisher.publish(limit);
+        near_obstacle = true;
+      }
     }
     else if (near_obstacle)
     {

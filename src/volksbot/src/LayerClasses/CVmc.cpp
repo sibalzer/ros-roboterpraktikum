@@ -82,19 +82,35 @@ void limitCallback(const volksbot::vel_limitConstPtr& limit_vel) {
   {
     left_neg = limit_vel->left_neg;
   }
+  else
+  {
+    left_neg = -100;
+  }
   if (fabs(limit_vel->right_neg) <= 100)
   {
     right_neg = limit_vel->right_neg;
+  }
+  else
+  {
+    right_neg = -100;
   }
   if (fabs(limit_vel->left_pos) <= 100)
   {
     left_pos = limit_vel->left_pos;
   }
+  else
+  {
+    left_pos = 100;
+  }
   if (fabs(limit_vel->right_pos) <= 100)
   {
     right_pos = limit_vel->right_pos;
   }
-  ROS_INFO("Updated velocity limits");
+  else
+  {
+    right_pos = 100;
+  }
+  ROS_INFO("Updated velocity limits %f %f %f %f", limit_vel->left_neg, limit_vel->left_pos, limit_vel->right_neg, limit_vel->right_pos);
 }
 
 void limitVelocities(double& leftvel, double& rightvel)
@@ -109,11 +125,11 @@ void limitVelocities(double& leftvel, double& rightvel)
   }
   if (rightvel > right_pos)
   {
-    rightvel = right_pos;
+    //rightvel = right_pos;
   }
   else if (rightvel < right_neg)
   {
-    rightvel = right_neg;
+    //rightvel = right_neg;
   }
 }
 

@@ -348,8 +348,8 @@ const int CVmc::BATTERY_VOLTAGE = 7;
 const int CVmc::VMC_ERROR = 0x80000000;
 
 // limits
-double left_neg, right_neg;
-double left_pos, right_pos;
+double left_neg=-100, right_neg=-100;
+double left_pos=100, right_pos=100;
 void limitCallback(const volksbot::vel_limitConstPtr& limit_vel);
 void limitVelocities(double& leftvel, double& rightvel);
 
