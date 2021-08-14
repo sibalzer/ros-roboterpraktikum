@@ -106,7 +106,7 @@ public:
   /**
    * Checks, if the given coordinates
    * are orthogonal to the current path segment.
-   * 
+   *
    * @param x the current x coordinate of the robot
    * @param y the current y coordinate of the robot
    */

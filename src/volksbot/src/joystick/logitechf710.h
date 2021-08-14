@@ -17,14 +17,14 @@
 #define BACK 0x0A
 
 // their configuration (full)
-#define LSTICK_LEFTRIGHT  0x00
-#define LSTICK_UPDOWN     0x01
-#define THROTTLE_LEFT     0x02
-#define RSTICK_LEFTRIGHT  0x03
-#define RSTICK_UPDOWN     0x04
-#define THROTTLE_RIGHT    0x05
-#define HUD_LEFTRIGHT     0x06
-#define HUD_UPDOWN        0x07
+#define LSTICK_LEFTRIGHT 0x00
+#define LSTICK_UPDOWN 0x01
+#define THROTTLE_LEFT 0x02
+#define RSTICK_LEFTRIGHT 0x03
+#define RSTICK_UPDOWN 0x04
+#define THROTTLE_RIGHT 0x05
+#define HUD_LEFTRIGHT 0x06
+#define HUD_UPDOWN 0x07
 
 // our configuration (full)
 /* #define LSTICK_LEFTRIGHT 0x00
@@ -51,7 +51,8 @@ public:
     init();
   };
 
-  ~LogitechF() {
+  ~LogitechF()
+  {
     publisher.shutdown();
   }
 

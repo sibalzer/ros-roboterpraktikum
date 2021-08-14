@@ -186,7 +186,9 @@ bool CCurve::getNext(const int looped)
     if (loopCount >= looped)
     {
       hasCurUpdated = false;
-    } else {
+    }
+    else
+    {
       cur = 0;
       loopCount++;
     }
@@ -209,8 +211,7 @@ bool CCurve::getNext(const int looped)
     loopCount = 0;
   }
 
-  ROS_INFO("Path: %d -> %d [%f, %f] -> [%f, %f]",
-    cur, cur+1, tx[cur], ty[cur], tx[cur+1], ty[cur+1]);
+  ROS_INFO("Path: %d -> %d [%f, %f] -> [%f, %f]", cur, cur + 1, tx[cur], ty[cur], tx[cur + 1], ty[cur + 1]);
 
   return hasCurUpdated;
 }
@@ -239,11 +240,11 @@ bool CCurve::pointIn(const double x, const double y) const
   const double diffY = ty[cur + 1] - ty[cur];
 
   // boundary of starting point
-  const double c1 = -diffX * tx[cur    ] - diffY * ty[cur    ];
+  const double c1 = -diffX * tx[cur] - diffY * ty[cur];
   // boundary of destination point
   const double c2 = -diffX * tx[cur + 1] - diffY * ty[cur + 1];
   // level of current point
-  const double c3 = -diffX * x           - diffY * y;
+  const double c3 = -diffX * x - diffY * y;
 
   return c3 >= min(c1, c2);
 }

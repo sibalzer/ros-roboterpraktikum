@@ -77,13 +77,15 @@ void CVcallback(const geometry_msgs::Twist::ConstPtr& cmd_vel)
   limitVelocities(leftvel, rightvel);
 }
 
-void limitCallback(const volksbot::vel_limitConstPtr& limit_vel) {
+void limitCallback(const volksbot::vel_limitConstPtr& limit_vel)
+{
   left_neg = std::min(std::max(-100.0, limit_vel->left_neg), 100.0);
   right_neg = std::min(std::max(-100.0, limit_vel->right_neg), 100.0);
   left_pos = std::min(std::max(-100.0, limit_vel->left_pos), 100.0);
   right_pos = std::min(std::max(-100.0, limit_vel->right_pos), 100.0);
 
-  ROS_INFO("Updated velocity limits %f %f %f %f", limit_vel->left_neg, limit_vel->left_pos, limit_vel->right_neg, limit_vel->right_pos);
+  ROS_INFO("Updated velocity limits %f %f %f %f", limit_vel->left_neg, limit_vel->left_pos, limit_vel->right_neg,
+           limit_vel->right_pos);
 }
 
 void limitVelocities(double& leftvel, double& rightvel)

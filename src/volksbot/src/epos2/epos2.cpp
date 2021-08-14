@@ -67,7 +67,8 @@ void EPOS2::CVcallback(const geometry_msgs::Twist::ConstPtr& cmd_vel)
   limitVelocities(leftvel, rightvel);
 }
 
-void EPOS2::limitCallback(const volksbot::vel_limitConstPtr& limit_vel) {
+void EPOS2::limitCallback(const volksbot::vel_limitConstPtr& limit_vel)
+{
   if (fabs(limit_vel->left_neg) <= 100)
   {
     left_neg = limit_vel->left_neg;
@@ -207,7 +208,6 @@ void EPOS2::init(const char* port)
                                                        ros::TransportHints().reliable().udp().maxDatagramSize(100));
       limit_sub = n.subscribe<volksbot::vel_limit>("vel_limit", 1, &EPOS2::limitCallback, this);
       service = n.advertiseService("Controls", &EPOS2::callback, this);
-      
 
       pthread_create(&threadId, NULL, &EPOS2::threadFunction, this);
     }

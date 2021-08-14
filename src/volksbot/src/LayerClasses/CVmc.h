@@ -333,8 +333,6 @@ private:
   void leaveCriticalSection();
   void init(const char* comPort);
   VMC::CvmcAPI* _apiObject;
-
-
 };
 
 const int CVmc::MOTOR_RPM = 0;
@@ -348,8 +346,8 @@ const int CVmc::BATTERY_VOLTAGE = 7;
 const int CVmc::VMC_ERROR = 0x80000000;
 
 // limits
-double left_neg=-100, right_neg=-100;
-double left_pos=100, right_pos=100;
+double left_neg = -100, right_neg = -100;
+double left_pos = 100, right_pos = 100;
 void limitCallback(const volksbot::vel_limitConstPtr& limit_vel);
 void limitVelocities(double& leftvel, double& rightvel);
 

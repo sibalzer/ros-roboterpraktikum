@@ -63,10 +63,10 @@ void MotorDummy::CVcallback(const geometry_msgs::Twist::ConstPtr& cmd_vel)
     rightvel = (double)(linear + v_diff);
   }
   limitVelocities(leftvel, rightvel);
-  
 }
 
-void MotorDummy::limitCallback(const volksbot::vel_limitConstPtr& limit_vel) {
+void MotorDummy::limitCallback(const volksbot::vel_limitConstPtr& limit_vel)
+{
   if (fabs(limit_vel->left_neg) <= 100)
   {
     left_neg = limit_vel->left_neg;

@@ -33,7 +33,7 @@ using namespace std;
 #define GradToRadian 0.01745328
 #define RadianToGrad 57.295827909
 
-#define NORMALIZE_ANGLE(ang)                                                                                            \
+#define NORMALIZE_ANGLE(ang)                                                                                           \
   while (fabs(ang) > M_PI)                                                                                             \
   ang += (ang > 0) ? -2 * M_PI : 2 * M_PI
 #define SQR(c) ((c) * (c))

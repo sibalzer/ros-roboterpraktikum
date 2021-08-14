@@ -180,12 +180,13 @@ bool CGioController::canDetermineRobotPosition(int looped)
   {
     const bool isInBoundary = path->pointIn(x0, y0);
     const bool isNotOnDestination = path->getDistanceToEnd(x0, y0) > endDistanceMax;
-    if (isInBoundary && isNotOnDestination) {
+    if (isInBoundary && isNotOnDestination)
+    {
       ROS_DEBUG("In boundary and not on destination. Continue...");
       giofile << path->getDistanceToEnd(x0, y0) << " ";  // u 1
       return true;
     }
-    
+
     ROS_DEBUG("Get next point");
     isRunning = path->getNext(looped);
   }

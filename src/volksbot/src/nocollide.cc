@@ -18,7 +18,6 @@ bool obstacle_right = false;
 bool obstacle_left = false;
 int min_samples;
 
-
 void handleOdomPose(const nav_msgs::Odometry::ConstPtr& odom)
 {
   ROS_DEBUG("Receive odom pose");
@@ -69,12 +68,12 @@ int main(int argc, char* argv[])
   n.param<int>("/sick/fov/max", max_angle, 225);
   double resolution;
   n.param<double>("/sick/resolution", resolution, 0.5);
-  samples = int((max_angle - min_angle)/resolution) + 1;
+  samples = int((max_angle - min_angle) / resolution) + 1;
   start = int(0.35 * samples);
   left = int(0.43 * samples);
   right = int(0.57 * samples);
   stop = int(0.65 * samples);
-  middle = samples/2;
+  middle = samples / 2;
   min_samples = int(0.05 * samples);
 
   ros::Subscriber odomSubscriber = n.subscribe("odom", 1, handleOdomPose);
@@ -84,11 +83,9 @@ int main(int argc, char* argv[])
 
   bool near_obstacle = false;
 
-  while (!ros::isShuttingDown()) 
+  while (!ros::isShuttingDown())
   {
-    if ((obstacle_linear && driving_linear) 
-       || (obstacle_left && driving_left)
-       || (obstacle_right && driving_right))
+    if ((obstacle_linear && driving_linear) || (obstacle_left && driving_left) || (obstacle_right && driving_right))
     {
       if (!near_obstacle)
       {
