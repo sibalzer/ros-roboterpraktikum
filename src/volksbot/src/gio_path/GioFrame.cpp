@@ -2,6 +2,11 @@
 
 GioFrame::GioFrame(const char* loggingName) : loggingName_{loggingName}
 {
+  tf::Vector3 initialPosition{0, 0, 0};
+  tf::Quaternion initialRotation{0, 0, 0, 1};
+  transform_.setOrigin(initialPosition);
+  transform_.setRotation(initialRotation);
+
   ROS_DEBUG_NAMED(loggingName_, "Get parameters");
   nh_.param<std::string>("source", sourceTopic_, "odom");
   nh_.param<std::string>("world", worldFrame_, "odom_combined");
@@ -55,11 +60,13 @@ void GioFrame::handleAmclPose(const geometry_msgs::PoseWithCovarianceStamped::Co
 
 bool GioFrame::resetToCurrentPose(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)
 {
-  auto orientation = lastPose_.pose.orientation;
+  const auto position = lastPose_.pose.position;
+  const auto orientation = lastPose_.pose.orientation;
+
   // build new transform frame from last pose
-  transform_.setOrigin(tf::Vector3(orientation.x, orientation.y, orientation.z));
+  transform_.setOrigin(tf::Vector3(position.x, position.y, position.z));
   tf::Quaternion quat_tf;
-  tf::quaternionMsgToTF(lastPose_.pose.orientation, quat_tf);
+  tf::quaternionMsgToTF(orientation, quat_tf);
   quat_tf.normalize();
   transform_.setRotation(quat_tf);
 
