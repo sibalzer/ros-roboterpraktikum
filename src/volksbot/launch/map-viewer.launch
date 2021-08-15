@@ -2,5 +2,5 @@
     <!-- Initialize -->
     <include file="$(find volksbot)/launch/parts/pre.xml" />
 
-    <node pkg="rviz" type="rviz" name="rviz" />
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find volksbot)/config/topdown.rviz" />
 </launch>
