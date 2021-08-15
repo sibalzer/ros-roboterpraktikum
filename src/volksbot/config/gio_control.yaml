@@ -3,3 +3,4 @@ source:             "odom"
 looprate:           100
 u_max:              15
 axis_length:        444.0
+export_dir:         "/tmp"

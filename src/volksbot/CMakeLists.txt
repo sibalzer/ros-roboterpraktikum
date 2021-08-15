@@ -160,6 +160,16 @@ target_link_libraries(pose_logger
 )
 add_dependencies(pose_logger volksbot_generate_messages_cpp)
 
+add_executable(path_recorder
+  src/path_recorder.cc
+  src/PathRecorder.cpp
+)
+set_target_properties(path_recorder PROPERTIES LINK_FLAGS "-pthread")
+target_link_libraries(path_recorder
+  ${catkin_LIBRARIES}
+)
+add_dependencies(path_recorder volksbot_generate_messages_cpp)
+
 add_executable(input_gio 
   src/gio_path/curves.cpp
   src/gio_path/gio_path.cpp
