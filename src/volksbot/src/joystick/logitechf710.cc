@@ -31,6 +31,8 @@ void LogitechF::handleButton(uint8_t number, bool pressed, uint32_t time)
       break;
     case BUTTON_Y:
       ROS_DEBUG("Button Y");
+      ROS_INFO("Trigger AMCL global localization");
+      ros::service::call("global_localization", e);
       // ros::service::call("setContinuous", e);
       break;
     case BUTTON_LEFT:
