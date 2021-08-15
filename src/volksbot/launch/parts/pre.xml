@@ -6,7 +6,7 @@
     />
 
     <!-- Set current working robot (use one of: irma, lars, sim, ute) -->
-    <arg name="robot" default="sim" />
+    <arg name="robot" default="lars" />
     <arg name="use_sim" default="false" />
 
     <!-- Load the generic configuration file -->
