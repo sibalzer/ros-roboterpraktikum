@@ -128,8 +128,8 @@ bool InputGio::stopHandler(std_srvs::Empty::Request& req, std_srvs::Empty::Respo
 void InputGio::sendSpeed()
 {
   volksbot::vels velocity;
-  velocity.left = leftVel_;
-  velocity.right = rightVel_;
-  ROS_DEBUG_NAMED(loggingName_, "Motor vels: [%f, %f]", leftVel_, rightVel_);
+  velocity.left = -leftVel_;
+  velocity.right = -rightVel_;
+  ROS_DEBUG_NAMED(loggingName_, "Motor vels: [%f, %f]", -leftVel_, -rightVel_);
   velPublisher_.publish(velocity);
 }
