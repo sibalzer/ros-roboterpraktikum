@@ -42,7 +42,7 @@ GioFrame::~GioFrame()
 
 void GioFrame::handlePose(const geometry_msgs::PoseWithCovariance& pose, std_msgs::Header header)
 {
-  broadcaster_.sendTransform(tf::StampedTransform(transform_, header.stamp, worldFrame_, destFrame_));
+  broadcaster_.sendTransform(tf::StampedTransform(transform_, ros::Time::now(), worldFrame_, destFrame_));
   lastPose_ = pose;
 }
 
