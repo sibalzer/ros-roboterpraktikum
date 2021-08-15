@@ -7,21 +7,13 @@ int main(int argc, char* argv[])
   printf("Launching Input Giovanni Controller\n");
   ROS_INFO("Launching Input Giovanni Controller");
 
-  InputGio inputGio;
-  inputGio.setup();
+  try {
+    InputGio inputGio;
 
-  ROS_INFO("Capturing poses...");
-
-  // init pose
-  cout << "press enter to continue";
-  getchar();
-  inputGio.initPose();
-  ROS_INFO("Set last received pose as initial pose");
-
-  ROS_INFO("Drive now?");
-  cout << "press enter to continue";
-  getchar();
-
-  ROS_INFO("Driving...");
-  inputGio.run();
+    ROS_INFO("Driving...");
+    inputGio.run();
+  } catch (const std::exception& exc) {
+    ROS_ERROR(exc.what());
+    ros::shutdown();
+  }
 }
