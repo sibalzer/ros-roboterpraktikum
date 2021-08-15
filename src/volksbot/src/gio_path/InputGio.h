@@ -43,6 +43,11 @@ private:
   std::string sourceTopic_;
 
   /**
+   * The name of the topic which transfers the motor velocities.
+   */
+  std::string velTopic_;
+
+  /**
    * Transform frame name which relates to the output system
    * relative to the world coordinate system based on the saved current position.
    */

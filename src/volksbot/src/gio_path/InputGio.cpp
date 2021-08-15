@@ -9,8 +9,9 @@ InputGio::InputGio(const char* loggingName) : loggingName_{ loggingName }
 
   ROS_DEBUG_NAMED(loggingName, "Get parameters");
   nh_.param<std::string>("source", sourceTopic_, "odom");
+  nh_.param<std::string>("velocity", velTopic_, "Vel");
   nh_.param<std::string>("dest", destFrame_, "gio_start");
-  nh_.param<std::string>("stop", stopSrvName_, "stop");
+  nh_.param<std::string>("stop", stopSrvName_, "stop_input_gio");
   nh_.param<int>("looprate", rate_, 100);
   nh_.param<std::string>("datfile", datfile, "quadrat.dat");
   nh_.param<double>("u_max", u_max, 1.0);
@@ -31,7 +32,7 @@ InputGio::InputGio(const char* loggingName) : loggingName_{ loggingName }
   }
 
   ROS_DEBUG_NAMED(loggingName_, "Advertise publishers");
-  velPublisher_ = nh_.advertise<volksbot::vels>("Vel", 100);
+  velPublisher_ = nh_.advertise<volksbot::vels>(velTopic_, 100);
 
   ROS_DEBUG_NAMED(loggingName_, "Advertise services");
   stopService_ = nh_.advertiseService(stopSrvName_, &InputGio::stopHandler, this);
@@ -60,7 +61,7 @@ InputGio::~InputGio() {
 void InputGio::run()
 {
   isRunning_ = true;
-  ros::Rate loop_rate{rate_};
+  ros::Rate loop_rate{rate_ * 1.0};
   while (ros::ok() && isRunning_)
   {
     // ROS housekeeping

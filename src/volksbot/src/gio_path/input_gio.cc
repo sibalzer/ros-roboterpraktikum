@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
     ROS_INFO("Driving...");
     inputGio.run();
   } catch (const std::exception& exc) {
-    ROS_ERROR(exc.what());
+    ROS_ERROR("%s", exc.what());
     ros::shutdown();
   }
 }
