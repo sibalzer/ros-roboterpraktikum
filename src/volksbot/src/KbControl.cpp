@@ -1,5 +1,6 @@
 #include <fcntl.h>
 #include <signal.h>
+#include <std_srvs/Empty.h>
 #include <stdlib.h>
 #include <string.h>
 #include <termios.h>
@@ -44,6 +45,11 @@ void KbControl::run()
   char c;                     // current pressed character
   char previous = KEYCODE_Q;  // last pressed character
 
+  printf("\n=== Controls ===\n");
+  printf("Direction: forward (%c), reverse (%c), left (%c), right (%c), stop (%c)\n", KEYCODE_D, KEYCODE_U, KEYCODE_L, KEYCODE_R, KEYCODE_Q);
+  printf("Speed: faster (%c), slower (%c)\n", KEYCODE_A, KEYCODE_Y);
+  printf("Utility: reset_gio_frame (%c), stop_gio (%c), quit (%c)\n\n", KEYCODE_G, KEYCODE_X, KEYCODE_O);
+
   // some terminal magic
   struct termios cooked;
   tcgetattr(kfd, &cooked);
@@ -57,22 +63,33 @@ void KbControl::run()
   signal(SIGINT, quit);
 
   ros::Rate loop_rate(5);
-  while (ros::ok())
+  while (!ros::isShuttingDown())
   {
     c = KEYCODE_Q;
     read(kfd, &c, 1);
 
-    handleKey(c, previous);
-    sendSpeed();
+    if (handleKey(c, previous))
+    {
+      sendSpeed();
+    }
 
     // ROS house keeping
     ros::spinOnce();
     loop_rate.sleep();
   }
+
+  // return to the normal input mode
+  tcgetattr(kfd, &cooked);
+  cooked.c_lflag |= (ICANON | ECHO);
+  cooked.c_cc[VEOL] = 0;
+  cooked.c_cc[VEOF] = 4;
+
+  tcsetattr(kfd, TCSANOW, &cooked);
 }
 
-void KbControl::handleKey(const char c, char& previous)
+bool KbControl::handleKey(const char c, char& previous)
 {
+  std_srvs::Empty e;
   char final = c;
 
   // handle faster and slower speeds
@@ -109,14 +126,29 @@ void KbControl::handleKey(const char c, char& previous)
       velocity_.request.left = 0;
       velocity_.request.right = 0;
       break;
+    case KEYCODE_G:
+      ROS_INFO("Reset gio frame");
+      ros::service::call("reset_gio_start", e);
+      return false;
+    case KEYCODE_X:
+      ROS_INFO("Stop gio controller");
+      ros::service::call("stop_input_gio", e);
+      return false;
+    case KEYCODE_O:
+      ROS_INFO("Quit");
+      ros::shutdown();
+      velocity_.request.left = 0;
+      velocity_.request.right = 0;
+      break;
   }
 
   previous = c;
+  return true;
 }
 
 void KbControl::sendSpeed()
 {
-  ROS_DEBUG_NAMED(loggingName_, "Motor vels: [%f, %f], speed: %f", velocity_.request.left, velocity_.request.right,
+  ROS_INFO_NAMED(loggingName_, "Motor vels: [%f, %f], speed: %f", velocity_.request.left, velocity_.request.right,
                   speed_);
   ros::service::call(velSrcName_, velocity_);
 }

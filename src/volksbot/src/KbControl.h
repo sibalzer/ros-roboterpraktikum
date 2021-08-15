@@ -13,6 +13,9 @@
 #define KEYCODE_Q 'q'  // 0x71
 #define KEYCODE_A 'a'  // 0x61
 #define KEYCODE_Y 'y'  // 0x79
+#define KEYCODE_G 'g'  // 0x67
+#define KEYCODE_X 'x'  // 0x78
+#define KEYCODE_O 'o'  // 0x6f
 
 namespace volksbot
 {
@@ -76,7 +79,7 @@ private:
   /**
    * Handles a parsed keyboard key input.
    */
-  void handleKey(char c, char& previous);
+  bool handleKey(char c, char& previous);
 
   /**
    * Sends the current motor velocities to the motor controllers.
