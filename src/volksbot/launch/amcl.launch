@@ -8,10 +8,10 @@
             file="$(find volksbot)/config/amcl_diff_cfg.yaml"
             command="load"
         />
-        <rosparam 
+        <!-- <rosparam 
             file="$(find volksbot)/config/amcl_init_pose.yaml"
             command="load"
-        />
+        /> -->
     </node>
 
     <!-- Some coordinate transformations -->
