@@ -91,7 +91,7 @@ void InputGio::handlePose(const geometry_msgs::PoseWithCovariance& pose, std_msg
 
   from.pose = pose.pose;
   from.header = header;
-  // from.header.stamp = ros::Time(0);
+  from.header.stamp = ros::Time(0);
   try
   {
     listener_.transformPose(destFrame_, from, to);
