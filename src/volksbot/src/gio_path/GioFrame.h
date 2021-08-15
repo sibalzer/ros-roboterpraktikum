@@ -16,63 +16,65 @@ public:
    * Constructs a new gio frame transformer
    * and registers subscribers and services.
    */
-  GioFrame();
+  GioFrame(const char* loggingName = "gio_frame");
 
   ~GioFrame();
 private:
+  const char* loggingName_;
+
   /**
    * The name of the topic which publishes the current robot position
    * in the world coordinate frame.
    */
-  std::string source;
+  std::string sourceTopic_;
 
   /**
    * Transform frame name which relates to the world coordinate system.
    */
-  std::string world;
+  std::string worldFrame_;
 
   /**
    * Transform frame name which relates to the output system
    * relative to the world coordinate system based on the saved current position.
    */
-  std::string dest;
+  std::string destFrame_;
 
   /**
    * The name of the reset service.
    */
-  std::string reset;
+  std::string resetSrvName_;
 
   /**
    * The default node handle for this object.
    */
-  ros::NodeHandle nh;
+  ros::NodeHandle nh_;
 
   /**
    * The current pose subscriber.
    */
-  ros::Subscriber poseSubscriber;
+  ros::Subscriber poseSubscriber_;
 
   /**
    * The reset service server.
    */
-  ros::ServiceServer resetService;
+  ros::ServiceServer resetService_;
 
   /**
    * The last pose received from the given robot position source.
    */
-  geometry_msgs::PoseWithCovariance lastPose;
+  geometry_msgs::PoseWithCovariance lastPose_;
 
   /**
    * The current transformation frame which transformes the world frame
    * to the last reset position.
    */
-  tf::Transform transform;
+  tf::Transform transform_;
 
   /**
    * The transformation frame broadcaster
    * which broadcasts the current transformation on every received robot position.
    */
-  tf::TransformBroadcaster broadcaster;
+  tf::TransformBroadcaster broadcaster_;
 
   /**
    * Handles a generic pose update from the robot
@@ -95,8 +97,6 @@ private:
    * This is a service handler for an empty service request.
    */
   bool resetToCurrentPose(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res);
-
-  static const std::string loggingName;
 };
 
 #endif
