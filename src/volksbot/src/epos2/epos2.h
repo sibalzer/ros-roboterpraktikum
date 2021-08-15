@@ -54,8 +54,8 @@ private:
   double vx;
   double vth;
   // limits
-  double left_neg, right_neg;
-  double left_pos, right_pos;
+  double left_neg=-100, right_neg=-100;
+  double left_pos=100, right_pos=100;
   void limitVelocities(double& leftvel, double& rightvel);
 
   // EPOS2 Functions
