@@ -111,7 +111,10 @@ target_link_libraries(volksbot
 )
 add_dependencies(volksbot volksbot_generate_messages_cpp) 
 
-add_executable(kbcontrol src/kbcontrol.cc)
+add_executable(kbcontrol
+  src/kb_control.cc
+  src/KbControl.cpp
+)
 set_target_properties(kbcontrol PROPERTIES LINK_FLAGS "-pthread")
 target_link_libraries(kbcontrol
   ${catkin_LIBRARIES}
