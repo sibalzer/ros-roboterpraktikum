@@ -97,7 +97,7 @@ void InputGio::handlePose(const geometry_msgs::PoseWithCovariance& pose, std_msg
     listener_.transformPose(destFrame_, from, to);
     const double yaw = tf::getYaw(to.pose.orientation);
 
-    ROS_DEBUG_NAMED(loggingName_, "Abs: %f [m], %f [m], %f [rad]; Rel: %f [m], %f [m], %f [rad]", from.pose.position.x,
+    ROS_INFO_NAMED(loggingName_, "Abs: %f [m], %f [m], %f [rad]; Rel: %f [m], %f [m], %f [rad]", from.pose.position.x,
               from.pose.position.y, yaw, to.pose.position.x, to.pose.position.y, yaw);
 
     gio_.setPose(to.pose.position.x, to.pose.position.y, yaw);
