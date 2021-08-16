@@ -4,6 +4,7 @@ GioFrame::GioFrame(const char* loggingName) : loggingName_{loggingName}
 {
   tf::Vector3 initialPosition{0, 0, 0};
   tf::Quaternion initialRotation{0, 0, 0, 1};
+  initialRotation.normalize();
   transform_.setOrigin(initialPosition);
   transform_.setRotation(initialRotation);
 

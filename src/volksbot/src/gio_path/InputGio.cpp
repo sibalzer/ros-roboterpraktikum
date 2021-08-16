@@ -3,9 +3,9 @@
 
 InputGio::InputGio(const char* loggingName) : loggingName_{ loggingName }
 {
-  std::string datfile; // the name of the coordinate file
-  double u_max; // maximal velocity
-  double axis_length; // axis length in milli meters
+  std::string datfile;  // the name of the coordinate file
+  double u_max;         // maximal velocity
+  double axis_length;   // axis length in milli meters
 
   ROS_DEBUG_NAMED(loggingName, "Get parameters");
   nh_.param<std::string>("source", sourceTopic_, "odom");
@@ -28,7 +28,7 @@ InputGio::InputGio(const char* loggingName) : loggingName_{ loggingName }
   }
   else
   {
-    throw std::invalid_argument{"No handler for pose type found: " + sourceTopic_};
+    throw std::invalid_argument{ "No handler for pose type found: " + sourceTopic_ };
   }
 
   ROS_DEBUG_NAMED(loggingName_, "Advertise publishers");
@@ -40,14 +40,15 @@ InputGio::InputGio(const char* loggingName) : loggingName_{ loggingName }
   ROS_DEBUG_NAMED(loggingName_, "Initialize controller");
   if (!gio_.getPathFromFile(datfile.c_str()))
   {
-    throw std::invalid_argument{"Giovanni Controller cannot open datfile: " + datfile};
+    throw std::invalid_argument{ "Giovanni Controller cannot open datfile: " + datfile };
   }
 
   gio_.setCurrentVelocity(u_max);
-  gio_.setAxisLength(axis_length / 1000.0); // mm -> m
+  gio_.setAxisLength(axis_length / 1000.0);  // mm -> m
 }
 
-InputGio::~InputGio() {
+InputGio::~InputGio()
+{
   ROS_DEBUG_NAMED(loggingName_, "Unsubscribe from topics");
   poseSubscriber_.shutdown();
 
@@ -61,7 +62,7 @@ InputGio::~InputGio() {
 void InputGio::run()
 {
   isRunning_ = true;
-  ros::Rate loop_rate{rate_ * 1.0};
+  ros::Rate loop_rate{ rate_ * 1.0 };
   while (ros::ok() && isRunning_)
   {
     // ROS housekeeping
@@ -69,7 +70,7 @@ void InputGio::run()
     loop_rate.sleep();
 
     // get next motor velocities and keep running state if possible
-    isRunning_ = gio_.getNextState(linVel_, angVel_, leftVel_, rightVel_, 0) && isRunning_;
+    isRunning_ = gio_.getNextState(linVel_, angVel_, leftVel_, rightVel_, 1) && isRunning_;
     sendSpeed();
   }
 
@@ -79,31 +80,33 @@ void InputGio::run()
   ROS_INFO_NAMED(loggingName_, "Giovanni Controller stopped.");
 }
 
-void InputGio::stop() {
+void InputGio::stop()
+{
   isRunning_ = false;
   ROS_WARN_NAMED(loggingName_, "Immediate stop initiated");
 }
 
 void InputGio::handlePose(const geometry_msgs::PoseWithCovariance& pose, std_msgs::Header header)
 {
-  /* geometry_msgs::PoseStamped from;
-  geometry_msgs::PoseStamped to;
+  geometry_msgs::PoseStamped from, to;
 
-  from.pose = pose.pose;
-  from.header = header;
-  from.header.stamp = ros::Time(0); */
+  from.pose = to.pose = pose.pose;
+  from.header = to.header = header;
+  from.header.stamp = to.header.stamp = ros::Time(0);
+
+  // from.pose = pose.pose;
+  // from.header = header;
+  // from.header.stamp = ros::Time(0);
   try
   {
-    /* listener_.transformPose(destFrame_, from, to);
-    const double yaw = tf::getYaw(to.pose.orientation);
+    // listener_.transformPose(destFrame_, from, to);
+    const double fromYaw = tf::getYaw(from.pose.orientation);
+    const double toYaw = tf::getYaw(to.pose.orientation);
 
     ROS_INFO_NAMED(loggingName_, "Abs: %f [m], %f [m], %f [rad]; Rel: %f [m], %f [m], %f [rad]", from.pose.position.x,
-              from.pose.position.y, yaw, to.pose.position.x, to.pose.position.y, yaw); */
+                   from.pose.position.y, fromYaw, to.pose.position.x, to.pose.position.y, toYaw);
 
-    const double yaw = tf::getYaw(pose.pose.orientation);
-    gio_.setPose(pose.pose.position.x, pose.pose.position.y, yaw);
-
-    ROS_INFO_NAMED(loggingName_, "%f %f Yaw %f", pose.pose.position.x, pose.pose.position.y, yaw);
+    gio_.setPose(to.pose.position.x, to.pose.position.y, toYaw);
   }
   catch (tf::TransformException& ex)
   {
@@ -123,7 +126,8 @@ void InputGio::handleAmclPose(const geometry_msgs::PoseWithCovarianceStamped::Co
   handlePose(amcl->pose, amcl->header);
 }
 
-bool InputGio::stopHandler(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res) {
+bool InputGio::stopHandler(std_srvs::Empty::Request& req, std_srvs::Empty::Response& res)
+{
   stop();
   return true;
 }
