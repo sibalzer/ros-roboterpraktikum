@@ -86,21 +86,24 @@ void InputGio::stop() {
 
 void InputGio::handlePose(const geometry_msgs::PoseWithCovariance& pose, std_msgs::Header header)
 {
-  geometry_msgs::PoseStamped from;
+  /* geometry_msgs::PoseStamped from;
   geometry_msgs::PoseStamped to;
 
   from.pose = pose.pose;
   from.header = header;
-  from.header.stamp = ros::Time(0);
+  from.header.stamp = ros::Time(0); */
   try
   {
-    listener_.transformPose(destFrame_, from, to);
+    /* listener_.transformPose(destFrame_, from, to);
     const double yaw = tf::getYaw(to.pose.orientation);
 
     ROS_INFO_NAMED(loggingName_, "Abs: %f [m], %f [m], %f [rad]; Rel: %f [m], %f [m], %f [rad]", from.pose.position.x,
-              from.pose.position.y, yaw, to.pose.position.x, to.pose.position.y, yaw);
+              from.pose.position.y, yaw, to.pose.position.x, to.pose.position.y, yaw); */
 
-    gio_.setPose(to.pose.position.x, to.pose.position.y, yaw);
+    const double yaw = tf::getYaw(pose.pose.orientation);
+    gio_.setPose(pose.pose.position.x, pose.pose.position.y, yaw);
+
+    ROS_INFO_NAMED(loggingName_, "%f %f Yaw %f", pose.pose.position.x, pose.pose.position.y, yaw);
   }
   catch (tf::TransformException& ex)
   {
