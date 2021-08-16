@@ -1,6 +1,7 @@
-#source:             "odom"
-path/source:             "amcl_pose"
-control/looprate:           100
-robot/u_max:              15
-robot/axis_length:        444.0
-path/export_dir:         "/tmp"
+#path/source:               "odom"
+path/source:          "amcl_pose"
+control/looprate:     100 # Hz
+robot/u_max:          15 # motor percent
+robot/axis_length:    444.0
+path/export_dir:      "/tmp"
+control/loops:           0 # 0 means: Do not loop

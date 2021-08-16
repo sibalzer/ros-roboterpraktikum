@@ -8,15 +8,16 @@ InputGio::InputGio(const char* loggingName) : loggingName_{ loggingName }
   double axis_length;   // axis length in milli meters
 
   ROS_DEBUG_NAMED(loggingName, "Get parameters");
-  nh_.param<std::string>("frame/source", sourceTopic_, "odom");
+  nh_.param<std::string>("path/source", sourceTopic_, "odom");
   nh_.param<std::string>("topic/velocity", velTopic_, "Vel");
   nh_.param<std::string>("frame/dest", destFrame_, "gio_start");
   nh_.param<std::string>("service/stop", stopSrvName_, "stop_input_gio");
   nh_.param<int>("control/looprate", rate_, 100);
+  nh_.param<int>("control/loops", loops_, 0);
   nh_.param<std::string>("path/datfile", datfile, "quadrat.dat");
   nh_.param<double>("robot/u_max", u_max, 1.0);
   nh_.param<double>("robot/axis_length", axis_length, 200.0);
-
+  
   ROS_DEBUG_NAMED(loggingName_, "Subscribe to topics");
   if (sourceTopic_ == "odom")
   {
@@ -70,7 +71,7 @@ void InputGio::run()
     loop_rate.sleep();
 
     // get next motor velocities and keep running state if possible
-    isRunning_ = gio_.getNextState(linVel_, angVel_, leftVel_, rightVel_, 1) && isRunning_;
+    isRunning_ = gio_.getNextState(linVel_, angVel_, leftVel_, rightVel_, loops_) && isRunning_;
     sendSpeed();
   }
 

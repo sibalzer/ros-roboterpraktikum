@@ -70,6 +70,11 @@ private:
   int rate_;
 
   /**
+   * The number of loops the controller should make.
+   */
+  int loops_;
+
+  /**
    * The default node handle for this object.
    */
   ros::NodeHandle nh_;
