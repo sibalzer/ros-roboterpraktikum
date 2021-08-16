@@ -9,10 +9,10 @@ GioFrame::GioFrame(const char* loggingName) : loggingName_{loggingName}
   transform_.setRotation(initialRotation);
 
   ROS_DEBUG_NAMED(loggingName_, "Get parameters");
-  nh_.param<std::string>("source", sourceTopic_, "odom");
-  nh_.param<std::string>("world", worldFrame_, "odom_combined");
-  nh_.param<std::string>("dest", destFrame_, "gio_start");
-  nh_.param<std::string>("reset", resetSrvName_, "reset_gio_start");
+  nh_.param<std::string>("frame/source", sourceTopic_, "odom");
+  nh_.param<std::string>("frame/world", worldFrame_, "odom_combined");
+  nh_.param<std::string>("frame/dest", destFrame_, "gio_start");
+  nh_.param<std::string>("service/reset", resetSrvName_, "reset_gio_start");
 
   ROS_DEBUG_NAMED(loggingName_, "Subscribe to topics");
   if (sourceTopic_ == "odom")

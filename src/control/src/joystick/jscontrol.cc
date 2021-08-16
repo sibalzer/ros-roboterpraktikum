@@ -8,7 +8,7 @@ int main(int argc, char* argv[])
   ros::init(argc, argv, "joystick_control");
   ros::NodeHandle n;
   std::string device;
-  n.param<std::string>("/devices/joystick", device, "/dev/input/js0");
+  n.param<std::string>("/path/joystick", device, "/dev/input/js0");
 
   Joystick* js;
   int type;

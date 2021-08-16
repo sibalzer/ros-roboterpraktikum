@@ -61,7 +61,7 @@ private:
   {
     stickx = sticky = speed = 0.0;
     std::string velTopic;
-    n.param<std::string>("velocity_topic", velTopic, "Vel");
+    n.param<std::string>("topic/velocity", velTopic, "Vel");
     publisher = n.advertise<control::vels>(velTopic, 100);
     /*
     gnuplot = popen("gnuplot -persist", "w");

@@ -22,7 +22,7 @@ Some parts of this project might not fully work, e. g. the pose reset part for t
 
 ### Services
  *  pose reset service (`reset_gio_start`) to be called and serviced
- *  velocity service (`velocity_service`, `Controls`) to be called by joystick and keyboard
+ *  velocity service (`Controls`) to be called by joystick and keyboard
  *  stop gio service (`stop_input_gio`) to be called and serviced
 
 ## Configuration
@@ -34,20 +34,20 @@ Right now, there are following config files:
 
 ### Parameters to configure
 
- *  `source` topic to subscribe for pose messages
- *  `looprate` looprate of the Giovanni Controller
- *  `u_max` maximal wheel velocity for the Giovanni Controller in [cm/s]
- *  `axis_length` wheel-base distance of the robot in [mm]
- *  `export_dir` where to write logfiles, csv files etc for the Giovanni controller
- *  `devices/joystick` what input device to use for the joystick node
+ *  `topic/source` topic to subscribe for pose messages
+ *  `control/looprate` looprate of the controller
+ *  `robot/u_max` maximal wheel velocity for the Giovanni Controller in [cm/s]
+ *  `robot/axis_length` wheel-base distance of the robot in [mm]
+ *  `path/export_dir` where to write logfiles, csv files etc for the Giovanni controller
+ *  `path/joystick` path to the joystick device
  *  `control/joystick/*` joystick type to use
- *  `world` name of the world frame (tf)
- *  `dest` name of the start frame for the Giovanni Controller
- *  `reset` name of the pose reset service
- *  `velocity_topic` name of the velocity topic
- *  `stop` name of the stop gio service
- *  `datfile` path input for the Giovanni Controller (absolute)
- *  `velocity_service` name of the velocity service to use
+ *  `frame/world` name of the world frame (tf)
+ *  `frame/dest` name of the start frame for the Giovanni Controller
+ *  `service/reset` name of the pose reset service
+ *  `topic/velocity` name of the velocity topic
+ *  `service/stop` name of the stop gio service
+ *  `path/datfile` path input for the Giovanni Controller (absolute)
+ *  `service/velocity` name of the velocity service to use
 
 ## Launchfiles
 

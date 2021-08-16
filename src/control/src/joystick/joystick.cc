@@ -1,4 +1,5 @@
 #include "joystick/joystick.h"
+#include <ros/ros.h>
 
 Joystick::Joystick(const char* filename)
 {
@@ -7,7 +8,11 @@ Joystick::Joystick(const char* filename)
 
 Joystick::Joystick()
 {
-  init("/dev/input/js0");
+  std::string jspath;
+  ros::NodeHandle n;
+  n.param<std::string>("path/joystick", jspath, "/dev/input/js0");
+
+  init(jspath.c_str());
 }
 
 void Joystick::init(const char* filename)

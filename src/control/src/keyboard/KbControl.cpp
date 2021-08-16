@@ -36,10 +36,10 @@ KbControl::KbControl(const char* loggingName) : loggingName_{ loggingName }
   kfd = 0;
 
   ROS_DEBUG_NAMED(loggingName, "Get parameters");
-  nh_.param<int>("looprate", rate_, 5);
-  nh_.param<std::string>("velocity_service", velSrcName_, "Controls");
-  nh_.param<std::string>("reset", resetSrv_, "reset_gio_start");
-  nh_.param<std::string>("stop", stopSrv_, "stop_input_gio");
+  nh_.param<int>("control/looprate", rate_, 5);
+  nh_.param<std::string>("service/velocity", velSrcName_, "Controls");
+  nh_.param<std::string>("service/reset", resetSrv_, "reset_gio_start");
+  nh_.param<std::string>("service/stop", stopSrv_, "stop_input_gio");
 }
 
 void KbControl::run()

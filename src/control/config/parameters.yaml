@@ -1,5 +1,5 @@
 ##### Joystick
-devices/joystick:       "/dev/input/js0"
+path/joystick:       "/dev/input/js0"
 #devices/mti:            "/dev/ttyS4"   # P1 on adapter
 #devices/mti:            "/dev/ttyUSB1" 
 #devices/mti:            "/dev/xsens" 

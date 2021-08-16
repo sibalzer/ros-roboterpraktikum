@@ -1,6 +1,6 @@
 #source:             "odom"
-source:             "amcl_pose"
-looprate:           100
-u_max:              15
-axis_length:        444.0
-export_dir:         "/tmp"
+path/source:             "amcl_pose"
+control/looprate:           100
+robot/u_max:              15
+robot/axis_length:        444.0
+path/export_dir:         "/tmp"
