@@ -1,0 +1,6 @@
+<launch>
+    <!-- Initialize -->
+    <include file="$(find volksbot)/launch/parts/pre.xml" />
+
+    <node pkg="control" type="kb" name="kb" output="screen" />
+</launch>

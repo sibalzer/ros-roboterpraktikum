@@ -111,16 +111,6 @@ target_link_libraries(volksbot
 )
 add_dependencies(volksbot volksbot_generate_messages_cpp) 
 
-add_executable(kbcontrol
-  src/kb_control.cc
-  src/KbControl.cpp
-)
-set_target_properties(kbcontrol PROPERTIES LINK_FLAGS "-pthread")
-target_link_libraries(kbcontrol
-  ${catkin_LIBRARIES}
-)
-add_dependencies(kbcontrol volksbot_generate_messages_cpp)
-
 add_executable(odometry 
   src/odometry.cc 
   src/odometry_main.cc
@@ -137,19 +127,6 @@ target_link_libraries(calibration
   ${catkin_LIBRARIES}
 )
 add_dependencies(calibration volksbot_generate_messages_cpp)
-
-add_executable(jscontrol
-  src/joystick/jscontrol.cc
-  src/joystick/joystick.cc
-  src/joystick/firejet.cc
-  src/joystick/predator.cc
-  src/joystick/logitechf710.cc
-)
-set_target_properties(jscontrol PROPERTIES LINK_FLAGS "-pthread")
-target_link_libraries(jscontrol
-  ${catkin_LIBRARIES}
-)
-add_dependencies(jscontrol volksbot_generate_messages_cpp)
 
 add_executable(pose_logger 
   src/pose_logger.cc
@@ -170,18 +147,6 @@ target_link_libraries(path_recorder
 )
 add_dependencies(path_recorder volksbot_generate_messages_cpp)
 
-add_executable(input_gio 
-  src/gio_path/curves.cpp
-  src/gio_path/gio_path.cpp
-  src/gio_path/InputGio.cpp
-  src/gio_path/input_gio.cc
-)
-set_target_properties(input_gio PROPERTIES LINK_FLAGS "-pthread")
-target_link_libraries(input_gio
-  ${catkin_LIBRARIES}
-)
-add_dependencies(input_gio volksbot_generate_messages_cpp)
-
 add_executable(nocollide 
   src/nocollide.cc
 )
@@ -190,16 +155,6 @@ target_link_libraries(nocollide
   ${catkin_LIBRARIES}
 )
 add_dependencies(nocollide volksbot_generate_messages_cpp)
-
-add_executable(gio_start_tf
-  src/gio_path/gio_start_tf.cc
-  src/gio_path/GioFrame.cpp
-)
-set_target_properties(gio_start_tf PROPERTIES LINK_FLAGS "-pthread")
-target_link_libraries(gio_start_tf
-  ${catkin_LIBRARIES}
-)
-add_dependencies(gio_start_tf volksbot_generate_messages_cpp)
 
 MESSAGE(STATUS "STATUS: ${CATKIN_PACKAGE_INCLUDE_DESTINATION}")
 MESSAGE(STATUS "STATUS: ${CATKIN_GLOBAL_INCLUDE_DESTINATION}")

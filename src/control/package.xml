@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <package>
-  <name>volksbot</name>
+  <name>control</name>
   <version>0.0.1</version>
-  <description>volksbot</description>
-  <maintainer email="borrmann@informatik.uni-wuerzburg.de">Dorit Borrmann</maintainer>
+  <description>control</description>
+  <maintainer email="ansgar.lemke@stud-mail.uni-wuerzburg.de">Ansgar Lemke</maintainer>
   <license>BSD</license>
   <url>http://ros.org/wiki/volksbot</url>
 
@@ -17,13 +17,11 @@
   <build_depend>nav_msgs</build_depend>
   <build_depend>move_base</build_depend>
   <run_depend>amcl</run_depend>
-  <run_depend>gmapping</run_depend>
-  <build_depend>lms100</build_depend>
 
   <run_depend>roscpp</run_depend>
   <run_depend>std_msgs</run_depend>
   <run_depend>message_runtime</run_depend>
-  <run_depend>control</run_depend>
+  <run_depend>volksbot</run_depend>
 
   <export>
     <cpp cflags="-I${prefix}/include" lflags="-L${prefix}/lib -lodo" />

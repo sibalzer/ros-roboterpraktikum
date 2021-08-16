@@ -1,0 +1,6 @@
+<launch>
+    <!-- Initialize -->
+    <include file="$(find control)/launch/parts/pre.xml" />
+
+    <node pkg="volksbot" type="js" name="js" output="screen" />
+</launch>

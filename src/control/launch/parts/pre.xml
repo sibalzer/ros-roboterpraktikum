@@ -1,0 +1,17 @@
+<launch>
+    <!-- Configure the ros console -->
+    <env
+        name="ROSCONSOLE_CONFIG_FILE"
+        value="$(find control)/config/rosconsole.conf"
+    />
+
+    <arg name="use_sim" default="false" />
+
+    <!-- Load the generic configuration file -->
+    <rosparam command="load" file="$(find control)/config/parameters.yaml" />
+
+    <!-- Set to true, if we are in a simulation -->
+    <rosparam param="use_sim_time" if="$(eval arg('use_sim') == 'true')">
+        false
+    </rosparam>
+</launch>

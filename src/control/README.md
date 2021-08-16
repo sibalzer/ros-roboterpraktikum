@@ -1,0 +1,59 @@
+# Control Guide
+
+## Overview 
+
+This package contains a collection of control inputs for mobile robots. There are three choices available: A Giovanni controller following paths, a keyboard controller and a joystick controller.
+
+## Note
+
+The package `control` is designed to be used in combination with the `volksbot` package. You need to be able to execute `volksbot` programs to use this package.
+
+Some parts of this project might not fully work, e. g. the pose reset part for the included Giovanni Controller.
+
+## Communication
+
+### Topics
+
+#### Subscribes to
+ *  pose topic (`odom` or `amcl_pose`)
+
+#### Publishes to
+ *  velocity topic (`Vel`)
+
+### Services
+ *  pose reset service (`reset_gio_start`) to be called and serviced
+ *  velocity service (`velocity_service`, `Controls`) to be called by joystick and keyboard
+ *  stop gio service (`stop_input_gio`) to be called and serviced
+
+## Configuration
+
+Right now, there are following config files:
+ *  `config/gio_control.yaml` configuring in/output of the Giovanni controller
+ *  `config/parameters.yaml` to configure general settings
+ *  `config/rosconsole.conf` to configure the verbosity level in the console window
+
+### Parameters to configure
+
+ *  `source` topic to subscribe for pose messages
+ *  `looprate` looprate of the Giovanni Controller
+ *  `u_max` maximal wheel velocity for the Giovanni Controller in [cm/s]
+ *  `axis_length` wheel-base distance of the robot in [mm]
+ *  `export_dir` where to write logfiles, csv files etc for the Giovanni controller
+ *  `devices/joystick` what input device to use for the joystick node
+ *  `control/joystick/*` joystick type to use
+ *  `world` name of the world frame (tf)
+ *  `dest` name of the start frame for the Giovanni Controller
+ *  `reset` name of the pose reset service
+ *  `velocity_topic` name of the velocity topic
+ *  `stop` name of the stop gio service
+ *  `datfile` path input for the Giovanni Controller (absolute)
+ *  `velocity_service` name of the velocity service to use
+
+## Launchfiles
+
+Right now, each node has it's own launch file. One might select the appropriate one.
+
+ *  `gio.launch` to launch the Giovanni Controller, needs the argument `file` to be set while `file` is the path to use (relative to `ressources/paths/`)
+ *  `js.launch` to launch the joystick controller
+ *  `kb.launch` to launch the keyboard controller
+ *  `gio_tf.launch` experimental to use tf transformations
