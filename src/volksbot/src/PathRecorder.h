@@ -7,7 +7,7 @@
 
 struct Coordinate
 {
-  double x, y;
+  double x, y, yaw;
 };
 
 class PathRecorder

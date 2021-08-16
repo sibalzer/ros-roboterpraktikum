@@ -1,5 +1,6 @@
 #include "PathRecorder.h"
 #include "boost/date_time/posix_time/posix_time.hpp"
+#include <tf/transform_datatypes.h>
 
 PathRecorder::PathRecorder(const char* loggingName) : loggingName_{ loggingName }
 {
@@ -41,13 +42,16 @@ void PathRecorder::flush() {
   fprintf(exportFile_, "%lu\n", coordinates_.size());
 
   for (const auto coordinate : coordinates_) {
-    fprintf(exportFile_, "%f %f\n", coordinate.x, coordinate.y);
+    fprintf(exportFile_, "%f %f %f\n", coordinate.x, coordinate.y, coordinate.yaw);
   }
 }
 
 void PathRecorder::handlePose(const geometry_msgs::PoseWithCovariance& pose, std_msgs::Header header)
 {
-  coordinates_.push_back({ pose.pose.position.x, pose.pose.position.y });
+  tf::Pose tmp;
+  const double yaw = tf::getYaw(pose.pose.orientation);
+
+  coordinates_.push_back({ pose.pose.position.x, pose.pose.position.y, yaw });
 }
 
 void PathRecorder::handleOdomPose(const nav_msgs::Odometry::ConstPtr& odom)
