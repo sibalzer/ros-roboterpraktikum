@@ -2,7 +2,7 @@
     <!-- Configure the ros console -->
     <env
         name="ROSCONSOLE_CONFIG_FILE"
-        value="$(find control)/config/rosconsole.conf"
+        value="$(find control)/config/custom_config.conf"
     />
 
     <arg name="use_sim" default="false" />

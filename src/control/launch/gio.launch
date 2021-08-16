@@ -10,7 +10,7 @@
 
     <arg name="file" />
     <param
-        name="datfile"
+        name="path/datfile"
         type="str"
         value="$(eval find('control') + '/resources/paths/' + arg('file'))"
     />
