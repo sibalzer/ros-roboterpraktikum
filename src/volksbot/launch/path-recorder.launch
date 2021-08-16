@@ -4,7 +4,7 @@
 
     <!-- Load gio input configuration -->
     <rosparam
-        file="$(find volksbot)/config/gio_control.yaml"
+        file="$(find control)/config/gio_control.yaml"
         command="load"
     />
 

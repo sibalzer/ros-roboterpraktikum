@@ -4,8 +4,8 @@
 PathRecorder::PathRecorder(const char* loggingName) : loggingName_{ loggingName }
 {
   ROS_DEBUG_NAMED(loggingName_, "Get parameters");
-  nh_.param<std::string>("source", sourceTopic_, "odom");
-  nh_.param<std::string>("export_dir", exportDir_, "/tmp");
+  nh_.param<std::string>("path/source", sourceTopic_, "odom");
+  nh_.param<std::string>("path/export_dir", exportDir_, "/tmp");
 
   const auto startTime = ros::Time::now().toBoost();
 
