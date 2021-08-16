@@ -3,19 +3,10 @@
 
 #include <ros/ros.h>
 
+#include "keycodes.h"
+
 // service
 #include "volksbot/velocities.h"
-
-#define KEYCODE_R 'r'  // 0x43
-#define KEYCODE_L 'l'  // 0x44
-#define KEYCODE_U 'u'  // 0x41
-#define KEYCODE_D 'd'  // 0x42
-#define KEYCODE_Q 'q'  // 0x71
-#define KEYCODE_A 'a'  // 0x61
-#define KEYCODE_Y 'y'  // 0x79
-#define KEYCODE_G 'g'  // 0x67
-#define KEYCODE_X 'x'  // 0x78
-#define KEYCODE_O 'o'  // 0x6f
 
 namespace control
 {
