@@ -1,9 +1,9 @@
 #include "gio_path/GioFrame.h"
 
-GioFrame::GioFrame(const char* loggingName) : loggingName_{loggingName}
+GioFrame::GioFrame(const char* loggingName) : loggingName_{ loggingName }
 {
-  tf::Vector3 initialPosition{0, 0, 0};
-  tf::Quaternion initialRotation{0, 0, 0, 1};
+  tf::Vector3 initialPosition{ 0, 0, 0 };
+  tf::Quaternion initialRotation{ 0, 0, 0, 1 };
   initialRotation.normalize();
   transform_.setOrigin(initialPosition);
   transform_.setRotation(initialRotation);
@@ -71,10 +71,10 @@ bool GioFrame::resetToCurrentPose(std_srvs::Empty::Request& req, std_srvs::Empty
   quat_tf.normalize();
   transform_.setRotation(quat_tf);
 
-
   const auto origin = transform_.getOrigin();
   const double yaw = tf::getYaw(transform_.getRotation());
-  ROS_INFO_NAMED(loggingName_, "New transform frame: [%f, %f, %f] (m), %f (rad)", origin.getX(), origin.getY(), origin.getZ(), yaw);
+  ROS_INFO_NAMED(loggingName_, "New transform frame: [%f, %f, %f] (m), %f (rad)", origin.getX(), origin.getY(),
+                 origin.getZ(), yaw);
 
   return true;
 }

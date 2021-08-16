@@ -20,6 +20,7 @@ public:
    * Flushes the recorded coordinates into the currently open file.
    */
   void flush();
+
 private:
   const char* loggingName_;
 

@@ -4,7 +4,7 @@
 #include <ros/ros.h>
 
 // service
-#include "control/velocities.h"
+#include "volksbot/velocities.h"
 
 #define KEYCODE_R 'r'  // 0x43
 #define KEYCODE_L 'l'  // 0x44
@@ -17,7 +17,7 @@
 #define KEYCODE_X 'x'  // 0x78
 #define KEYCODE_O 'o'  // 0x6f
 
-namespace volksbot
+namespace control
 {
 /**
  * The stdin keyboard file director.
@@ -77,7 +77,7 @@ private:
    * The current velocities the motors should have.
    * This variable is published when {@link sendSpeed} is called.
    */
-  control::velocities velocity_;
+  volksbot::velocities velocity_;
 
   /**
    * The current target speed adjusted via the keyboard.
@@ -95,6 +95,6 @@ private:
   void sendSpeed();
 };
 
-}  // namespace volksbot
+}  // namespace control
 
 #endif

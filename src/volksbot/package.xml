@@ -23,7 +23,7 @@
   <run_depend>roscpp</run_depend>
   <run_depend>std_msgs</run_depend>
   <run_depend>message_runtime</run_depend>
-  <run_depend>control</run_depend>
+  <!--run_depend>control</run_depend-->
 
   <export>
     <cpp cflags="-I${prefix}/include" lflags="-L${prefix}/lib -lodo" />

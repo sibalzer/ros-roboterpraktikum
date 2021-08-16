@@ -12,13 +12,15 @@ FILE* amclPoseFile;
 void handleOdomPose(const nav_msgs::Odometry::ConstPtr& odom)
 {
   const double yaw = tf::getYaw(odom->pose.pose.orientation);
-  fprintf(odomPoseFile, "%f,%f,%f,%f\n", odom->header.stamp.toSec(), odom->pose.pose.position.x, odom->pose.pose.position.y, yaw);
+  fprintf(odomPoseFile, "%f,%f,%f,%f\n", odom->header.stamp.toSec(), odom->pose.pose.position.x,
+          odom->pose.pose.position.y, yaw);
 }
 
 void handleAmclPose(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& amcl)
 {
   const double yaw = tf::getYaw(amcl->pose.pose.orientation);
-  fprintf(amclPoseFile, "%f,%f,%f,%f\n", amcl->header.stamp.toSec(), amcl->pose.pose.position.x, amcl->pose.pose.position.y, yaw);
+  fprintf(amclPoseFile, "%f,%f,%f,%f\n", amcl->header.stamp.toSec(), amcl->pose.pose.position.x,
+          amcl->pose.pose.position.y, yaw);
 }
 
 int main(int argc, char* argv[])

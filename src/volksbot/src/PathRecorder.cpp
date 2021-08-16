@@ -29,7 +29,8 @@ PathRecorder::PathRecorder(const char* loggingName) : loggingName_{ loggingName 
   exportFile_ = fopen(fileName_.c_str(), "w");
 }
 
-PathRecorder::~PathRecorder() {
+PathRecorder::~PathRecorder()
+{
   ROS_DEBUG_NAMED(loggingName_, "Unsubscribe from topics");
   poseSubscriber_.shutdown();
 
@@ -37,17 +38,19 @@ PathRecorder::~PathRecorder() {
   fclose(exportFile_);
 }
 
-void PathRecorder::flush() {
+void PathRecorder::flush()
+{
   fprintf(exportFile_, "%lu\n", coordinates_.size());
 
-  for (const auto coordinate : coordinates_) {
+  for (const auto coordinate : coordinates_)
+  {
     fprintf(exportFile_, "%f %f\n", coordinate.x, coordinate.y);
   }
 }
 
 void PathRecorder::handlePose(const geometry_msgs::PoseWithCovariance& pose, std_msgs::Header header)
 {
-  coordinates_.push_back({ pose.pose.position.x, pose.pose.position.y});
+  coordinates_.push_back({ pose.pose.position.x, pose.pose.position.y });
 }
 
 void PathRecorder::handleOdomPose(const nav_msgs::Odometry::ConstPtr& odom)

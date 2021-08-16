@@ -3,7 +3,7 @@
 
 #include "joystick.h"
 #include <ros/ros.h>
-#include "control/vels.h"
+#include "volksbot/vels.h"
 #include <std_msgs/String.h>
 
 #define BUTTON_A 0x00

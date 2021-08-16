@@ -1,5 +1,5 @@
 #include "gio_path/InputGio.h"
-#include "control/vel_limit.h"
+#include "volksbot/vel_limit.h"
 
 InputGio::InputGio(const char* loggingName) : loggingName_{ loggingName }
 {

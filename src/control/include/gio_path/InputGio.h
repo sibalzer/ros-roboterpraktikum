@@ -99,28 +99,28 @@ private:
 
   /**
    * The velocity of the left motor.
-   * 
+   *
    * **Note:** This variable is managed by the controller instance.
    */
   double leftVel_;
 
   /**
    * The velocity of the right motor.
-   * 
+   *
    * **Note:** This variable is managed by the controller instance.
    */
   double rightVel_;
 
   /**
    * The linear velocity of the robot.
-   * 
+   *
    * **Note:** This variable is managed by the controller instance.
    */
   double linVel_;
 
   /**
    * The angular velocity of the robot.
-   * 
+   *
    * **Note:** This variable is managed by the controller instance.
    */
   double angVel_;

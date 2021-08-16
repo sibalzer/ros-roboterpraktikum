@@ -3,7 +3,7 @@
 
 #include "joystick.h"
 #include <ros/ros.h>
-#include "control/vels.h"
+#include "volksbot/vels.h"
 #include <std_msgs/String.h>
 
 #define TRIANGLE 0x00
@@ -60,7 +60,7 @@ private:
     rightvel = leftvel = 0.0;
     std::string velTopic;
     n.param<std::string>("topic/velocity", velTopic, "Vel");
-    publisher = n.advertise<control::vels>(velTopic, 100);
+    publisher = n.advertise<volksbot::vels>(velTopic, 100);
   }
 
   double leftvel, rightvel;

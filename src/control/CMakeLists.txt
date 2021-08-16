@@ -7,6 +7,7 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
   roscpp
   tf
+  volksbot
 )
 
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
@@ -14,15 +15,10 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 add_message_files(
   FILES
-  pose2d.msg
-  ticks.msg
-  vels.msg
-  vel_limit.msg
 )
 
 add_service_files(
   FILES
-  velocities.srv
 )
 
 generate_messages(

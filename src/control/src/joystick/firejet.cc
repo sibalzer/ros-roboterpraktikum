@@ -1,8 +1,8 @@
 #include "joystick/firejet.h"
 
 // service
-#include "control/velocities.h"
-#include "control/vels.h"
+#include "volksbot/velocities.h"
+#include "volksbot/vels.h"
 
 #include "std_srvs/Empty.h"
 
@@ -171,7 +171,7 @@ void Firejet::setSpeed()
  */
 void Firejet::sendSpeed()
 {
-  control::vels velocity;
+  volksbot::vels velocity;
   velocity.left = leftvel;
   velocity.right = rightvel;
   publisher.publish(velocity);

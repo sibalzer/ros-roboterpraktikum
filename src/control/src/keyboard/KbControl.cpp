@@ -13,7 +13,7 @@
 #include "stdio.h"
 #include "sys/time.h"
 
-namespace volksbot
+namespace control
 {
 int kfd = 0;
 void quit(int signum)
@@ -48,7 +48,8 @@ void KbControl::run()
   char previous = KEYCODE_Q;  // last pressed character
 
   printf("\n=== Controls ===\n");
-  printf("Direction: forward (%c), reverse (%c), left (%c), right (%c), stop (%c)\n", KEYCODE_D, KEYCODE_U, KEYCODE_L, KEYCODE_R, KEYCODE_Q);
+  printf("Direction: forward (%c), reverse (%c), left (%c), right (%c), stop (%c)\n", KEYCODE_D, KEYCODE_U, KEYCODE_L,
+         KEYCODE_R, KEYCODE_Q);
   printf("Speed: faster (%c), slower (%c)\n", KEYCODE_A, KEYCODE_Y);
   printf("Utility: reset_gio_frame (%c), stop_gio (%c), quit (%c)\n\n", KEYCODE_G, KEYCODE_X, KEYCODE_O);
 
@@ -151,8 +152,8 @@ bool KbControl::handleKey(const char c, char& previous)
 void KbControl::sendSpeed()
 {
   ROS_INFO_NAMED(loggingName_, "Motor vels: [%f, %f], speed: %f", velocity_.request.left, velocity_.request.right,
-                  speed_);
+                 speed_);
   ros::service::call(velSrcName_, velocity_);
 }
 
-}  // namespace volksbot
+}  // namespace control

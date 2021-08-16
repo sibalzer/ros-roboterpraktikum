@@ -7,12 +7,15 @@ int main(int argc, char* argv[])
   printf("Launching Input Giovanni Controller\n");
   ROS_INFO("Launching Input Giovanni Controller");
 
-  try {
+  try
+  {
     InputGio inputGio;
 
     ROS_INFO("Driving...");
     inputGio.run();
-  } catch (const std::exception& exc) {
+  }
+  catch (const std::exception& exc)
+  {
     ROS_ERROR("%s", exc.what());
     ros::shutdown();
   }

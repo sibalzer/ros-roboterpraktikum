@@ -9,7 +9,7 @@ int main(int argc, char* argv[])
   printf("Launching Keyboard Controller\n");
   ROS_INFO("Launching Keyboard Controller");
 
-  volksbot::KbControl controller;
+  control::KbControl controller;
   controller.run();
   return 0;
 }

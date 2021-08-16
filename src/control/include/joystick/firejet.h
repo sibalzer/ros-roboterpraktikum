@@ -3,7 +3,7 @@
 
 #include "joystick.h"
 #include <ros/ros.h>
-#include "control/vels.h"
+#include "volksbot/vels.h"
 #include <std_msgs/String.h>
 
 #define BUTTON1 0x00
@@ -62,7 +62,7 @@ private:
     stickx = sticky = speed = 0.0;
     std::string velTopic;
     n.param<std::string>("topic/velocity", velTopic, "Vel");
-    publisher = n.advertise<control::vels>(velTopic, 100);
+    publisher = n.advertise<volksbot::vels>(velTopic, 100);
     /*
     gnuplot = popen("gnuplot -persist", "w");
     fprintf(gnuplot, "set xrange[-1:1]\n");

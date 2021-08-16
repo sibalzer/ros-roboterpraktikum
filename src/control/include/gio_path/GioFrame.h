@@ -19,6 +19,7 @@ public:
   GioFrame(const char* loggingName = "gio_frame");
 
   ~GioFrame();
+
 private:
   const char* loggingName_;
 
