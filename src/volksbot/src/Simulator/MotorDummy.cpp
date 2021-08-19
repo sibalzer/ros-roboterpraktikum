@@ -8,11 +8,6 @@ MotorDummy::MotorDummy()
   ticks_per_cm = -1811.9178;  // rotations per 100? second
   frequency = 20;             // Hz
   MotorDummy::init();
-
-  left_neg = -100;
-  right_neg = -100;
-  left_pos = 100;
-  right_pos = 100;
 }
 
 MotorDummy::~MotorDummy()
@@ -65,45 +60,10 @@ void MotorDummy::CVcallback(const geometry_msgs::Twist::ConstPtr& cmd_vel)
   limitVelocities(leftvel, rightvel);
 }
 
-void MotorDummy::limitCallback(const volksbot::vel_limitConstPtr& limit_vel)
-{
-  if (fabs(limit_vel->left_neg) <= 100)
-  {
-    left_neg = limit_vel->left_neg;
-  }
-  if (fabs(limit_vel->right_neg) <= 100)
-  {
-    right_neg = limit_vel->right_neg;
-  }
-  if (fabs(limit_vel->left_pos) <= 100)
-  {
-    left_pos = limit_vel->left_pos;
-  }
-  if (fabs(limit_vel->right_pos) <= 100)
-  {
-    right_pos = limit_vel->right_pos;
-  }
-  ROS_INFO("Updated velocity limits");
-}
-
 void MotorDummy::limitVelocities(double& leftvel, double& rightvel)
 {
-  if (leftvel > left_pos)
-  {
-    leftvel = left_pos;
-  }
-  else if (leftvel < left_neg)
-  {
-    leftvel = left_neg;
-  }
-  if (rightvel > right_pos)
-  {
-    rightvel = right_pos;
-  }
-  else if (rightvel < right_neg)
-  {
-    rightvel = right_neg;
-  }
+  leftvel = std::min(std::max(leftvel, -100.0), 100.0);
+  rightvel = std::min(std::max(rightvel, -100.0), 100.0);
 }
 
 void* MotorDummy::threadFunction(void* param)
@@ -168,7 +128,6 @@ void MotorDummy::init()
   cmd_vel_sub_ = n.subscribe<geometry_msgs::Twist>("cmd_vel", 10, &MotorDummy::CVcallback, this,
                                                    ros::TransportHints().reliable().udp().maxDatagramSize(100));
 
-  limit_sub = n.subscribe<volksbot::vel_limit>("vel_limit", 1, &MotorDummy::limitCallback, this);
   service = n.advertiseService("Controls", &MotorDummy::callback, this);
   pthread_create(&threadId, NULL, &MotorDummy::threadFunction, this);
 }

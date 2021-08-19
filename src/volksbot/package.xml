@@ -3,7 +3,9 @@
   <name>volksbot</name>
   <version>0.0.1</version>
   <description>volksbot</description>
-  <maintainer email="borrmann@informatik.uni-wuerzburg.de">Dorit Borrmann</maintainer>
+  <author email="borrmann@informatik.uni-wuerzburg.de">Dorit Borrmann</author>
+  <maintainer email="ludwig.richter@stud-mail.uni-wuerburg.de">Ludwig Richter</maintainer>
+  <maintainer email="ansgar.lemke@stud-mail.uni-wuerzburg.de">Ansgar Lemke</maintainer>
   <license>BSD</license>
   <url>http://ros.org/wiki/volksbot</url>
 

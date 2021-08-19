@@ -79,13 +79,11 @@ private:
     rightvel = leftvel = 0.0;
     n.param<std::string>("service/velocity", velocitySrv_, "Controls");
     n.param<std::string>("service/stop", stopSrv_, "stop_input_gio");
-    n.param<std::string>("service/reset", resetSrv_, "reset_gio_start");
   }
 
   double leftvel, rightvel;
   double speed;
 
-  std::string resetSrv_;
   std::string stopSrv_;
   std::string velocitySrv_;
 };

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 2.8.12)
 project(volksbot)
 
 find_package(catkin REQUIRED COMPONENTS
@@ -71,28 +71,28 @@ target_link_libraries(EPOS2
 )
 
 add_library(VMCLIB
-  src/Adapter/CComAdapter.cpp
-  src/LayerClasses/CVmc.cpp
-  src/SupportClasses/CData.cpp
-  src/SupportClasses/CRequest.cpp
-  src/LayerClasses/CCommunicationLayer.cpp
-  src/StorageClasses/CMotor.cpp
-  src/SupportClasses/CError.cpp
-  src/SupportClasses/CSendTwo.cpp
-  src/LayerClasses/CTranslationLayer.cpp
-  src/StorageClasses/CStorage.cpp
-  src/SupportClasses/CMessage.cpp
-  src/SupportClasses/CTimer.cpp
-  src/LayerClasses/CvmcAPI.cpp
-  src/SupportClasses/CChannel.cpp
-  src/SupportClasses/CMultisend.cpp
-  src/SupportClasses/CTimestamp.cpp
+  src/VMC/Adapter/CComAdapter.cpp
+  src/VMC/LayerClasses/CVmc.cpp
+  src/VMC/SupportClasses/CData.cpp
+  src/VMC/SupportClasses/CRequest.cpp
+  src/VMC/LayerClasses/CCommunicationLayer.cpp
+  src/VMC/StorageClasses/CMotor.cpp
+  src/VMC/SupportClasses/CError.cpp
+  src/VMC/SupportClasses/CSendTwo.cpp
+  src/VMC/LayerClasses/CTranslationLayer.cpp
+  src/VMC/StorageClasses/CStorage.cpp
+  src/VMC/SupportClasses/CMessage.cpp
+  src/VMC/SupportClasses/CTimer.cpp
+  src/VMC/LayerClasses/CvmcAPI.cpp
+  src/VMC/SupportClasses/CChannel.cpp
+  src/VMC/SupportClasses/CMultisend.cpp
+  src/VMC/SupportClasses/CTimestamp.cpp
 )
 add_dependencies(VMCLIB volksbot_generate_messages_cpp) 
 
 
 add_library(odo
-  src/odometry.cc
+  src/odometry.cpp
 )
 add_dependencies(odo volksbot_generate_messages_cpp) 
 
@@ -112,7 +112,7 @@ target_link_libraries(volksbot
 add_dependencies(volksbot volksbot_generate_messages_cpp) 
 
 add_executable(odometry 
-  src/odometry.cc 
+  src/odometry.cpp 
   src/odometry_main.cc
 )
 set_target_properties(odometry PROPERTIES LINK_FLAGS "-pthread")
@@ -120,13 +120,6 @@ target_link_libraries(odometry
   ${catkin_LIBRARIES}
 )
 add_dependencies(odometry volksbot_generate_messages_cpp)
-
-add_executable(calibration src/calibration.cc)
-set_target_properties(calibration PROPERTIES LINK_FLAGS "-pthread")
-target_link_libraries(calibration
-  ${catkin_LIBRARIES}
-)
-add_dependencies(calibration volksbot_generate_messages_cpp)
 
 add_executable(pose_logger 
   src/pose_logger.cc
@@ -146,15 +139,6 @@ target_link_libraries(path_recorder
   ${catkin_LIBRARIES}
 )
 add_dependencies(path_recorder volksbot_generate_messages_cpp)
-
-add_executable(nocollide 
-  src/nocollide.cc
-)
-set_target_properties(nocollide PROPERTIES LINK_FLAGS "-pthread")
-target_link_libraries(nocollide
-  ${catkin_LIBRARIES}
-)
-add_dependencies(nocollide volksbot_generate_messages_cpp)
 
 MESSAGE(STATUS "STATUS: ${CATKIN_PACKAGE_INCLUDE_DESTINATION}")
 MESSAGE(STATUS "STATUS: ${CATKIN_GLOBAL_INCLUDE_DESTINATION}")

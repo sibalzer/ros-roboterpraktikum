@@ -10,6 +10,8 @@ The package `control` is designed to be used in combination with the `volksbot` 
 
 Some parts of this project might not fully work, e. g. the pose reset part for the included Giovanni Controller.
 
+This work builds upon previous work, notable Dorit Borrmann (borrmann@informatik.uni-wuerzburg.de). 
+
 ## Communication
 
 ### Topics
@@ -21,7 +23,6 @@ Some parts of this project might not fully work, e. g. the pose reset part for t
  *  velocity topic (`Vel`)
 
 ### Services
- *  pose reset service (`reset_gio_start`) to be called and serviced
  *  velocity service (`Controls`) to be called by joystick and keyboard
  *  stop gio service (`stop_input_gio`) to be called and serviced
 
@@ -56,4 +57,3 @@ Right now, each node has it's own launch file. One might select the appropriate 
  *  `gio.launch` to launch the Giovanni Controller, needs the argument `file` to be set while `file` is the path to use (relative to `ressources/paths/`)
  *  `js.launch` to launch the joystick controller
  *  `kb.launch` to launch the keyboard controller
- *  `gio_tf.launch` experimental to use tf transformations

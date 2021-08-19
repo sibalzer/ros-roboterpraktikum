@@ -48,10 +48,7 @@ private:
    * The name of the service to set the motor velocities.
    */
   std::string velSrcName_;
-  /**
-   * The name of the service to reset the start pose
-   */
-  std::string resetSrv_;
+
   /**
    * The name of the service to stop the giovanni controller
    */

@@ -1,3 +1,7 @@
+/**
+ * Save poses to file to be able to plot paths later.
+ */
+
 #include <ros/ros.h>
 
 #include <geometry_msgs/PoseWithCovarianceStamped.h>

@@ -1,10 +1,9 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 2.8.12)
 project(control)
 
 find_package(catkin REQUIRED COMPONENTS
   std_msgs
   std_srvs
-  message_generation
   roscpp
   tf
   volksbot
@@ -19,11 +18,6 @@ add_message_files(
 
 add_service_files(
   FILES
-)
-
-generate_messages(
-  DEPENDENCIES
-  std_msgs
 )
 
 catkin_package(
@@ -48,7 +42,6 @@ set_target_properties(kb PROPERTIES LINK_FLAGS "-pthread")
 target_link_libraries(kb
   ${catkin_LIBRARIES}
 )
-add_dependencies(kb control_generate_messages_cpp)
 
 add_executable(js
   src/joystick/jscontrol.cc
@@ -61,7 +54,6 @@ set_target_properties(js PROPERTIES LINK_FLAGS "-pthread")
 target_link_libraries(js
   ${catkin_LIBRARIES}
 )
-add_dependencies(js control_generate_messages_cpp)
 
 add_executable(gio 
   src/gio_path/curves.cpp
@@ -73,31 +65,8 @@ set_target_properties(gio PROPERTIES LINK_FLAGS "-pthread")
 target_link_libraries(gio
   ${catkin_LIBRARIES}
 )
-add_dependencies(gio control_generate_messages_cpp)
-
-add_executable(gio_tf
-  src/gio_path/gio_start_tf.cc
-  src/gio_path/GioFrame.cpp
-)
-set_target_properties(gio_tf PROPERTIES LINK_FLAGS "-pthread")
-target_link_libraries(gio_tf
-  ${catkin_LIBRARIES}
-)
-add_dependencies(gio_tf control_generate_messages_cpp)
 
 MESSAGE(STATUS "STATUS: ${CATKIN_PACKAGE_INCLUDE_DESTINATION}")
 MESSAGE(STATUS "STATUS: ${CATKIN_GLOBAL_INCLUDE_DESTINATION}")
 MESSAGE(STATUS "STATUS: include/${PROJECT_NAME}")
 MESSAGE(STATUS "STATUS: ${CATKIN_DEVEL_PREFIX}/include/")
-
-#install(DIRECTORY include/${PROJECT_NAME}
-#	DESTINATION ${CATKIN_DEVEL_PREFIX}/include/
-#	PATTERN ".svn" EXCLUDE)
-
-#DESTINATION ${CATKIN_DEVEL_PREFIX}/include/${PROJECT_NAME}/
-#install(DIRECTORY include/${PROJECT_NAME}/
-#  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}/control
-#)
-
-# install(TARGETS odo VMCLIB DESTINATION lib EXPORT control-targets)
-# install(EXPORT control-targets DESTINATION lib/control)

@@ -10,6 +10,9 @@ struct Coordinate
   double x, y;
 };
 
+/**
+ * Record a path for later use by Giovanni controller.
+ */
 class PathRecorder
 {
 public:

@@ -5,7 +5,7 @@
 ///  @date 23.10.2006
 //////////////////////////////////////////////////////////////////////////////
 
-#include "CCommunicationLayer.h"
+#include "./CCommunicationLayer.h"
 
 namespace VMC
 {

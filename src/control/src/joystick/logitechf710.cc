@@ -14,9 +14,6 @@ void LogitechF::handleButton(uint8_t number, bool pressed, uint32_t time)
   {
     case BUTTON_A:
       ROS_DEBUG("Button A");
-      ROS_INFO("Reset gio frame");
-      ros::service::call(resetSrv_, e);
-      // ros::service::call("startMeasuring", e);
       break;
     case BUTTON_B:
       ROS_DEBUG("Button B");

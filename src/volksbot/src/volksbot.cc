@@ -1,6 +1,10 @@
+/**
+ * Provide a wrapper for the different motor controllers.
+ */
+
 #include <ros/ros.h>
 #include "stdio.h"
-#include "CVmc.h"
+#include "VMC/LayerClasses/CVmc.h"
 
 #include <signal.h>
 #include <termios.h>
@@ -37,7 +41,7 @@ int main(int argc, char* argv[])
 
   printf("Ros init...\n");
 
-  ros::init(argc, argv, "VMC_Module");
+  ros::init(argc, argv, "Volksbot_Module");
   ros::NodeHandle n;
 
   std::string controller;

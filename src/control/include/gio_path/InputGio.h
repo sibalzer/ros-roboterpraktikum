@@ -5,9 +5,7 @@
 #include <nav_msgs/Odometry.h>
 #include <ros/ros.h>
 #include <std_srvs/Empty.h>
-#include <tf/transform_broadcaster.h>
 #include <tf/transform_datatypes.h>
-#include <tf/transform_listener.h>
 
 #include "gio_path.h"
 #include "volksbot/vels.h"
@@ -46,12 +44,6 @@ private:
    * The name of the topic which transfers the motor velocities.
    */
   std::string velTopic_;
-
-  /**
-   * Transform frame name which relates to the output system
-   * relative to the world coordinate system based on the saved current position.
-   */
-  std::string destFrame_;
 
   /**
    * The name of the stop service.
@@ -94,13 +86,6 @@ private:
    * The stop service server.
    */
   ros::ServiceServer stopService_;
-
-  /**
-   * The transformation frame listener
-   * which listens for transformation frame updates
-   * on the destination frame.
-   */
-  tf::TransformListener listener_;
 
   /**
    * The velocity of the left motor.

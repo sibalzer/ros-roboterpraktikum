@@ -18,8 +18,8 @@
  * and epos2.h.
  * It behaves like a differentiable drive robot.
  * Axis length is taken from the real robot.
- * We need to adjust the value which is used to calculate ticks
- * from velocity.
+ * In combination with the odometry node, this works as a simulator
+ * for the Giovanni Path Controller.
  */
 class MotorDummy
 {
@@ -40,7 +40,6 @@ private:
   bool callback(volksbot::velocities::Request& vel, volksbot::velocities::Response& response);
   void Vcallback(const volksbot::velsConstPtr& vel);
   void CVcallback(const geometry_msgs::Twist::ConstPtr& cmd_vel);
-  void limitCallback(const volksbot::vel_limitConstPtr& limit_vel);
   void limitVelocities(double& leftvel, double& rightvel);
 
   // Thread Loop Function, simulate a connection to the motor
@@ -62,10 +61,6 @@ private:
   double rightvel;
   double vx;
   double vth;
-
-  // limits
-  double left_neg, right_neg;
-  double left_pos, right_pos;
 
   // MotorDummy variables
   // counters for the wheel rotations

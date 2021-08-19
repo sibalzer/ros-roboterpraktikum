@@ -38,7 +38,6 @@ KbControl::KbControl(const char* loggingName) : loggingName_{ loggingName }
   ROS_DEBUG_NAMED(loggingName, "Get parameters");
   nh_.param<int>("control/looprate", rate_, 5);
   nh_.param<std::string>("service/velocity", velSrcName_, "Controls");
-  nh_.param<std::string>("service/reset", resetSrv_, "reset_gio_start");
   nh_.param<std::string>("service/stop", stopSrv_, "stop_input_gio");
 }
 
@@ -51,7 +50,7 @@ void KbControl::run()
   printf("Direction: forward (%c), reverse (%c), left (%c), right (%c), stop (%c)\n", KEYCODE_D, KEYCODE_U, KEYCODE_L,
          KEYCODE_R, KEYCODE_Q);
   printf("Speed: faster (%c), slower (%c)\n", KEYCODE_A, KEYCODE_Y);
-  printf("Utility: reset_gio_frame (%c), stop_gio (%c), quit (%c)\n\n", KEYCODE_G, KEYCODE_X, KEYCODE_O);
+  printf("Utility: stop_gio (%c), quit (%c)\n\n", KEYCODE_X, KEYCODE_O);
 
   // some terminal magic
   struct termios cooked;
@@ -129,10 +128,6 @@ bool KbControl::handleKey(const char c, char& previous)
       velocity_.request.left = 0;
       velocity_.request.right = 0;
       break;
-    case KEYCODE_G:
-      ROS_INFO("Reset gio frame");
-      ros::service::call(resetSrv_, e);
-      return false;
     case KEYCODE_X:
       ROS_INFO("Stop gio controller");
       ros::service::call(stopSrv_, e);

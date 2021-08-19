@@ -77,21 +77,10 @@ void CVcallback(const geometry_msgs::Twist::ConstPtr& cmd_vel)
   limitVelocities(leftvel, rightvel);
 }
 
-void limitCallback(const volksbot::vel_limitConstPtr& limit_vel)
-{
-  left_neg = std::min(std::max(-100.0, limit_vel->left_neg), 100.0);
-  right_neg = std::min(std::max(-100.0, limit_vel->right_neg), 100.0);
-  left_pos = std::min(std::max(-100.0, limit_vel->left_pos), 100.0);
-  right_pos = std::min(std::max(-100.0, limit_vel->right_pos), 100.0);
-
-  ROS_INFO("Updated velocity limits %f %f %f %f", limit_vel->left_neg, limit_vel->left_pos, limit_vel->right_neg,
-           limit_vel->right_pos);
-}
-
 void limitVelocities(double& leftvel, double& rightvel)
 {
-  leftvel = std::min(std::max(leftvel, left_neg), left_pos);
-  rightvel = std::min(std::max(rightvel, right_neg), right_pos);
+  leftvel = std::min(std::max(leftvel, -100.0), 100.0);
+  rightvel = std::min(std::max(rightvel, -100.0), 100.0);
 
   // ROS_INFO("New velocities: %f l, %f r", leftvel, rightvel);
 }
@@ -120,7 +109,6 @@ void* vmcThreadFunction(void* param)
   ros::Subscriber cmd_vel_sub_ = n.subscribe<geometry_msgs::Twist>(
       "cmd_vel", 10, CVcallback, ros::TransportHints().reliable().udp().maxDatagramSize(100));
   //      ros::TransportHints().reliable().tcp().tcpNoDelay(true));
-  ros::Subscriber sub_limits = n.subscribe<volksbot::vel_limit>("vel_limit", 1, limitCallback);
 
   ros::ServiceServer service = n.advertiseService("Controls", callback);
 

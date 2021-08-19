@@ -32,7 +32,6 @@ private:
   bool callback(volksbot::velocities::Request& vel, volksbot::velocities::Response& response);
   void Vcallback(const volksbot::velsConstPtr& vel);
   void CVcallback(const geometry_msgs::Twist::ConstPtr& cmd_vel);
-  void limitCallback(const volksbot::vel_limitConstPtr& limit_vel);
 
   // Thread Loop Function
   static void* threadFunction(void* param);
@@ -53,9 +52,6 @@ private:
   double rightvel;
   double vx;
   double vth;
-  // limits
-  double left_neg = -100, right_neg = -100;
-  double left_pos = 100, right_pos = 100;
   void limitVelocities(double& leftvel, double& rightvel);
 
   // EPOS2 Functions

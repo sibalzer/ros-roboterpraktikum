@@ -10,14 +10,13 @@ InputGio::InputGio(const char* loggingName) : loggingName_{ loggingName }
   ROS_DEBUG_NAMED(loggingName, "Get parameters");
   nh_.param<std::string>("path/source", sourceTopic_, "odom");
   nh_.param<std::string>("topic/velocity", velTopic_, "Vel");
-  nh_.param<std::string>("frame/dest", destFrame_, "gio_start");
   nh_.param<std::string>("service/stop", stopSrvName_, "stop_input_gio");
   nh_.param<int>("control/looprate", rate_, 100);
   nh_.param<int>("control/loops", loops_, 0);
   nh_.param<std::string>("path/datfile", datfile, "quadrat.dat");
   nh_.param<double>("robot/u_max", u_max, 1.0);
   nh_.param<double>("robot/axis_length", axis_length, 200.0);
-  
+
   ROS_DEBUG_NAMED(loggingName_, "Subscribe to topics");
   if (sourceTopic_ == "odom")
   {
@@ -95,24 +94,13 @@ void InputGio::handlePose(const geometry_msgs::PoseWithCovariance& pose, std_msg
   from.header = to.header = header;
   from.header.stamp = to.header.stamp = ros::Time(0);
 
-  // from.pose = pose.pose;
-  // from.header = header;
-  // from.header.stamp = ros::Time(0);
-  try
-  {
-    // listener_.transformPose(destFrame_, from, to);
-    const double fromYaw = tf::getYaw(from.pose.orientation);
-    const double toYaw = tf::getYaw(to.pose.orientation);
+  const double fromYaw = tf::getYaw(from.pose.orientation);
+  const double toYaw = tf::getYaw(to.pose.orientation);
 
-    ROS_INFO_NAMED(loggingName_, "Abs: %f [m], %f [m], %f [rad]; Rel: %f [m], %f [m], %f [rad]", from.pose.position.x,
-                   from.pose.position.y, fromYaw, to.pose.position.x, to.pose.position.y, toYaw);
+  ROS_INFO_NAMED(loggingName_, "Abs: %f [m], %f [m], %f [rad]; Rel: %f [m], %f [m], %f [rad]", from.pose.position.x,
+                 from.pose.position.y, fromYaw, to.pose.position.x, to.pose.position.y, toYaw);
 
-    gio_.setPose(to.pose.position.x, to.pose.position.y, toYaw);
-  }
-  catch (tf::TransformException& ex)
-  {
-    ROS_ERROR_NAMED(loggingName_, "%s", ex.what());
-  }
+  gio_.setPose(to.pose.position.x, to.pose.position.y, toYaw);
 }
 
 void InputGio::handleOdomPose(const nav_msgs::Odometry::ConstPtr& odom)
