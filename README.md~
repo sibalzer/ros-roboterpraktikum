@@ -34,10 +34,6 @@ Place the robot at the start position. Run the commands from basic driving to ge
 
 Place the robot at the start position. Start the basic driving commands. Start `roslaunch volksbot map-server.launch`. Start `roslaunch volksbot amcl.launch`. Make sure that `amcl` is set as `/path/source` in `$HOME/ros-roboterpraktikum/src/control/config/gio_control.yaml`. Drive to the start point of your path. Start `roslaunch volksbot path-recorder.launch` to record the path. Drive slowly. Stop `path-recorder` to stop the recording. The new path is placced into `/tmp/recording*.dat`. You need to copy this file into `$HOME/ros-roboterpraktikum/src/control/ressources/paths/` to be able to use it with the next Giovanni controller.
 
-### Record poses for analysis
-
-After placing the robot at the start position of the map, starting `roslaunch volksbot robot.launch`, `roslaunch volksbot map-server.launch` and `roslaunch volksbot amcl.launch`, you will be able to log poses using `roslaunch volksbot logger-coordinates.launch`. If `amcl` is not started, the related logfile will be empty. Find the logfiles in `/tmp/odom-pose.csv` or `/tmp/amcl-pose.csv` (if the default parameters are used).
-
 ### Use odometry for the Giovanni controller
 
 Run the commands from basic driving. Make sure that `odom_pose` is set as `/path/source` in `$HOME/ros-roboterpraktikum/src/control/config/gio_control.yaml`. Run `roslaunch control gio.launch file:=$YOURPATH.DAT`, `$YOURPATH.DAT` is a path file from the `$HOME/ros-roboterpraktikum/src/control/ressources/paths` directory. Be careful, the robot will start instantanously.

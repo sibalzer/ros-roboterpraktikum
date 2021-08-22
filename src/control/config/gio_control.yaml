@@ -1,5 +1,5 @@
-path/source:               "odom"
-#path/source:          "amcl_pose"
+#path/source:               "odom"
+path/source:          "amcl_pose"
 control/looprate:     100 # Hz
 robot/u_max:          15 # motor percent
 robot/axis_length:    444.0
