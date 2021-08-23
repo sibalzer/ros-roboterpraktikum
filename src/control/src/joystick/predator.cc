@@ -1,8 +1,8 @@
 #include "joystick/predator.h"
 
 // service
-#include "control/velocities.h"
-#include "control/vels.h"
+#include "volksbot/velocities.h"
+#include "volksbot/vels.h"
 
 #include "std_srvs/Empty.h"
 #include <math.h>
@@ -117,7 +117,7 @@ void Predator::handleAxis(uint8_t number, int16_t value, uint32_t time)
 
 void Predator::sendSpeed()
 {
-  control::vels velocity;
+  volksbot::vels velocity;
   velocity.left = leftvel * speed;
   velocity.right = rightvel * speed;
   ROS_INFO("%f %f SPEED %f \n", leftvel, rightvel, speed);

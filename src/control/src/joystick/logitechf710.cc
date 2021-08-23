@@ -1,8 +1,8 @@
 #include "joystick/logitechf710.h"
 
 // service
-#include "control/velocities.h"
-#include "control/vels.h"
+#include "volksbot/velocities.h"
+#include "volksbot/vels.h"
 
 #include "std_srvs/Empty.h"
 #include <math.h>
@@ -156,7 +156,7 @@ void LogitechF::handleAxis(uint8_t number, int16_t value, uint32_t time)
 
 void LogitechF::sendSpeed()
 {
-  control::velocities velocity;
+  volksbot::velocities velocity;
   velocity.request.left = leftvel * speed;
   velocity.request.right = rightvel * speed;
   ROS_INFO("%f %f SPEED %f \n", leftvel, rightvel, speed);
